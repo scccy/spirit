@@ -62,12 +62,16 @@ public class Aria2Util {
 	 * @param downclass
 	 * @return
 	 */
-	public static JSONObject createparameter(String downlink,String downpath,String downclass) {
+	public static JSONObject createparameter(String downlink,String downpath,String downclass,String token) {
 		JSONObject obj =  new JSONObject();
+		
 		obj.put("id", RandomStringUtils.randomNumeric(16));
 		obj.put("jsonrpc", "2.0");
 		obj.put("method", "aria2.addUri");
 		JSONArray params = new JSONArray();
+		if(token != null) {
+			params.add("token:"+token);
+		}
 		JSONArray downLinkArray = new JSONArray();
 		downLinkArray.add(downlink);
 		params.add(downLinkArray);
@@ -80,7 +84,7 @@ public class Aria2Util {
 		return obj;
 	}
 	public static void main(String[] args) {
-		JSONObject createparameter = Aria2Util.createparameter("https://pan.mdreamworld.cn/api/raw/?path=/环境安装包/AdobeAIRInstaller.exe", "D:\\aria2\\down\\xxxx", "AdobeAIRInstaller.exe");
+		JSONObject createparameter = Aria2Util.createparameter("https://pan.mdreamworld.cn/api/raw/?path=/环境安装包/AdobeAIRInstaller.exe", "D:\\aria2\\down\\xxxx", "AdobeAIRInstaller.exe","123456");
 		Object sendMessage = Aria2Util.sendMessage("http://localhost:6800/jsonrpc", createparameter);
 		System.out.println(sendMessage);
 	}
