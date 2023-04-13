@@ -42,6 +42,19 @@
         <div class="left-nav">
             <div id="side-nav">
                 <ul id="nav">
+                	<li>
+                        <a href="javascript:;">
+                            <i class="iconfont left-nav-li" lay-tips="媒体库">&#xe723;</i>
+                            <cite>媒体库</cite>
+                            <i class="iconfont nav_right">&#xe697;</i></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a onclick="xadmin.add_tab('媒体库','videoDataList')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>媒体库</cite></a>
+                            </li>
+                        </ul>
+                    </li>
                     <li>
                         <a href="javascript:;">
                             <i class="iconfont left-nav-li" lay-tips="用户管理">&#xe723;</i>
@@ -57,6 +70,11 @@
                                 <a onclick="xadmin.add_tab('下载器管理','downLoaderList')">
                                     <i class="iconfont">&#xe6a7;</i>
                                     <cite>下载器管理</cite></a>
+                            </li>
+                            <li>
+                                <a onclick="xadmin.add_tab('系统配置','config')">
+                                    <i class="iconfont">&#xe6a7;</i>
+                                    <cite>系统配置</cite></a>
                             </li>
                         </ul>
                     </li>

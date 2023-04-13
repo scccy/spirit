@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.common.RequestEntity;
+import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.DownloaderEntity;
 import com.flower.spirit.entity.UserEntity;
+import com.flower.spirit.entity.VideoDataEntity;
+import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.SystemService;
 import com.flower.spirit.service.UserService;
+import com.flower.spirit.service.VideoDataService;
 
 
 @RestController
@@ -30,7 +34,14 @@ public class AdminController {
 	
 	@Autowired
 	private DownloaderService downloaderService;
+	
+	
+	@Autowired
+	private ConfigService configService;
 
+	
+	@Autowired
+	private VideoDataService videoDataService;
 	
 	/**  
 	
@@ -100,5 +111,14 @@ public class AdminController {
 	@GetMapping(value = "/getDownLoader")
 	public AjaxEntity getDownLoader(DownloaderEntity downloaderEntity,HttpServletRequest request) {
 		return downloaderService.getDownLoader(downloaderEntity);
+	}
+	
+	@PostMapping(value = "/saveConfig")
+	public AjaxEntity saveConfig(ConfigEntity configEntity,HttpServletRequest request) {
+		return configService.saveConfig(configEntity);
+	}
+	@PostMapping(value = "/findVideoDataList")
+	public AjaxEntity findVideoDataList(VideoDataEntity videoDataEntity,HttpServletRequest request) {
+		return videoDataService.findPage(videoDataEntity);
 	}
 } 

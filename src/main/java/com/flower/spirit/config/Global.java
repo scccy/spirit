@@ -50,4 +50,7 @@ public class Global {
 	
 	public static String a2_down_path="/home";
 	
+	
+	public static String apptoken="123456";
+	
 }

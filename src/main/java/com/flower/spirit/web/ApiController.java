@@ -17,11 +17,12 @@ public class ApiController {
 	@RequestMapping("/processingVideos")
 	public void processingVideos(String token,String video) {
 		try {
-			analysisService.processingVideos(token,video);
+			 analysisService.processingVideos(token,video);
 		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
 	}
 
 }

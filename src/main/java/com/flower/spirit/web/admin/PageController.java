@@ -1,10 +1,15 @@
 package com.flower.spirit.web.admin;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.flower.spirit.config.Global;
+import com.flower.spirit.entity.ConfigEntity;
+import com.flower.spirit.service.ConfigService;
 
 
 @Controller
@@ -12,7 +17,8 @@ import com.flower.spirit.config.Global;
 public class PageController {
 	
 
-	
+	@Autowired
+	private ConfigService configService;
 	
 	@RequestMapping(value = "/admin")
 	public String admin(HttpServletRequest request) {
@@ -57,5 +63,14 @@ public class PageController {
 	public String downLoaderList() {
 		return "admin/downLoaderList";
 	}
-	
+	@RequestMapping(value = "/config")
+	public String config(Model model) {
+		ConfigEntity config = configService.getData();
+		model.addAttribute("config", config);
+		return "admin/config";
+	}
+	@RequestMapping(value = "/videoDataList")
+	public String videoDataList() {
+		return "admin/videoDataList";
+	}
 }
