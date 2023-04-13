@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.common.RequestEntity;
+import com.flower.spirit.entity.DownloaderEntity;
 import com.flower.spirit.entity.UserEntity;
+import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.SystemService;
 import com.flower.spirit.service.UserService;
 
@@ -25,6 +27,9 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 	
+	
+	@Autowired
+	private DownloaderService downloaderService;
 
 	
 	/**  
@@ -78,5 +83,22 @@ public class AdminController {
 		return userService.delUser(userEntity);
 	}
 	
-
+	@PostMapping(value = "/finddownLoaderList")
+	public AjaxEntity finddownLoaderList(RequestEntity res,HttpServletRequest request) {
+		return downloaderService.finddownLoaderList(res);
+	}
+	
+	@GetMapping(value = "/deleteDownLoader")
+	public AjaxEntity delDownLoader(DownloaderEntity downloaderEntity,HttpServletRequest request) {
+		return downloaderService.delDownLoader(downloaderEntity);
+	}
+	
+	@PostMapping(value = "/addDownLoader")
+	public AjaxEntity addDownLoader(DownloaderEntity downloaderEntity,HttpServletRequest request) {
+		return downloaderService.addDownLoader(downloaderEntity);
+	}
+	@GetMapping(value = "/getDownLoader")
+	public AjaxEntity getDownLoader(DownloaderEntity downloaderEntity,HttpServletRequest request) {
+		return downloaderService.getDownLoader(downloaderEntity);
+	}
 } 

@@ -53,6 +53,9 @@ public class PageController {
 		return "admin/addUser";
 	}
 	
-	
+	@RequestMapping(value = "/downLoaderList")
+	public String downLoaderList() {
+		return "admin/downLoaderList";
+	}
 	
 }
