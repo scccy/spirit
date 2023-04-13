@@ -35,6 +35,8 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 	
 	private String videocover;
 	
+	private String videounrealaddr;
+	
 	private String videoaddr;
 	
 	private Date createtime;
@@ -48,7 +50,7 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 	}
 
 	public VideoDataEntity(String videoname, String videodesc, String videoplatform, String videocover,
-			String videoaddr) {
+			String videoaddr,String videounrealaddr) {
 		super();
 		this.videoname = videoname;
 		this.videodesc = videodesc;
@@ -56,6 +58,7 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 		this.videocover = videocover;
 		this.videoaddr = videoaddr;
 		this.createtime = new Date();
+		this.videounrealaddr =videounrealaddr;
 	}
 
 	public Integer getId() {
@@ -112,6 +115,14 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 
 	public void setVideodesc(String videodesc) {
 		this.videodesc = videodesc;
+	}
+
+	public String getVideounrealaddr() {
+		return videounrealaddr;
+	}
+
+	public void setVideounrealaddr(String videounrealaddr) {
+		this.videounrealaddr = videounrealaddr;
 	}
 	
 	

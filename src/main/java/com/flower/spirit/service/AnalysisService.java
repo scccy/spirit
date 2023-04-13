@@ -14,6 +14,7 @@ import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -22,6 +23,7 @@ import com.flower.spirit.dao.VideoDataDao;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.utils.Aria2Util;
 import com.flower.spirit.utils.DateUtils;
+import com.flower.spirit.utils.HttpUtil;
 import com.flower.spirit.utils.ThreadConfig;
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -34,10 +36,19 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 @Service
 public class AnalysisService {
 	
+	
+    @Value("${file.save}")
+    private String savefile;
+    
+    @Value("${file.save.path}")
+    private String uploadRealPath;
+	
 	@Autowired
 	private VideoDataDao videoDataDao;
 	
 	private Logger logger = LoggerFactory.getLogger(AnalysisService.class);
+	
+	
 
 	@SuppressWarnings("static-access")
 	public void processingVideos(String token, String video) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
@@ -70,14 +81,17 @@ public class AnalysisService {
 	        			  JSONObject videoobj = detail.getJSONObject("video");
 	        	          String playApi = videoobj.getString("playApi");
 	        	          String cover = videoobj.getString("cover");
-	        	          System.out.println(desc);
-	        	          System.out.println(playApi);
-	        	          System.out.println(cover);
 	        	          //首先推送源文件到下载器 目前仅支持a2 其他待优化
 	        	          String videofile = Global.a2_down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
-	        	          Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.a2_down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token));
+	        	          String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+	        	          if(Global.downtype.equals("a2")) {
+	        	        	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.a2_down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token));
+	        	          }
+	        	          //下载封面图当容器映射目录
+	        	          String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
+	        	          HttpUtil.downLoadFromUrl("https:"+cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 	        	          //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
-	        	          VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, platform, cover, videofile);
+	        	          VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, platform, coverunaddr, videofile,videounrealaddr);
 	        	          videoDataDao.save(videoDataEntity);
 	        	          //建档结束
 	        		  }

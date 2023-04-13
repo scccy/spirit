@@ -42,7 +42,7 @@ public class Global {
 	
 	public static String ajax_nav_no_rule_message ="未对外开放";
 	
-	
+	public static String downtype ="a2";
 	
 	public static String a2_link ="http://localhost:6800/jsonrpc";
 	
