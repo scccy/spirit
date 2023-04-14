@@ -67,13 +67,13 @@
 			},
 			saveServer:function(){
 				if(this.serveraddr != ""){
-					uni.setStorageSync('serveraddr',serveraddr)
+					uni.setStorageSync('serveraddr',this.serveraddr)
 				}
 				if(this.serverport != ""){
-					uni.setStorageSync('serverport',serverport)
+					uni.setStorageSync('serverport',this.serverport)
 				}
 				if(this.servertoken != ""){
-					uni.setStorageSync('servertoken',servertoken)
+					uni.setStorageSync('servertoken',this.servertoken)
 				}
 				uni.showToast({
 					title: '保存成功',
