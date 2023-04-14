@@ -1,6 +1,7 @@
 package com.flower.spirit.service;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.Iterator;
@@ -50,13 +51,27 @@ public class AnalysisService {
 	
 	
 
-	@SuppressWarnings("static-access")
+	/**解析资源
+	 * @param token
+	 * @param video
+	 * @throws FailingHttpStatusCodeException
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	public void processingVideos(String token, String video) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 			if(null == token || !token.equals(Global.apptoken)) {
 				return;
 			}
 			String platform = this.getPlatform(video);
-	        WebClient webClient = ThreadConfig.getWebClient();
+			if(platform.equals("抖音")) {
+				this.dyvideo(platform, video);
+				return;
+			}
+	       
+	}
+	@SuppressWarnings("static-access")
+	public void dyvideo(String platform,String  video) throws UnsupportedEncodingException {
+		 WebClient webClient = ThreadConfig.getWebClient();
 	        HtmlPage page = null;
 	        try {
 	            page = webClient.getPage(this.findAddr(video));
@@ -81,25 +96,36 @@ public class AnalysisService {
 	        			  JSONObject videoobj = detail.getJSONObject("video");
 	        	          String playApi = videoobj.getString("playApi");
 	        	          String cover = videoobj.getString("cover");
-	        	          //首先推送源文件到下载器 目前仅支持a2 其他待优化
-	        	          String videofile = Global.a2_down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
-	        	          String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
-	        	          if(Global.downtype.equals("a2")) {
-	        	        	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.a2_down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token));
-	        	          }
-	        	          //下载封面图当容器映射目录
-	        	          String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
-	        	          HttpUtil.downLoadFromUrl("https:"+cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
-	        	          //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
-	        	          VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, platform, coverunaddr, videofile,videounrealaddr);
-	        	          videoDataDao.save(videoDataEntity);
-	        	          //建档结束
+	        	          this.putRecord(awemeId, desc, playApi, cover, platform);
 	        		  }
 	        	}
 				
 			});
 	}
 	
+	
+	/**
+	 * 推送建档
+	 * @param awemeId
+	 * @param desc
+	 * @param playApi
+	 * @param cover
+	 * @param platform
+	 */
+	public void putRecord(String awemeId,String desc,String playApi,String cover,String platform) {
+        String videofile = Global.a2_down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+        String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+        if(Global.downtype.equals("a2")) {
+      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.a2_down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token));
+        }
+        //下载封面图当容器映射目录
+        String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
+        HttpUtil.downLoadFromUrl("https:"+cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
+        //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
+        VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, platform, coverunaddr, videofile,videounrealaddr);
+        videoDataDao.save(videoDataEntity);
+		
+	}
 	
 	public static boolean isJSONString(String str) {
 	    boolean result = false;

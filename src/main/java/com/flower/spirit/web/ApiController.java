@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flower.spirit.common.AjaxEntity;
+import com.flower.spirit.config.Global;
 import com.flower.spirit.service.AnalysisService;
 
 @RestController
@@ -15,13 +17,12 @@ public class ApiController {
 	
 	
 	@RequestMapping("/processingVideos")
-	public void processingVideos(String token,String video) {
+	public AjaxEntity processingVideos(String token,String video) {
 		try {
 			 analysisService.processingVideos(token,video);
 		}catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		return new AjaxEntity(Global.ajax_success, "操作成功", "");
 	
 	}
 
