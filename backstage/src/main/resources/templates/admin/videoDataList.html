@@ -94,6 +94,9 @@
 		<a class="layui-btn layui-btn layui-btn-xs" lay-event="prevideo">播放</a>
   		<a class="layui-btn layui-btn-danger layui-btn-xs delData" lay-event="del">删除</a>
 	</script>     
+	<script type="text/html" th:inline="none" id="imageTpl">
+		<img src="{{d.videocover}}"  width="180px"/>
+	</script>     
 	<script  th:inline="none">
     var table;
      $(function(){
@@ -199,7 +202,7 @@
     			    	 {field: 'videoname', title: '视频名称', width:180},
     			    	 {field: 'videodesc', title: '视频简介', width:180},
     			    	 {field: 'videoplatform', title: '来源平台', width:80},
-    			    	 {field: 'videocover', title: '视频封面', width:180,templet:function(obj){return "<image src=\'"+obj.videocover+"\' width='180px'"}},
+    			    	 {field: 'videocover', title: '视频封面', width:180,templet:'#imageTpl'},
     			    	 {field: 'videoaddr', title: '视频真实地址', width:180},
     			    	 {field: 'createtime', title: '下载时间', width:180},
     			    	 {fixed: 'right', title:'操作',  minWidth: 180, toolbar: '#barLineTool'}
