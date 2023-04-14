@@ -17,6 +17,9 @@
 		onLoad() {
 
 		},
+		onShow() {
+			
+		}
 		methods: {
 
 		}

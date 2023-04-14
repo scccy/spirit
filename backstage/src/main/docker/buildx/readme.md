@@ -9,8 +9,9 @@
 
 eg 
 a2 down
-	下载器设置的目录     /resources/video        挂载处理媒体
+	下载器设置的目录     /app/resources/video        挂载处理媒体
 
-	随意			       /resources/cover      封面
+	随意			       /app/resources/cover      封面
 
 	随意              /app/db               数据库
+	随意			  /tmp

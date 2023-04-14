@@ -1,5 +1,8 @@
 package com.flower.spirit.web;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,14 +18,19 @@ public class ApiController {
 	@Autowired
 	private AnalysisService analysisService;
 	
+	private ExecutorService exec = Executors.newFixedThreadPool(1);
+	
 	
 	@RequestMapping("/processingVideos")
 	public AjaxEntity processingVideos(String token,String video) {
-		try {
-			 analysisService.processingVideos(token,video);
-		}catch (Exception e) {
-		}
-		return new AjaxEntity(Global.ajax_success, "操作成功", "");
+		
+		exec.execute(() -> {
+			try {
+				 analysisService.processingVideos(token,video);
+			}catch (Exception e) {
+			}
+		});
+		return new AjaxEntity(Global.ajax_success, "已提交,等待系统处理", "");
 	
 	}
 
