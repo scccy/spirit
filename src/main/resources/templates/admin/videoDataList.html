@@ -90,29 +90,20 @@
      function search(){
     		$('.search').click(function(){
     			 var option = {}
-    			 var  typename = $('#typename').val();
-    			 if(typename != "" && typename != "-1"){
-    				 option['typeid']= typename;
+    			 var  videoplatform = $('#videoplatform').val();
+    			 if(videoplatform != "" ){
+    				 option['videoplatform']= videoplatform;
     			 }
-    			 var  labelname = $('#labelname').val();
-    			 if(labelname != "" && labelname != "-1"){
-    				 option['labelid']= labelname;
+    			 var  videodesc = $('#videodesc').val();
+    			 if(videodesc != "" ){
+    				 option['videodesc']= videodesc;
     			 }
-    			 var  bookmarkrule = $('#bookmarkrule').val();
-    			 if(bookmarkrule != "" && bookmarkrule != "-1"){
-    				 option['bookmarkrule']= bookmarkrule;
-    			 }
-    			 var  bookmarkname = $('#bookmarkname').val();
-    			 if(bookmarkname != "" && bookmarkname != "-1"){
-    				 option['bookmarkname']= bookmarkname;
-    			 }
-    			 console.log(option);
     	         table.reload('projectList', {
     	             page: {
     	                 curr:1
     	             }, 
     	 			 method:'post',
-    	 			 url: '/admin/api/findBookList',
+    	 			 url: '/admin/api/findVideoDataList',
     	             where: option
     	         })
     		})
