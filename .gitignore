@@ -27,3 +27,4 @@ buildNumber.properties
 /backstage/.settings/org.eclipse.core.resources.prefs
 /backstage/.settings/org.eclipse.jdt.core.prefs
 /backstage/.settings/org.eclipse.m2e.core.prefs
+/backstage/.settings/org.eclipse.jdt.apt.core.prefs
