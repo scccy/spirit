@@ -16,6 +16,12 @@
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
           <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+    <style>
+        .layui-table-cell {
+            height: 100%;
+            max-width: 100%;
+        }
+    </style>
     </head>
     <body>
 
@@ -85,6 +91,7 @@
     </body>
 	<script type="text/html" th:inline="none" id="barLineTool">
 		<a class="layui-btn layui-btn-xs editData" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn layui-btn-xs" lay-event="prevideo">播放</a>
   		<a class="layui-btn layui-btn-danger layui-btn-xs delData" lay-event="del">删除</a>
 	</script>     
 	<script  th:inline="none">
@@ -162,6 +169,9 @@
     	         })
     		})
      }
+     function preVideo(e){
+    	 console.log(e);
+     }
      function loadTable(){
     		layui.use(['table','form'], function(){
     			  table = layui.table;
@@ -184,12 +194,13 @@
     			        last: false,
     			     },
     			     cols: [[ 
-    			    	 {field: 'id', title: 'ID', width:80},
+    			    	 {field: 'id', title: 'ID', width:60},
+    			    	 {field: 'originaladdress', title: '视频原地址', width:180},
     			    	 {field: 'videoname', title: '视频名称', width:180},
     			    	 {field: 'videodesc', title: '视频简介', width:180},
-    			    	 {field: 'videoplatform', title: '来源平台', width:180},
-    			    	 {field: 'videocover', title: '视频封面', width:180},
-    			    	 {field: 'videoaddr', title: '视频地址', width:180},
+    			    	 {field: 'videoplatform', title: '来源平台', width:80},
+    			    	 {field: 'videocover', title: '视频封面', width:180,templet:function(obj){return "<image src='"+obj.videocover+"' width='180px'"}},
+    			    	 {field: 'videoaddr', title: '视频真实地址', width:180},
     			    	 {field: 'createtime', title: '下载时间', width:180},
     			    	 {fixed: 'right', title:'操作',  minWidth: 180, toolbar: '#barLineTool'}
     			     ]],
@@ -241,6 +252,15 @@
       			   		  content: $('.updateData')
       			   		});
     			   	}
+    			   	
+    			   	if(obj.event === 'prevideo'){
+       			   		layer.open({
+        			   		  type: 1,
+        			   		  skin: 'layui-layer-rim', 
+        			   		  area: ['520px', '520px'], 
+        			   		  content: "<video src='"+obj.data.videounrealaddr+"' width='500' controls='controls'>"
+        			   	});
+			  	 	}
     			  });
     			  
     			  

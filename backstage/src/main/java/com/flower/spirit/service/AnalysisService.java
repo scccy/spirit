@@ -71,6 +71,7 @@ public class AnalysisService {
 	}
 	@SuppressWarnings("static-access")
 	public void dyvideo(String platform,String  video) throws UnsupportedEncodingException {
+		 logger.info("WebClient客户端开始启动");
 		 WebClient webClient = ThreadConfig.getWebClient();
 	        HtmlPage page = null;
 	        try {
@@ -101,6 +102,7 @@ public class AnalysisService {
 	        	}
 				
 			});
+	        logger.info("下载流程结束");
 	}
 	
 	
