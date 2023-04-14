@@ -19,7 +19,7 @@ public class SpiritApplication {
 	
 	public static void initData() {
 		try {
-			  File destDir = new File("/app/db/app.db");
+			  File destDir = new File("/app/db/spirit.db");
 			  if(!destDir.exists()) {
 				  FileUtil.copyDir("/home/app/db", "/app/db");
 			  }
