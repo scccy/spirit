@@ -17,3 +17,13 @@ buildNumber.properties
 /.settings/org.eclipse.m2e.core.prefs
 /LOG_PATH_IS_UNDEFINED/error.log
 /LOG_PATH_IS_UNDEFINED/info.log
+/backstage/.classpath
+/backstage/.settings/org.eclipse.wst.common.project.facet.core.xml
+/backstage/LOG_PATH_IS_UNDEFINED/error.log
+/backstage/LOG_PATH_IS_UNDEFINED/info.log
+/backstage/.mvn/wrapper/maven-wrapper.jar
+/backstage/.mvn/wrapper/maven-wrapper.properties
+/backstage/.project
+/backstage/.settings/org.eclipse.core.resources.prefs
+/backstage/.settings/org.eclipse.jdt.core.prefs
+/backstage/.settings/org.eclipse.m2e.core.prefs
