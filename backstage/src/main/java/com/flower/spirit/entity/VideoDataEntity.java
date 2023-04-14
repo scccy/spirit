@@ -27,6 +27,8 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 	@TableGenerator(name = "biz_video_seq", allocationSize = 1, table = "seq_common", pkColumnName = "seq_id", valueColumnName = "seq_count")
     private Integer id;
 	
+	public String originaladdress;
+	
 	private String videoname;
 	
 	private String videodesc;
@@ -50,7 +52,7 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 	}
 
 	public VideoDataEntity(String videoname, String videodesc, String videoplatform, String videocover,
-			String videoaddr,String videounrealaddr) {
+			String videoaddr,String videounrealaddr,String originaladdress) {
 		super();
 		this.videoname = videoname;
 		this.videodesc = videodesc;
@@ -59,6 +61,7 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 		this.videoaddr = videoaddr;
 		this.createtime = new Date();
 		this.videounrealaddr =videounrealaddr;
+		this.originaladdress  = originaladdress;
 	}
 
 	public Integer getId() {
@@ -123,6 +126,14 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 
 	public void setVideounrealaddr(String videounrealaddr) {
 		this.videounrealaddr = videounrealaddr;
+	}
+
+	public String getOriginaladdress() {
+		return originaladdress;
+	}
+
+	public void setOriginaladdress(String originaladdress) {
+		this.originaladdress = originaladdress;
 	}
 	
 	

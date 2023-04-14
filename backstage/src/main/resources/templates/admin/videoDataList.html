@@ -53,6 +53,35 @@
                 </div>
             </div>
         </div> 
+        
+         <div class="updateData layui-form" style="display: none;padding: 20px;">
+	   		 <input class="optionid" type="hidden">
+			 <div class="layui-inline">
+			    <label class="layui-form-label">来源平台</label>
+			     <div class="layui-input-inline layui-show-xs-block">
+					<select class="videoplatform">
+						   <option  value="其他">其他</option>
+			               <option  value="抖音">抖音</option>
+			               <option  value="B站">B站</option>
+			         </select>   
+			       </div>
+			  </div>
+			
+			  <div class="layui-inline">
+			    <label class="layui-form-label">视频名称</label>
+			    <div class="layui-input-inline">
+			      <input  type="text" name="videoname"  autocomplete="off" class="videoname layui-input">
+			    </div>
+			  </div>
+			  <div class="layui-inline">
+			    <label class="layui-form-label">视频简介</label>
+			    <div class="layui-input-inline">
+			      <input  type="text" name="videodesc"  autocomplete="off" class="videodesc layui-input">
+			    </div>
+			  </div>
+			  <div class="buttondiv" style=" padding-left: 5%; padding-top: 5%; "><button type="button" class="layui-btn">保存信息</button></div>
+	</div>
+        
     </body>
 	<script type="text/html" th:inline="none" id="barLineTool">
 		<a class="layui-btn layui-btn-xs editData" lay-event="edit">编辑</a>
@@ -65,7 +94,32 @@
     	 loadTable();
     	 search();
     	 initList();
+    	 updateData();
      })
+     
+         function updateData(){
+			$('.buttondiv button').click(function(){
+				var option ={
+						id:$('.optionid').val(),
+						videoplatform:$('.videoplatform').val(),
+						videoname:$('.videoname').val(),
+						videodesc:$('.videodesc').val()
+				};
+				layer.load();
+				$.post("/admin/api/updateVideoData",option,function(data,status){
+					console.log(data);
+					if(data.resCode =="000001"){
+						layer.closeAll();
+						layer.alert(data.message,function(){
+							 window.location.reload();
+						})
+					}else{
+						layer.closeAll();
+						layer.alert(data.data);
+					}
+				})
+			})
+		}
      
      function initList(){
     	 $('.initList').click(function(){
@@ -157,11 +211,36 @@
     			    var data = obj.data;
     			    console.log(obj)
     			    if(obj.event === 'del'){
-
+      			      layer.confirm("删除后下载的资源将一并删除,是否删除", function(index){
+      			        //调用接口删除
+      			        var id =obj.data.id;
+      			        $.get("/admin/api/deleteVideoData?id="+id,function(res){
+      			        	if(res.resCode =="000001"){
+      			        		layer.msg(res.message)
+      			        		setTimeout(function(){
+      								 window.location.reload();
+      							},1500)
+      			        	}else{
+      			        		layer.alert(res.message);
+      			        	}
+      			        })
+      			        layer.close(index);
+      			      });
     			    }
     			   	if(obj.event === 'edit'){
-
-    			    }
+							//updateData
+    			   		$('.optionid').val(obj.data.id);
+    			   		$(".videoplatform option[value=" + obj.data.videoplatform + "]").attr('selected', "selected"); 
+    			   		$('.videoname').val(obj.data.videoname);
+    			   		$('.videodesc').val(obj.data.videodesc);
+    			   		form.render('select');
+    			   		layer.open({
+      			   		  type: 1,
+      			   		  skin: 'layui-layer-rim', 
+      			   		  area: ['520px', '540px'], 
+      			   		  content: $('.updateData')
+      			   		});
+    			   	}
     			  });
     			  
     			  

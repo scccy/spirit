@@ -96,7 +96,7 @@ public class AnalysisService {
 	        			  JSONObject videoobj = detail.getJSONObject("video");
 	        	          String playApi = videoobj.getString("playApi");
 	        	          String cover = videoobj.getString("cover");
-	        	          this.putRecord(awemeId, desc, playApi, cover, platform);
+	        	          this.putRecord(awemeId, desc, playApi, cover, platform,video);
 	        		  }
 	        	}
 				
@@ -112,7 +112,7 @@ public class AnalysisService {
 	 * @param cover
 	 * @param platform
 	 */
-	public void putRecord(String awemeId,String desc,String playApi,String cover,String platform) {
+	public void putRecord(String awemeId,String desc,String playApi,String cover,String platform,String originaladdress) {
         String videofile = Global.a2_down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
         String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
         if(Global.downtype.equals("a2")) {
@@ -122,7 +122,7 @@ public class AnalysisService {
         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
         HttpUtil.downLoadFromUrl("https:"+cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
         //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
-        VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, platform, coverunaddr, videofile,videounrealaddr);
+        VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, platform, coverunaddr, videofile,videounrealaddr,originaladdress);
         videoDataDao.save(videoDataEntity);
 		
 	}

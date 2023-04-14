@@ -121,4 +121,14 @@ public class AdminController {
 	public AjaxEntity findVideoDataList(VideoDataEntity videoDataEntity,HttpServletRequest request) {
 		return videoDataService.findPage(videoDataEntity);
 	}
+	
+	@GetMapping(value = "/deleteVideoData")
+	public AjaxEntity deleteVideoData(VideoDataEntity downloaderEntity,HttpServletRequest request) {
+		return videoDataService.deleteVideoData(downloaderEntity);
+	}
+	
+	@PostMapping(value = "/updateVideoData")
+	public AjaxEntity updateVideoData(VideoDataEntity downloaderEntity,HttpServletRequest request) {
+		return videoDataService.updateVideoData(downloaderEntity);
+	}
 } 
