@@ -28,6 +28,13 @@ sqlite
     B站   未实现
 ### 部署
     任意java 环境或者docker
+    
+    docker 部署下 容器端口 为20801
+    必须挂载的目录 为
+    /app/resources/video       请注意此处  挂载目录必须与系统配置用推送给Aria2的下载目录一致
+    /app/resources/cover
+    /app/db
+    /tmp
 ### 后台默认帐号密码
     后台地址是 http://ip:port/admin/login
     默认帐号为admin 默认密码为123456
