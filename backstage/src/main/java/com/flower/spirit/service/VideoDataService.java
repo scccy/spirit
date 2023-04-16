@@ -51,7 +51,7 @@ public class VideoDataService {
 				if(seachDate != null && StringUtil.isString(seachDate.getVideoplatform())) {
 					predicate.getExpressions().add(criteriaBuilder.like(root.get("videoplatform"), "%"+seachDate.getVideoplatform()+"%"));
 				}
-				
+				query.orderBy(criteriaBuilder.desc(root.get("id")));
 				return predicate;
 			}};
 			
