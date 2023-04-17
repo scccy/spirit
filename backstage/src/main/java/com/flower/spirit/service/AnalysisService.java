@@ -69,6 +69,12 @@ public class AnalysisService {
 			}
 	       
 	}
+	
+	public void bilivideo(String platform,String  video) {
+		
+	}
+	
+	
 	@SuppressWarnings("static-access")
 	public void dyvideo(String platform,String  video) throws UnsupportedEncodingException {
 		 logger.info("WebClient客户端开始启动");
@@ -76,32 +82,32 @@ public class AnalysisService {
 	        HtmlPage page = null;
 	        try {
 	            page = webClient.getPage(this.findAddr(video));
+		        webClient.waitForBackgroundJavaScript(300);
+		        String pageXml = page.asXml();
+		        Document parse = Jsoup.parse(pageXml);
+		        Element render_data = parse.getElementById("RENDER_DATA");
+		        String encode = URLDecoder.decode(render_data.html().substring("//<![CDATA[".length(), render_data.html().length() - "//]]>".length()).trim(), "UTF-8");
+		        JSONObject jsonObject = JSON.parseObject(encode);
+		        jsonObject.forEach((key, value) -> {
+		        	if(this.isJSONString(value.toString())) {
+		        		  JSONObject aweme = JSONObject.parseObject(value.toString()).getJSONObject("aweme");
+		        		  if(aweme != null) {
+		        			  JSONObject detail = aweme.getJSONObject("detail");
+		        			  String awemeId = detail.getString("awemeId");
+		        			  String desc = detail.getString("desc");
+		        			  JSONObject videoobj = detail.getJSONObject("video");
+		        	          String playApi = videoobj.getString("playApi");
+		        	          String cover = videoobj.getString("cover");
+		        	          this.putRecord(awemeId, desc, playApi, cover, platform,video);
+		        		  }
+		        	}
+					
+				});
 	        } catch (Exception e) {
 	        	logger.error(e.getMessage());
 	        }finally {
 	            webClient.close();
 	        }
-	        webClient.waitForBackgroundJavaScript(300);
-	        String pageXml = page.asXml();
-	        Document parse = Jsoup.parse(pageXml);
-	        Element render_data = parse.getElementById("RENDER_DATA");
-	        String encode = URLDecoder.decode(render_data.html().substring("//<![CDATA[".length(), render_data.html().length() - "//]]>".length()).trim(), "UTF-8");
-	        JSONObject jsonObject = JSON.parseObject(encode);
-	        jsonObject.forEach((key, value) -> {
-	        	if(this.isJSONString(value.toString())) {
-	        		  JSONObject aweme = JSONObject.parseObject(value.toString()).getJSONObject("aweme");
-	        		  if(aweme != null) {
-	        			  JSONObject detail = aweme.getJSONObject("detail");
-	        			  String awemeId = detail.getString("awemeId");
-	        			  String desc = detail.getString("desc");
-	        			  JSONObject videoobj = detail.getJSONObject("video");
-	        	          String playApi = videoobj.getString("playApi");
-	        	          String cover = videoobj.getString("cover");
-	        	          this.putRecord(awemeId, desc, playApi, cover, platform,video);
-	        		  }
-	        	}
-				
-			});
 	        logger.info("下载流程结束");
 	}
 	

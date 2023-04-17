@@ -31,4 +31,15 @@ public class ThreadConfig {
         webClient.getOptions().setDownloadImages(false);
         return webClient;
     }
+    
+    public static WebClient getWebClientNotJavaScript() {
+        WebClient webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setActiveXNative(false);
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setJavaScriptEnabled(false);
+        webClient.getOptions().setDownloadImages(false);
+        return webClient;
+    }
 }
