@@ -113,7 +113,6 @@ public class HttpUtil {
 		} catch (Exception e) {
 			
 		}
-        System.out.println("download success!!");
     }
 
     public static  byte[] readInputStream(InputStream inputStream) throws IOException {  

@@ -28,12 +28,11 @@ public class BiliUtil {
 		if(parseEntry.contains("av")) {
 			api="https://api.bilibili.com/x/web-interface/view?aid="+parseEntry.substring(2, parseEntry.length());
 		}
-		System.out.println(api);
 		String serchPersion = HttpUtil.getSerchPersion(api, "UTF-8");
 		JSONObject videoData = JSONObject.parseObject(serchPersion);
-		String bvid = videoData.getString("bvid");
-		String aid = videoData.getString("aid");
-		String cid = videoData.getString("cid");
+		String bvid = videoData.getJSONObject("data").getString("bvid");
+		String aid = videoData.getJSONObject("data").getString("aid");
+		String cid = videoData.getJSONObject("data").getString("cid");
 		res.put("bvid", bvid);
 		res.put("aid", aid);
 		res.put("cid", cid);
@@ -81,6 +80,7 @@ public class BiliUtil {
 	
 	public static void main(String[] args) {
 		Map<String, String> videoDataInfo = BiliUtil.getVideoDataInfo("https://b23.tv/kq7ciww");
+		System.out.println(videoDataInfo);
 //		System.out.println("BV1NP411S7aY".substring(2,"BV1NP411S7aY".length()));
 	}
 }
