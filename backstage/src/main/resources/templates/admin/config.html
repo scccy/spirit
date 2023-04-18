@@ -42,6 +42,26 @@
     </div>
   </div>
   <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+  		<legend>B站配置</legend>
+  </fieldset>
+  
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <input type="hidden" class="bili" th:value="${bili.id}" /> 
+      <label class="layui-form-label">B站cookies</label>
+      <div class="layui-input-inline">
+        <input type="type" name="bilicookies"  autocomplete="off" class="layui-input bilicookies" th:value="${bili.bilicookies}">
+      </div>
+      <div style=" margin-top: 1rem; display: inline-block; ">此处填写B站登录后的Cookies 可以不填 但是无法获取1080</div>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button type="button" class="layui-btn saveBiliConfig" lay-submit="" >保存</button>
+    </div>
+  </div>
+  
+  <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
   		<legend>其他功能UI占位</legend>
   </fieldset>
   
@@ -50,7 +70,7 @@
  $(function(){
 	 initLayui();
 	 saveConfig();
-	 
+	 saveBiliConfig();
 	 
  })
  var layer;
@@ -58,6 +78,28 @@
 	 layui.use(['layer'], function(){
 		 layer = layui.layer;
        });
+ }
+ function saveBiliConfig(){
+	 $('.saveBiliConfig').click(function(){
+		 var appid = $('.bili').val();
+		 var bilicookies = $('.bilicookies').val();
+		 var option = {};
+		 option['id'] = appid;
+		 option['bilicookies'] = bilicookies;
+		 $.post("/admin/api/updateBiliConfig",option,function(data,status){
+			if(data.resCode =="000001"){
+				layer.closeAll();
+				layer.alert(data.message,function(){
+					 window.location.reload();
+				})
+			}else{
+				
+				layer.alert(data.message,function(){
+					layer.closeAll();
+				});
+			}
+		 })
+	 })
  }
  function saveConfig(){
 	 $('.saveConfig').click(function(){

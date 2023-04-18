@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.common.RequestEntity;
+import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.DownloaderEntity;
 import com.flower.spirit.entity.UserEntity;
 import com.flower.spirit.entity.VideoDataEntity;
+import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.SystemService;
@@ -42,6 +44,9 @@ public class AdminController {
 	
 	@Autowired
 	private VideoDataService videoDataService;
+	
+	@Autowired
+	private BiliConfigService biliConfigService;
 	
 	/**  
 	
@@ -130,5 +135,11 @@ public class AdminController {
 	@PostMapping(value = "/updateVideoData")
 	public AjaxEntity updateVideoData(VideoDataEntity downloaderEntity,HttpServletRequest request) {
 		return videoDataService.updateVideoData(downloaderEntity);
+	}
+	
+	
+	@PostMapping(value = "/updateBiliConfig")
+	public AjaxEntity updateBiliConfig(BiliConfigEntity biliConfigEntity,HttpServletRequest request) {
+		return biliConfigService.updateBiliConfig(biliConfigEntity);
 	}
 } 

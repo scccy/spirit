@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.flower.spirit.config.Global;
+import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
+import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 
 
@@ -19,6 +21,9 @@ public class PageController {
 
 	@Autowired
 	private ConfigService configService;
+	
+	@Autowired
+	private BiliConfigService biliConfigService;
 	
 	@RequestMapping(value = "/admin")
 	public String admin(HttpServletRequest request) {
@@ -66,6 +71,8 @@ public class PageController {
 	@RequestMapping(value = "/config")
 	public String config(Model model) {
 		ConfigEntity config = configService.getData();
+		BiliConfigEntity bili = biliConfigService.getData();
+		model.addAttribute("bili", bili);
 		model.addAttribute("config", config);
 		return "admin/config";
 	}

@@ -75,13 +75,13 @@
                          下载器类型
                      </label>
                      <div class="layui-input-inline">
-                          <select id="downloadertype">
+                          <select id="downloadertype" lay-filter="downloadertype">
                                 <option value="aria2">aria2</option>
-                                <option value="http">http下载</option>
+                                <option value="http">http</option>
                             </select>    
                      </div>
                 </div>
-        		<div class="layui-form-item">
+        		<div class="layui-form-item downloaderlinkdiv">
                      <label for="downloaderlink" class="layui-form-label">
                           下载器地址
                      </label>
@@ -90,7 +90,7 @@
                      </div>
 
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item downloaderportdiv">
                      <label for="downloaderport" class="layui-form-label">
                           下载端口
                      </label>
@@ -99,7 +99,7 @@
                      </div>
 
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item downloadpathdiv">
                      <label for="downloadpath" class="layui-form-label">
                           下载目录
                      </label>
@@ -108,7 +108,7 @@
                      </div>
 
                 </div>
-                 <div class="layui-form-item">
+                 <div class="layui-form-item usernamediv">
                      <label for="username" class="layui-form-label">
                           下载器用户名
                      </label>
@@ -117,7 +117,7 @@
                      </div>
 
                 </div>
-               <div class="layui-form-item">
+               <div class="layui-form-item passworddiv">
                      <label for="password" class="layui-form-label">
                           下载器密码
                      </label>
@@ -126,7 +126,7 @@
                      </div>
 
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-form-item tokendiv" >
                      <label for="token" class="layui-form-label">
                           token
                      </label>
@@ -164,7 +164,7 @@
 					  type: 1,
 					  shade: false,
 					  title: "下载器维护",
-					  area: ['450px', '560px'], 
+					  area: ['480px', '600px'], 
 					  content: $('.downLoader')
 				});
  	 })
@@ -191,22 +191,22 @@
     		 if(downloadertype != null){
     			 option['downloadertype'] = downloadertype;
     		 }
-    		 if(downloaderlink != null){
+    		 if(downloaderlink != null && downloadertype =="aria2"){
     			 option['downloaderlink'] = downloaderlink;
     		 }
-    		 if(downloaderport != null){
+    		 if(downloaderport != null && downloadertype =="aria2"){
     			 option['downloaderport'] = downloaderport;
     		 }
-    		 if(downloadpath != null){
+    		 if(downloadpath != null && downloadertype =="aria2"){
     			 option['downloadpath'] = downloadpath;
     		 }
-    		 if(username != null){
+    		 if(username != null && downloadertype =="aria2"){
     			 option['username'] = username;
     		 }
-    		 if(password != null){
+    		 if(password != null && downloadertype =="aria2"){
     			 option['password'] = password;
     		 }
-    		 if(token != null){
+    		 if(token != null && downloadertype =="aria2"){
     			 option['token'] = token;
     		 }
     		 if(status != null){
@@ -233,7 +233,28 @@
     	 layui.use(['laydate','form'], function(){
              var laydate = layui.laydate;
              var  form = layui.form;
-
+			
+             form.on('select(downloadertype)',function() {
+            	 var downloadertype = $('#downloadertype').val();
+            	 console.log(downloadertype);
+            	 if(downloadertype == "http"){
+            		 $('.downloaderlinkdiv').hide();
+            		 $('.downloaderportdiv').hide();
+            		 $('.downloadpathdiv').hide();
+            		 $('.usernamediv').hide();
+            		 $('.passworddiv').hide();
+            		 $('.tokendiv').hide();
+            	 }else{
+             		 $('.downloaderlinkdiv').show();
+            		 $('.downloaderportdiv').show();
+            		 $('.downloadpathdiv').show();
+            		 $('.usernamediv').show();
+            		 $('.passworddiv').show();
+            		 $('.tokendiv').show();
+            	 }
+             });
+             
+             
              form.on('submit(add)',
                      function(data) {
                          console.log(data);
@@ -311,11 +332,15 @@
     		 $('#password').val(res.record.password);
     		 $('#token').val(res.record.token);
     		 $('.status').val(res.record.status);
+    		  layui.use('form', function(){
+    		      var form = layui.form;
+    		      form.render();
+    		    });
     		 layer.open({
 				  type: 1,
 				  shade: false,
 				  title: "下载器维护",
-				  area: ['450px', '560px'], 
+				  area: ['480px', '600px'], 
 				  content: $('.downLoader')
 			 });
 		  })

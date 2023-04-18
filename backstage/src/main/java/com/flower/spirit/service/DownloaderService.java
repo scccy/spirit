@@ -10,6 +10,7 @@ import javax.persistence.criteria.Root;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.common.RequestEntity;
+import com.flower.spirit.config.AppConfig;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.dao.DownloaderDao;
 import com.flower.spirit.entity.DownloaderEntity;
@@ -28,6 +30,11 @@ public class DownloaderService {
 	
 	@Autowired
 	private DownloaderDao  downloaderDao;
+	
+	
+	@Autowired
+	@Lazy
+	private AppConfig appConfig;
 
 	public void renovate() {
 		List<DownloaderEntity> list =  downloaderDao.findAll();
@@ -89,6 +96,7 @@ public class DownloaderService {
 			}
 		}
 		downloaderDao.save(downloaderEntity);
+		appConfig.init();
 		return new AjaxEntity(Global.ajax_success, Global.ajax_option_success, null);
 	}
 
