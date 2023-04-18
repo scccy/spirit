@@ -124,6 +124,11 @@ public class AnalysisService {
         if(Global.downtype.equals("a2")) {
       	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token));
         }
+        if(Global.down_path.equals("http")) {
+        	//内置下载器
+        	HttpUtil.downLoadFromUrl("https:"+playApi, awemeId+".mp4", Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+        	
+        }
         //下载封面图当容器映射目录
         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
         HttpUtil.downLoadFromUrl("https:"+cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
