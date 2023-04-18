@@ -2,7 +2,6 @@ package com.flower.spirit.utils;
 
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 
 import java.util.concurrent.Executors;

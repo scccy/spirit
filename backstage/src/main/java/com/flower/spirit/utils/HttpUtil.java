@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -66,7 +65,8 @@ public class HttpUtil {
      * @param json
      * @return
      */
-    public static JSONObject doPost(String url,JSONObject json){
+    @SuppressWarnings("deprecation")
+	public static JSONObject doPost(String url,JSONObject json){
         DefaultHttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
         JSONObject response = null;
