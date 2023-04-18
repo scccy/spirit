@@ -22,5 +22,25 @@ public class BiliConfigEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.TABLE,generator="biz_bili_config")
 	@TableGenerator(name = "biz_bili_config", allocationSize = 1, table = "seq_common", pkColumnName = "seq_id", valueColumnName = "seq_count")
     private Integer id;
+	
+	public String bilicookies;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getBilicookies() {
+		return bilicookies;
+	}
+
+	public void setBilicookies(String bilicookies) {
+		this.bilicookies = bilicookies;
+	}
+	
+	
 
 }

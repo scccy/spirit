@@ -53,4 +53,6 @@ public class Global {
 	
 	public static String apptoken="123456";
 	
+	
+	public static String bilicookies ="";
 }
