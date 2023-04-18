@@ -77,6 +77,7 @@
                      <div class="layui-input-inline">
                           <select id="downloadertype">
                                 <option value="aria2">aria2</option>
+                                <option value="http">http下载</option>
                             </select>    
                      </div>
                 </div>
@@ -103,7 +104,7 @@
                           下载目录
                      </label>
                      <div class="layui-input-inline">
-                          <input type="text" id="downloadpath" name="downloadpath" required="" lay-verify="downloadpath" autocomplete="off" class="layui-input" placeholder="传递给a2的下载目录  绝对路径 eg. /home/xxx or  d://xxx" title="传递给a2的下载目录  绝对路径 eg. /home/xxx or  d://xxx">
+                          <input type="text" id="downloadpath" name="downloadpath" required="" lay-verify="downloadpath" autocomplete="off" class="layui-input" placeholder="传递给a2的下载目录  绝对路径 eg. /home/xxx or  d://xxx" title="传递给a2的下载目录  绝对路径 eg. /home/xxx or  d://xxx 如果不是外置下载器 则地址默认使用/app/resources/video">
                      </div>
 
                 </div>

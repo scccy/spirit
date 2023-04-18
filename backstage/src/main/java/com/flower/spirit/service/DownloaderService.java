@@ -37,9 +37,16 @@ public class DownloaderService {
 					//目前仅加载aria2
 					String a2_link = data.getDownloaderlink()+":"+data.getDownloaderport()+"/jsonrpc";
 					Global.a2_link =a2_link;
-					Global.a2_down_path =data.getDownloadpath();
+					Global.down_path =data.getDownloadpath();
 					Global.a2_token =data.getToken();
+					Global.downtype ="a2";
 					logger.info("已加载默认下载器"+a2_link);
+				}
+				if(data.getDownloadertype().equals("http")) {
+					//基础http 下载器
+					Global.down_path =data.getDownloadpath();
+					Global.downtype ="http";
+					logger.info("已使用基础http下载器");
 				}
 			}
 		}
