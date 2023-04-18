@@ -23,14 +23,14 @@ public class ApiController {
 	
 	@RequestMapping("/processingVideos")
 	public AjaxEntity processingVideos(String token,String video) throws Exception {
-		 analysisService.processingVideos(token,video);
-//		exec.execute(() -> {
-//			try {
-//				 analysisService.processingVideos(token,video);
-//			}catch (Exception e) {
-//				
-//			}
-//		});
+//		 analysisService.processingVideos(token,video);
+		exec.execute(() -> {
+			try {
+				 analysisService.processingVideos(token,video);
+			}catch (Exception e) {
+				
+			}
+		});
 		return new AjaxEntity(Global.ajax_success, "已提交,等待系统处理", "");
 	
 	}

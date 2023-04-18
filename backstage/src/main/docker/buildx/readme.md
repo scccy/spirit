@@ -1,6 +1,8 @@
 ###docker buildx
     
     docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t qingfeng2336/spirit --push -f ./Dockerfile .
+
+	docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t qingfeng2336/spirit:dev --push -f ./Dockerfile .
     
 ## 映射目录
 
