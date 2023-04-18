@@ -26,6 +26,7 @@ public class BiliUtil {
 		api =api+"&fnval=1&fnver=0&fourk=0";
 		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
+		System.out.println(httpGetBili);
 		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
 		HttpUtil.downBiliFromUrl(video, videoDataInfo.get("cid")+".mp4", filepath);
 		videoDataInfo.put("video", filepath+"/"+videoDataInfo.get("cid")+".mp4");
@@ -102,8 +103,7 @@ public class BiliUtil {
 	
 	
 	public static void main(String[] args) throws Exception {
-//		String findVideoStreaming = BiliUtil.findVideoStreaming("https://b23.tv/kq7ciww",null,"D:\\flower\\uploadFile");
-//		System.out.println(findVideoStreaming);
-//		System.out.println("BV1NP411S7aY".substring(2,"BV1NP411S7aY".length()));
+		Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming("https://www.bilibili.com/video/BV1zs4y1w7Qy/?spm_id_from=autoNext&vd_source=4e28b639dd740fe29d40b7a7ce78150a","buvid3=A482E3B3-9600-C78A-83F9-820A593BD77D98106infoc; b_nut=1674643698; _uuid=A34D1EA8-8E3F-42AC-E823-31E87A106BFA196842infoc; rpdid=|(umYJYlYYY)0J'uY~RYRJ~|u; nostalgia_conf=-1; buvid_fp_plain=undefined; hit-new-style-dyn=0; hit-dyn-v2=1; i-wanna-go-back=-1; header_theme_version=CLOSE; CURRENT_BLACKGAP=0; buvid4=A7F1A7FD-D260-A5A3-C4CF-0978621B76B401106-023012518-I+fjjCdS2R4+iUreQE/8BA==; DedeUserID=3493262113376423; DedeUserID__ckMd5=d6afd5e2e0cb60b3; LIVE_BUVID=AUTO3516787998398287; b_ut=5; PVID=1; CURRENT_FNVAL=4048; CURRENT_PID=fed22140-d21a-11ed-8dbf-3f61c17c3c6f; FEED_LIVE_VERSION=V8; CURRENT_QUALITY=80; fingerprint=aaef0e9f1d452954ccb3f45ced603e16; buvid_fp=541890ad651676727c6770a2daf2a081; bp_video_offset_3493262113376423=785525518392885500; innersign=0; b_lsid=82F85E86_187949D9837; SESSDATA=b9852370,1697377571,aa6fa*41; bili_jct=057f32fb819f4bcb47d686c2772c026f; sid=6o43jv69; home_feed_column=4","D:\\flower\\uploadFile");
+		System.out.println(findVideoStreaming);
 	}
 }

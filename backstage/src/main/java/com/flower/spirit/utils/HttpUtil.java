@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.HttpResponse;
@@ -61,14 +62,18 @@ public class HttpUtil {
     
     public static String httpGetBili(String url,String param,String cookie){
         HttpClient httpClient = new HttpClient();
+    
+        httpClient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
         httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
         GetMethod getMethod = new GetMethod(url);
+     
         getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 5000);
         getMethod.getParams().setParameter("user-agent", "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Mobile Safari/537.36");
-        if(null != cookie && cookie.equals("")) {
-        	  getMethod.getParams().setParameter("cookie", cookie);
+        getMethod.addRequestHeader("user-agent","Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Mobile Safari/537.36");
+        if(null != cookie && !cookie.equals("")) {
+        	   getMethod.addRequestHeader("cookie",cookie);
         }
-      
+     
         getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
         String response = "";
         try {
