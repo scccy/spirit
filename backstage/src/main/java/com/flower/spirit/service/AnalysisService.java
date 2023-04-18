@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +22,7 @@ import com.flower.spirit.config.Global;
 import com.flower.spirit.dao.VideoDataDao;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.utils.Aria2Util;
+import com.flower.spirit.utils.BiliUtil;
 import com.flower.spirit.utils.DateUtils;
 import com.flower.spirit.utils.HttpUtil;
 import com.flower.spirit.utils.ThreadConfig;
@@ -63,11 +65,25 @@ public class AnalysisService {
 				this.dyvideo(platform, video);
 				return;
 			}
+			if(platform.equals("哔哩")) {
+				this.bilivideo(platform, this.getUrl(video));
+				return;
+			}
 	       
 	}
 	
-	public void bilivideo(String platform,String  video) {
-		
+	public void bilivideo(String platform,String  video) throws Exception {
+		  String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
+		  try {
+			 Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
+			 String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
+			 String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
+			 HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), findVideoStreaming.get("cid")+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,video);
+		     videoDataDao.save(videoDataEntity);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 	
 	
@@ -125,7 +141,7 @@ public class AnalysisService {
         if(Global.downtype.equals("http")) {
         	//内置下载器
         	HttpUtil.downLoadFromUrl("https:"+playApi, awemeId+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
-        	
+        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
         }
         //下载封面图当容器映射目录
         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
@@ -163,6 +179,9 @@ public class AnalysisService {
 	public  String getPlatform(String input) {
 		if(input.contains("抖音")) {
 			return "抖音";
+		}
+		if(input.contains("哔哩")) {
+			return "哔哩";
 		}
 		return "未知";
     }
