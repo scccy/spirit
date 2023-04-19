@@ -26,6 +26,14 @@ sqlite
 htmlunit等
 ```
 
+## docker hub
+
+[Docker](https://hub.docker.com/r/qingfeng2336/spirit)
+
+### github
+
+[GitHub - Confession1995/spirit: spirit](https://github.com/Confession1995/spirit)
+
 ### 功能点
 
 - [x] 配置下载器
@@ -86,8 +94,8 @@ docker 部署下 容器端口 为20801
                            如果不使用Aria2 只使用内置http 下载器  就正常挂载此目录
 /app/resources/cover
 /app/db
+/app/log
 /tmp
-
 ```
 
 ### 后台默认帐号密码
@@ -107,6 +115,6 @@ docker 部署下 容器端口 为20801
 
 ## 参考资料
 
-   https://github.com/SocialSisterYi/bilibili-API-collect
+https://github.com/SocialSisterYi/bilibili-API-collect
 
-   https://toscode.gitee.com/zong_zh/parsing-tiktok-video
+https://toscode.gitee.com/zong_zh/parsing-tiktok-video
