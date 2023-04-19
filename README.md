@@ -83,10 +83,11 @@ docker run --name spirit -d -p 28081:28081 -v /home/spirit/log:/app/log -v /home
 ```
 docker 部署下 容器端口 为20801
 /app/resources/video       请注意此处  挂载目录必须与系统配置用推送给Aria2的下载目录一致   
-                           如果不使用Aria2 只使用内置http 下载器  就正常挂载此目录
+                           如果不使用Aria2 只使用内置http 下载器  就正常挂载此目录
 /app/resources/cover
 /app/db
 /tmp
+
 ```
 
 ### 后台默认帐号密码
@@ -98,18 +99,14 @@ docker 部署下 容器端口 为20801
 
 ### 意见反馈
 
-
-
 ### 更新方向
 
 ```
 暂无
 ```
 
-
-
 ## 参考资料
 
-    https://github.com/SocialSisterYi/bilibili-API-collect
+   https://github.com/SocialSisterYi/bilibili-API-collect
 
-    https://toscode.gitee.com/zong_zh/parsing-tiktok-video
+   https://toscode.gitee.com/zong_zh/parsing-tiktok-video
