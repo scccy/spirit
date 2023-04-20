@@ -27,8 +27,13 @@ public class BiliConfigService {
 		return findAll.get(0);
 	}
 
+	/**
+	 * @param entity
+	 * @return
+	 */
 	public AjaxEntity updateBiliConfig(BiliConfigEntity entity) {
 		BiliConfigDao.save(entity);
+		Global.bilicookies = entity.getBilicookies();
 		return new AjaxEntity(Global.ajax_success, "操作成功", entity);
 	}
 

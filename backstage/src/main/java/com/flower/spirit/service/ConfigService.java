@@ -23,6 +23,7 @@ public class ConfigService {
 
 	public AjaxEntity saveConfig(ConfigEntity configEntity) {
 		configDao.save(configEntity);
+		Global.apptoken =configEntity.getApptoken();
 		return new AjaxEntity(Global.ajax_option_success, "操作成功", configEntity);
 	}
 

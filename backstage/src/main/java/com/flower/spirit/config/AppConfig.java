@@ -11,6 +11,10 @@ import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
 
+/**
+ * @author flower
+ *程序初始化入口 加载常量信息到应用缓存
+ */
 @Configuration
 public class AppConfig {
 	
