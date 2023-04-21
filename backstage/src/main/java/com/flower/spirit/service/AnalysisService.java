@@ -115,7 +115,10 @@ public class AnalysisService {
 	        } catch (Exception e) {
 	        	throw e;
 	        }finally {
-	            webClient.close();
+				//如果后续观察内存占用问题比较大 考虑取消此处注释
+				//webClient.getCurrentWindow().getJobManager().removeAllJobs();
+				webClient.close();
+				//System.gc();
 	        }
 	        logger.info("下载流程结束");
 	}

@@ -79,7 +79,11 @@ public class BiliUtil {
 			}catch (Exception e) {
 				
 			}finally {
+				//如果后续观察内存占用问题比较大 考虑取消此处注释
+				//webClient.getCurrentWindow().getJobManager().removeAllJobs();
 				webClient.close();
+				//System.gc();
+				
 			}
 		}
 		return "";
