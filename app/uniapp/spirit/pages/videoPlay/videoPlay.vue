@@ -11,15 +11,7 @@
 		 
 		<view>
 			<uni-popup ref="videoPlay" type="dialog">
-				<!-- #ifdef APP -->
-					<web-view>
-						<video id="myVideo" :src="videoPlay"  controls show-fullscreen-btn></video>
-					</web-view>
-				<!-- #endif -->
-				<!-- #ifdef MP-WEIXIN -->
-					<video id="myVideo" :src="videoPlay"  controls show-fullscreen-btn></video>
-				<!-- #endif -->
-			
+				<video id="myVideo" :src="videoPlay"  controls show-fullscreen-btn></video>
 			</uni-popup>
 		</view>
 	 </view>
