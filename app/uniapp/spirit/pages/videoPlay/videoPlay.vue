@@ -11,9 +11,15 @@
 		 
 		<view>
 			<uni-popup ref="videoPlay" type="dialog">
-				<cover-view>
+				<!-- #ifdef APP -->
+					<web-view>
+						<video id="myVideo" :src="videoPlay"  controls show-fullscreen-btn></video>
+					</web-view>
+				<!-- #endif -->
+				<!-- #ifdef MP-WEIXIN -->
 					<video id="myVideo" :src="videoPlay"  controls show-fullscreen-btn></video>
-				</cover-view>
+				<!-- #endif -->
+			
 			</uni-popup>
 		</view>
 	 </view>
@@ -88,6 +94,10 @@
 	page{
 		background: #f3f3f3;
 	}
+	.videolist{
+		padding-left: 0.8rem;
+		padding-right: 0.8rem;
+	}
 	.grid{
 		padding-top: 10px;
 	}
@@ -96,7 +106,7 @@
 		text-align: center;
 		vertical-align: middle;
 		height: 15rem;
-		width: 45%;
+		width: 43.7%;
 		float: left;
 		margin: 0.5%;
 		background-color: #fff;
