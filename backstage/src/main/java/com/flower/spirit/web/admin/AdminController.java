@@ -23,6 +23,12 @@ import com.flower.spirit.service.UserService;
 import com.flower.spirit.service.VideoDataService;
 
 
+/**
+ * 
+ * 后台api 控制器
+ * @author flower
+ *
+ */
 @RestController
 @RequestMapping("/admin/api")
 public class AdminController {
@@ -94,50 +100,109 @@ public class AdminController {
 		return userService.addUser(userEntity);
 	}
 	
+	/**
+	 * 删除管理用户
+	 * @param userEntity
+	 * @param request
+	 * @return
+	 */
 	@GetMapping(value = "/delUser")
 	public AjaxEntity delUser(UserEntity userEntity,HttpServletRequest request) {
 		return userService.delUser(userEntity);
 	}
 	
+	/**
+	 * 分页获取下载器列表
+	 * @param res
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/finddownLoaderList")
 	public AjaxEntity finddownLoaderList(RequestEntity res,HttpServletRequest request) {
 		return downloaderService.finddownLoaderList(res);
 	}
 	
+	/**
+	 * 删除下载器
+	 * @param downloaderEntity
+	 * @param request
+	 * @return
+	 */
 	@GetMapping(value = "/deleteDownLoader")
 	public AjaxEntity delDownLoader(DownloaderEntity downloaderEntity,HttpServletRequest request) {
 		return downloaderService.delDownLoader(downloaderEntity);
 	}
 	
+	/**
+	 * 新增或修改下载器
+	 * @param downloaderEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/addDownLoader")
 	public AjaxEntity addDownLoader(DownloaderEntity downloaderEntity,HttpServletRequest request) {
 		return downloaderService.addDownLoader(downloaderEntity);
 	}
+	/**
+	 * 获取单个下载器信息
+	 * @param downloaderEntity
+	 * @param request
+	 * @return
+	 */
 	@GetMapping(value = "/getDownLoader")
 	public AjaxEntity getDownLoader(DownloaderEntity downloaderEntity,HttpServletRequest request) {
 		return downloaderService.getDownLoader(downloaderEntity);
 	}
 	
+	/**
+	 * 修改系统基础设置 apptoken
+	 * @param configEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/saveConfig")
 	public AjaxEntity saveConfig(ConfigEntity configEntity,HttpServletRequest request) {
 		return configService.saveConfig(configEntity);
 	}
+	/**
+	 * 分页获取已缓存的视频历史记录
+	 * @param videoDataEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/findVideoDataList")
 	public AjaxEntity findVideoDataList(VideoDataEntity videoDataEntity,HttpServletRequest request) {
 		return videoDataService.findPage(videoDataEntity);
 	}
 	
+	/**
+	 * 删除视频缓存信息及视频文件
+	 * @param downloaderEntity
+	 * @param request
+	 * @return
+	 */
 	@GetMapping(value = "/deleteVideoData")
 	public AjaxEntity deleteVideoData(VideoDataEntity downloaderEntity,HttpServletRequest request) {
 		return videoDataService.deleteVideoData(downloaderEntity);
 	}
 	
+	/**
+	 * 更新视频基础文件
+	 * @param downloaderEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/updateVideoData")
 	public AjaxEntity updateVideoData(VideoDataEntity downloaderEntity,HttpServletRequest request) {
 		return videoDataService.updateVideoData(downloaderEntity);
 	}
 	
 	
+	/**修改Bili配置信息
+	 * @param biliConfigEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/updateBiliConfig")
 	public AjaxEntity updateBiliConfig(BiliConfigEntity biliConfigEntity,HttpServletRequest request) {
 		return biliConfigService.updateBiliConfig(biliConfigEntity);

@@ -14,6 +14,11 @@ import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 
 
+/**
+ * 页面类控制器
+ * @author flower
+ *
+ */
 @Controller
 @RequestMapping(value = "/admin")
 public class PageController {
@@ -25,6 +30,11 @@ public class PageController {
 	@Autowired
 	private BiliConfigService biliConfigService;
 	
+	/**
+	 * 管理员控制台
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/admin")
 	public String admin(HttpServletRequest request) {
 		if(request.getSession().getAttribute(Global.user_session_key) ==  null) {
@@ -33,6 +43,11 @@ public class PageController {
 			return "admin/index";
 		}
 	}
+	/**
+	 * 管理员登录
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/login")
 	public String login(HttpServletRequest request) {
 		if(request.getSession().getAttribute(Global.user_session_key) !=  null) {
@@ -41,33 +56,63 @@ public class PageController {
 		return "admin/login";
 	}
 
+	/**
+	 * 管理员控制台
+	 * @return
+	 */
 	@RequestMapping(value = "/index")
 	public String index() {
 		return "admin/index";
 	}
 	
+	/**
+	 * 后台欢迎页
+	 * @return
+	 */
 	@RequestMapping(value = "/welcome")
 	public String welcome() {
 		return "admin/welcome";
 	}
+	/**
+	 * 退出登录
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/loginOut")
 	public String loginOut(HttpServletRequest request) {
 		request.getSession().setAttribute(Global.user_session_key, null);
 		return "admin/login";
 	}
+	/**
+	 * 用户列表页
+	 * @return
+	 */
 	@RequestMapping(value = "/userList")
 	public String userList() {
 		return "admin/userList";
 	}
+	/**
+	 * 新增用户页
+	 * @return
+	 */
 	@RequestMapping(value = "/addUser")
 	public String addUser() {
 		return "admin/addUser";
 	}
 	
+	/**
+	 * 下载列表页
+	 * @return
+	 */
 	@RequestMapping(value = "/downLoaderList")
 	public String downLoaderList() {
 		return "admin/downLoaderList";
 	}
+	/**
+	 * 系统配置页
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/config")
 	public String config(Model model) {
 		ConfigEntity config = configService.getData();
@@ -76,6 +121,10 @@ public class PageController {
 		model.addAttribute("config", config);
 		return "admin/config";
 	}
+	/**
+	 * 视频列表页
+	 * @return
+	 */
 	@RequestMapping(value = "/videoDataList")
 	public String videoDataList() {
 		return "admin/videoDataList";

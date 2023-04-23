@@ -11,6 +11,11 @@ import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.service.AnalysisService;
 
+/**
+ * api 调用控制器 此处控制器不拦截  仅通过token 校验
+ * @author flower
+ *
+ */
 @RestController
 @RequestMapping("/api")
 public class ApiController {
@@ -21,6 +26,13 @@ public class ApiController {
 	private ExecutorService exec = Executors.newFixedThreadPool(1);
 	
 	
+	/**
+	 * 接受 视频平台的分享链接
+	 * @param token
+	 * @param video
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/processingVideos")
 	public AjaxEntity processingVideos(String token,String video) throws Exception {
 //		 analysisService.processingVideos(token,video);

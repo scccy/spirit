@@ -24,6 +24,7 @@ import com.flower.spirit.utils.BiliUtil;
 import com.flower.spirit.utils.DateUtils;
 import com.flower.spirit.utils.HttpUtil;
 import com.flower.spirit.utils.ThreadConfig;
+import com.flower.spirit.utils.URLUtil;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -35,9 +36,15 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 public class AnalysisService {
 	
 	
+    /**
+     * 映射路径
+     */
     @Value("${file.save}")
     private String savefile;
     
+    /**
+     * 文件储存真实路径
+     */
     @Value("${file.save.path}")
     private String uploadRealPath;
 	
@@ -69,6 +76,12 @@ public class AnalysisService {
 	       
 	}
 	
+	/**
+	 * 哔哩解析
+	 * @param platform
+	 * @param video
+	 * @throws Exception
+	 */
 	public void bilivideo(String platform,String  video) throws Exception {
 		  String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
 		  try {
@@ -84,6 +97,11 @@ public class AnalysisService {
 	}
 	
 	
+	/**抖音解析
+	 * @param platform
+	 * @param video
+	 * @throws Exception
+	 */
 	@SuppressWarnings("static-access")
 	public void dyvideo(String platform,String  video) throws Exception {
 		 logger.info("WebClient客户端开始启动");
@@ -116,9 +134,9 @@ public class AnalysisService {
 	        	throw e;
 	        }finally {
 				//如果后续观察内存占用问题比较大 考虑取消此处注释
-				//webClient.getCurrentWindow().getJobManager().removeAllJobs();
+				webClient.getCurrentWindow().getJobManager().removeAllJobs();
 				webClient.close();
-				//System.gc();
+				System.gc();
 	        }
 	        logger.info("下载流程结束");
 	}
@@ -152,6 +170,11 @@ public class AnalysisService {
 		
 	}
 	
+	/**
+	 * 判断是否为json
+	 * @param str
+	 * @return
+	 */
 	@SuppressWarnings("unused")
 	public static boolean isJSONString(String str) {
 	    boolean result = false;
@@ -164,10 +187,20 @@ public class AnalysisService {
 	    return result;
 	}
 	
+	/**
+	 * 获得文本中的https地址
+	 * @param videourl
+	 * @return
+	 */
 	public String findAddr(String videourl) {
 		return this.getUrl(videourl);
 	}
 	
+	/**
+	 * 正则获取url
+	 * @param input
+	 * @return
+	 */
 	public  String getUrl(String input) {
         String regex = "(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
@@ -184,7 +217,7 @@ public class AnalysisService {
 		if(input.contains("哔哩")) {
 			return "哔哩";
 		}
-		return "未知";
+		return URLUtil.urlAnalysis(input);
     }
 
 	
