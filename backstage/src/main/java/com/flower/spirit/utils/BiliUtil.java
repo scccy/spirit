@@ -26,7 +26,6 @@ public class BiliUtil {
 		api =api+"&fnval=1&fnver=0&fourk=0";
 		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
-		System.out.println(httpGetBili);
 		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
 		HttpUtil.downBiliFromUrl(video, videoDataInfo.get("cid")+".mp4", filepath);
 		videoDataInfo.put("video", filepath+"/"+videoDataInfo.get("cid")+".mp4");

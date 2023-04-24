@@ -30,6 +30,7 @@
 			this.getData(this.fetchPageNum);
 		},
 		onPullDownRefresh() {
+			this.fetchPageNum =1;
 			this.getData(this.fetchPageNum);
 		},
 		onReachBottom() {

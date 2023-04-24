@@ -7,4 +7,4 @@ VOLUME ["/tmp","/app"]
 COPY db /home/app/db/
 RUN mkdir -p /app/resources
 ADD spirit-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","-Xmx512m","/app.jar","--spring.profiles.active=docker"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar","--spring.profiles.active=docker"]

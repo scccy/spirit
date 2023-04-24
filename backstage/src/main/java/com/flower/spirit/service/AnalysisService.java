@@ -84,6 +84,7 @@ public class AnalysisService {
 	 * @throws Exception
 	 */
 	public void bilivideo(String platform,String  video) throws Exception {
+		  logger.info("bilivideo down");
 		  String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
 		  try {
 			 Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
@@ -92,6 +93,7 @@ public class AnalysisService {
 			 HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), findVideoStreaming.get("cid")+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
 			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,video);
 		     videoDataDao.save(videoDataEntity);
+		     logger.info("下载流程结束");
 		} catch (Exception e) {
 			throw e;
 		}
