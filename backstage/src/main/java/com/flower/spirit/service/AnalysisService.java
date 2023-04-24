@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.htmlunit.WebClient;
+import org.htmlunit.html.HtmlPage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,8 +27,7 @@ import com.flower.spirit.utils.DateUtils;
 import com.flower.spirit.utils.HttpUtil;
 import com.flower.spirit.utils.ThreadConfig;
 import com.flower.spirit.utils.URLUtil;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 
 /**
  * @author flower
@@ -135,6 +136,7 @@ public class AnalysisService {
 	        }finally {
 				//如果后续观察内存占用问题比较大 考虑取消此处注释
 				webClient.getCurrentWindow().getJobManager().removeAllJobs();
+				webClient.getCurrentWindow().getJobManager().shutdown();
 				webClient.close();
 				System.gc();
 	        }

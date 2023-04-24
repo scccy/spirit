@@ -3,5 +3,5 @@ spring:
     active: dev
 logging:
   level:
-    com:
-      gargoylesoftware: off
+    org:
+      htmlunit: off

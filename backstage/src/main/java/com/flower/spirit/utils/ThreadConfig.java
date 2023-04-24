@@ -1,13 +1,14 @@
 package com.flower.spirit.utils;
 
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import org.htmlunit.BrowserVersion;
+import org.htmlunit.WebClient;
 
 public class ThreadConfig {
     public static ThreadPoolExecutor threadPoolExecutor() {

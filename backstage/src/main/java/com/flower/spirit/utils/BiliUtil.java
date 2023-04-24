@@ -4,10 +4,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.htmlunit.WebClient;
+import org.htmlunit.html.HtmlPage;
 
+import com.alibaba.fastjson.JSONObject;
 public class BiliUtil {
 	
 	/**
@@ -81,8 +81,10 @@ public class BiliUtil {
 			}finally {
 				//如果后续观察内存占用问题比较大 考虑取消此处注释
 				webClient.getCurrentWindow().getJobManager().removeAllJobs();
+				webClient.getCurrentWindow().getJobManager().shutdown();
 				webClient.close();
 				System.gc();
+
 				
 			}
 		}
