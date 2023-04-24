@@ -4,6 +4,8 @@
 ### 我正在试图解决htmlunit内存占用问题
      dev分支上 docker 内jar 启动已添加内存限制
 
+### 目前应该是一个小的稳定版本了
+
 ### 为啥要做这个
 
 ```
@@ -19,7 +21,7 @@
 后期预计增加视频墙功能和APP端播放视频功能
 ```
 
-### 有浏览器书签一键推送需求的请docker 使用cors分支 latest上提交接口暂不支持跨域请求
+### 有浏览器书签一键推送需求的请docker  latest分支已经合并
 ```
 浏览器一键提交  请新建浏览器书签  书签内容为 /app/app.js 里的内容
 请注意修改app.js 中第二行的ip,端口,及token 
@@ -54,7 +56,7 @@ htmlunit等
 
 - [x] 视频资源缓存查看
 
-- [x] 视频墙
+- [ ] 视频墙
 
 - [ ] 视频解析
 
@@ -62,7 +64,7 @@ htmlunit等
 
 - [x]           哔哩
 
-- [ ] APP或小程序播放视频
+- [x] APP或小程序播放视频
 
 - [ ] 其他功能
 ### 目前已开始计划的功能
@@ -127,6 +129,9 @@ docker 部署下 容器端口 为28081
     安卓用户可以有两种选择 一个是我打包好的apk 一个是自己发布一个小程序
     apk
       https://github.com/Confession1995/spirit/blob/main/app/release/apk/apk.apk
+
+    apk 请注意 这个是升级版 支持查看视频的 如果没有手机查看视频的需求 直接下上边那一个就可以了
+     https://github.com/Confession1995/spirit/blob/main/app/release/apk/apk_update_video_play.apk
     
     ios用户 仅有一种选择是自己发布一个小程序
     
@@ -145,11 +150,14 @@ docker 部署下 容器端口 为28081
 <img src="https://s2.loli.net/2023/04/19/GlmrVTWEe8AyYR2.jpg" title="" alt="微信图片_20230419093629.jpg" width="251">
 
 ### 意见反馈
+```
+ 个人收藏批量下载 已加入规划
+ ```
 
 ### 更新方向
 
 ```
-暂无
+新增其他平台 优化整体后台 完善整体系统功能
 ```
 
 ## 参考资料
