@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,6 +42,7 @@ public class ApiController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/processingVideos")
+	@CrossOrigin
 	public AjaxEntity processingVideos(String token,String video) throws Exception {
 //		 analysisService.processingVideos(token,video);
 		exec.execute(() -> {
