@@ -44,8 +44,9 @@ https://blog.csdn.net/qq_17627195/article/details/129203873
 请通过浏览器加载已解压的扩展 /app/extend
 
 扩展安装后的效果
-![微信截图_20230425155144.png](https://s2.loli.net/2023/04/25/8gOtXFIYZCTVDp5.png)
 ```
+![微信截图_20230425155144.png](https://s2.loli.net/2023/04/25/8gOtXFIYZCTVDp5.png)
+
 
 ### 技术框架
 
