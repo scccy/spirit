@@ -27,6 +27,11 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 	@TableGenerator(name = "biz_video_seq", allocationSize = 1, table = "seq_common", pkColumnName = "seq_id", valueColumnName = "seq_count")
     private Integer id;
 	
+	/**
+	 * 对应视频站的视频id
+	 */
+	private String videoid;
+	
 	public String originaladdress;
 	
 	private String videoname;
@@ -51,9 +56,10 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 		super();
 	}
 
-	public VideoDataEntity(String videoname, String videodesc, String videoplatform, String videocover,
+	public VideoDataEntity(String videoid,String videoname, String videodesc, String videoplatform, String videocover,
 			String videoaddr,String videounrealaddr,String originaladdress) {
 		super();
+		this.videoid = videoid;
 		this.videoname = videoname;
 		this.videodesc = videodesc;
 		this.videoplatform = videoplatform;
@@ -134,6 +140,14 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 
 	public void setOriginaladdress(String originaladdress) {
 		this.originaladdress = originaladdress;
+	}
+
+	public String getVideoid() {
+		return videoid;
+	}
+
+	public void setVideoid(String videoid) {
+		this.videoid = videoid;
 	}
 	
 	

@@ -23,7 +23,11 @@ public class BiliConfigEntity implements Serializable {
 	@TableGenerator(name = "biz_bili_config", allocationSize = 1, table = "seq_common", pkColumnName = "seq_id", valueColumnName = "seq_count")
     private Integer id;
 	
-	public String bilicookies;
+	private String bilicookies;
+	
+	private String bigmember;
+	
+	private String bitstream;
 
 	public Integer getId() {
 		return id;
@@ -39,6 +43,22 @@ public class BiliConfigEntity implements Serializable {
 
 	public void setBilicookies(String bilicookies) {
 		this.bilicookies = bilicookies;
+	}
+
+	public String getBigmember() {
+		return bigmember;
+	}
+
+	public void setBigmember(String bigmember) {
+		this.bigmember = bigmember;
+	}
+
+	public String getBitstream() {
+		return bitstream;
+	}
+
+	public void setBitstream(String bitstream) {
+		this.bitstream = bitstream;
 	}
 	
 	

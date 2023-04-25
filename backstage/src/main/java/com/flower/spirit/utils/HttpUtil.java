@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -25,6 +27,91 @@ import com.alibaba.fastjson.JSONObject;
 
 public class HttpUtil {
 	
+	
+	
+    /** web 端
+     * @param url
+     * @param param
+     * @return
+     */
+    public static String httpGet(String url,String param){
+        HttpClient httpClient = new HttpClient();
+        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+        GetMethod getMethod = new GetMethod(url);
+        getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 5000);
+        getMethod.getParams().setParameter("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36");
+        getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
+        String response = "";
+        try {
+            int statusCode = httpClient.executeMethod(getMethod);
+            if (statusCode != HttpStatus.SC_OK) {
+                System.err.println("请求出错: "+ getMethod.getStatusLine());
+            }
+            byte[] responseBody = getMethod.getResponseBody();
+            response = new String(responseBody, param);
+        } catch (HttpException e) {
+            System.out.println("请检查输入的URL!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("发生网络异常!");
+            e.printStackTrace();
+        } finally {
+         /* 6 .释放连接 */
+            getMethod.releaseConnection();
+        }
+        return response;
+    }
+    
+    
+    /**用于验证bili登录接口 并取出cookie
+     * @param url
+     * @param param
+     * @return
+     */
+    public static String httpGetBypoll(String url,String param){
+        HttpClient httpClient = new HttpClient();
+        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
+        GetMethod getMethod = new GetMethod(url);
+        getMethod.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, 5000);
+        getMethod.getParams().setParameter("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36");
+        getMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler());
+        String response = "";
+        try {
+            int statusCode = httpClient.executeMethod(getMethod);
+            if (statusCode != HttpStatus.SC_OK) {
+               return null;
+            }
+            byte[] responseBody = getMethod.getResponseBody();
+            response = new String(responseBody, param);
+            String code = JSONObject.parseObject(response).getJSONObject("data").getString("code");
+            if(code.equals("0")) {
+            	//登录成功
+                Header[] headers = getMethod.getResponseHeaders();
+                String cookie ="";
+    	        for (Header h : headers) {
+    	        	  if(h.getName().equals("Set-Cookie")) {
+    	        		  String str = h.getValue().split(";")[0];
+    	        		  cookie =cookie+";"+str;
+    	        	  }
+    	        }
+    	        return cookie.substring(1, cookie.length());
+            }else {
+            	return null;
+            }
+
+          
+        } catch (HttpException e) {
+            System.out.println("请检查输入的URL!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("发生网络异常!");
+            e.printStackTrace();
+        } finally {
+         /* 6 .释放连接 */
+            getMethod.releaseConnection();
+        }
+        return null;
+    }
 	
     /**
      * json 字符串

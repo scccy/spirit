@@ -34,6 +34,12 @@ public class AppConfig {
 		Global.apptoken =data.getApptoken();
 		BiliConfigEntity bili = biliConfigService.getData();
 		Global.bilicookies =bili.getBilicookies();
+		if(null != bili.getBigmember() && bili.getBigmember().equals("是")) {
+			Global.bilimember= true;
+		}
+		if(null != bili.getBitstream() && !"".equals(bili.getBitstream())) {
+			Global.bilibitstream= bili.getBitstream();
+		}
 	}
 
 }

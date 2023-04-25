@@ -207,4 +207,15 @@ public class AdminController {
 	public AjaxEntity updateBiliConfig(BiliConfigEntity biliConfigEntity,HttpServletRequest request) {
 		return biliConfigService.updateBiliConfig(biliConfigEntity);
 	}
+	
+	@GetMapping(value = "/getBiliCode")
+	public AjaxEntity getBiliCode() {
+		return biliConfigService.getBiliCode();
+	}
+	
+	
+	@GetMapping(value = "/checkBiliLogin")
+	public AjaxEntity checkBiliLogin(String qrcodekey) {
+		return biliConfigService.checkBiliLogin(qrcodekey);
+	}
 } 

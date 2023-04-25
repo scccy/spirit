@@ -91,7 +91,7 @@ public class AnalysisService {
 			 String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
 			 String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
 			 HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), findVideoStreaming.get("cid")+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
-			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,video);
+			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,video);
 		     videoDataDao.save(videoDataEntity);
 		     logger.info("下载流程结束");
 		} catch (Exception e) {
@@ -169,7 +169,7 @@ public class AnalysisService {
         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
         HttpUtil.downLoadFromUrl("https:"+cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
         //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
-        VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId, desc, platform, coverunaddr, videofile,videounrealaddr,originaladdress);
+        VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId,awemeId, desc, platform, coverunaddr, videofile,videounrealaddr,originaladdress);
         videoDataDao.save(videoDataEntity);
 		
 	}

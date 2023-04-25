@@ -8,6 +8,7 @@ import org.htmlunit.WebClient;
 import org.htmlunit.html.HtmlPage;
 
 import com.alibaba.fastjson.JSONObject;
+import com.flower.spirit.config.Global;
 public class BiliUtil {
 	
 	/**
@@ -18,12 +19,24 @@ public class BiliUtil {
 		String api ="https://api.bilibili.com/x/player/playurl";
 		Map<String, String> videoDataInfo = BiliUtil.getVideoDataInfo(url);
 		api=api+"?avid="+videoDataInfo.get("aid")+"&cid="+videoDataInfo.get("cid");
+		//公共部分结束
+		//按照配置处理码流设置  优先使用用户配置
 		if(null != token && !token.equals("")) {
-			api =api+"&qn=80";
+			if(!Global.bilibitstream.equals("64")) {
+				api =api+"&qn="+Global.bilibitstream;
+			}else {
+				api =api+"&qn=80";
+			}
 		}else {
 			api =api+"&qn=64";
 		}
-		api =api+"&fnval=1&fnver=0&fourk=0";
+		api =api+"&fnval=1&fnver=0";
+		if(Global.bilibitstream.equals("120") && Global.bilimember) {
+			api =api+"&fourk=1";
+		}else {
+			api =api+"&fourk=0";
+		}
+		//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
 		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
 		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");

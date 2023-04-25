@@ -55,4 +55,8 @@ public class Global {
 	
 	
 	public static String bilicookies ="";
+	
+	public static boolean bilimember =false;
+	
+	public static String bilibitstream ="64";
 }
