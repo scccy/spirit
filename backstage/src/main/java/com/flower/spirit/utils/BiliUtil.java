@@ -1,11 +1,11 @@
 package com.flower.spirit.utils;
 
-import java.net.URL;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.htmlunit.WebClient;
-import org.htmlunit.html.HtmlPage;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import com.alibaba.fastjson.JSONObject;
 import com.flower.spirit.config.Global;
@@ -83,23 +83,12 @@ public class BiliUtil {
 		if(url.contains("/video/av") || url.contains("/video/BV") ) {
 			return BiliUtil.findUrlAidOrBid(url);
 		}else {
-			 WebClient webClient = ThreadConfig.getWebClientNotJavaScript();
-			 HtmlPage page = null;
-			 try {
-				  page = webClient.getPage(url);
-				  webClient.waitForBackgroundJavaScript(300);
-				  URL biliUrl = page.getUrl();
-				  String realUrl = biliUrl.toString();
-				  return BiliUtil.findUrlAidOrBid(realUrl);
-			}catch (Exception e) {
-				
-			}finally {
-				//如果后续观察内存占用问题比较大 考虑取消此处注释
-				webClient.getCurrentWindow().getJobManager().removeAllJobs();
-				webClient.getCurrentWindow().getJobManager().shutdown();
-				webClient.close();
-				System.gc();
-
+			Document document = null;
+			try {
+				document = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36").get();
+				 String baseUri = document.baseUri();
+				 return BiliUtil.findUrlAidOrBid(baseUri);
+			} catch (IOException e1) {
 				
 			}
 		}
@@ -114,15 +103,6 @@ public class BiliUtil {
 		return id;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public static void main(String[] args) throws Exception {
 		Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming("https://b23.tv/iCL7K0s","buvid3=A482E3B3-9600-C78A-83F9-820A593BD77D98106infoc; b_nut=1674643698; _uuid=A34D1EA8-8E3F-42AC-E823-31E87A106BFA196842infoc; rpdid=|(umYJYlYYY)0J'uY~RYRJ~|u; nostalgia_conf=-1; buvid_fp_plain=undefined; hit-new-style-dyn=0; hit-dyn-v2=1; i-wanna-go-back=-1; header_theme_version=CLOSE; CURRENT_BLACKGAP=0; buvid4=A7F1A7FD-D260-A5A3-C4CF-0978621B76B401106-023012518-I+fjjCdS2R4+iUreQE/8BA==; DedeUserID=3493262113376423; DedeUserID__ckMd5=d6afd5e2e0cb60b3; LIVE_BUVID=AUTO3516787998398287; b_ut=5; PVID=1; CURRENT_FNVAL=4048; CURRENT_PID=fed22140-d21a-11ed-8dbf-3f61c17c3c6f; FEED_LIVE_VERSION=V8; CURRENT_QUALITY=80; fingerprint=aaef0e9f1d452954ccb3f45ced603e16; buvid_fp=541890ad651676727c6770a2daf2a081; bp_video_offset_3493262113376423=785525518392885500; innersign=0; b_lsid=82F85E86_187949D9837; SESSDATA=b9852370,1697377571,aa6fa*41; bili_jct=057f32fb819f4bcb47d686c2772c026f; sid=6o43jv69; home_feed_column=4","D:\\flower\\uploadFile");
 		System.out.println(findVideoStreaming);
