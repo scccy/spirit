@@ -171,6 +171,16 @@ docker 部署下 容器端口 为28081
 
 <img src="https://s2.loli.net/2023/04/19/GlmrVTWEe8AyYR2.jpg" title="" alt="微信图片_20230419093629.jpg" width="251">
 
+#### 关于API调用
+
+```
+接口地址为 http://ip:port/api/processingVideos
+参数为
+     token   自己后台设置的
+     video   链接或分享口令
+
+请求类型 http post
+```
 
 
 ![1234.png](https://s2.loli.net/2023/04/25/9vWbFi48cG73XQk.png)
