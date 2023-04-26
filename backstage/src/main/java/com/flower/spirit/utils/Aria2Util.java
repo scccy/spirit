@@ -54,6 +54,28 @@ public class Aria2Util {
         return null;
 	}
 	
+	public static JSONObject createBiliparameter(String downlink,String downpath,String downclass,String token) {
+		JSONObject obj =  new JSONObject();
+		
+		obj.put("id", RandomStringUtils.randomNumeric(16));
+		obj.put("jsonrpc", "2.0");
+		obj.put("method", "aria2.addUri");
+		JSONArray params = new JSONArray();
+		if(token != null) {
+			params.add("token:"+token);
+		}
+		JSONArray downLinkArray = new JSONArray();
+		downLinkArray.add(downlink);
+		params.add(downLinkArray);
+		JSONObject confog =  new JSONObject();
+		confog.put("dir", downpath);
+		confog.put("out", downclass);
+		confog.put("User-Agent", "Mozilla/5.0 BiliDroid/7.25.0 (bbcallen@gmail.com)");
+		confog.put("referer", "https://www.bilibili.com");
+		params.add(confog);
+		obj.put("params", params);
+		return obj;
+	}
 	/**
 	 * @param downlink
 	 * @param downpath

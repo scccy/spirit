@@ -43,7 +43,13 @@ public class BiliUtil {
 		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
 		System.out.println(parseObject);
 		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
-		HttpUtil.downBiliFromUrl(video, videoDataInfo.get("cid")+".mp4", filepath);
+		
+		if(Global.downtype.equals("http")) {
+			HttpUtil.downBiliFromUrl(video, videoDataInfo.get("cid")+".mp4", filepath);
+		}
+		if(Global.downtype.equals("a2")) {
+			Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), videoDataInfo.get("cid")+".mp4", Global.a2_token));
+		}
 		videoDataInfo.put("video", filepath+"/"+videoDataInfo.get("cid")+".mp4");
 		videoDataInfo.put("videoname", videoDataInfo.get("cid")+".mp4");
 		return videoDataInfo;
