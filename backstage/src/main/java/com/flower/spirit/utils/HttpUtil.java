@@ -20,7 +20,9 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSONObject;
@@ -207,6 +209,31 @@ public class HttpUtil {
             }
         } catch (Exception e) {
         	client.close();
+        }
+        return response;
+    }
+    
+    
+	public static JSONObject doPostNew(String url,JSONObject json){
+    	CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPost post = new HttpPost(url);
+        post.addHeader("Content-Type", "application/json");
+        JSONObject response = null;
+        try {
+        	post.setEntity(new StringEntity(json.toString(),"UTF-8"));
+            HttpResponse res = httpClient.execute(post);
+            if(res.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+                String result = EntityUtils.toString(res.getEntity());
+                result = new String(result.getBytes("ISO-8859-1"), "utf-8");
+                response = JSONObject.parseObject(result);
+            }
+        } catch (Exception e) {
+        	
+        }finally{
+            try {
+            	httpClient.close();
+			} catch (Exception e2) {
+			}
         }
         return response;
     }
