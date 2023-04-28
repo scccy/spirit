@@ -76,6 +76,28 @@ public class Aria2Util {
 		obj.put("params", params);
 		return obj;
 	}
+	public static JSONObject createDouparameter(String downlink,String downpath,String downclass,String token,String cookie) {
+		JSONObject obj =  new JSONObject();
+		
+		obj.put("id", RandomStringUtils.randomNumeric(16));
+		obj.put("jsonrpc", "2.0");
+		obj.put("method", "aria2.addUri");
+		JSONArray params = new JSONArray();
+		if(token != null) {
+			params.add("token:"+token);
+		}
+		JSONArray downLinkArray = new JSONArray();
+		downLinkArray.add(downlink);
+		params.add(downLinkArray);
+		JSONObject confog =  new JSONObject();
+		confog.put("dir", downpath);
+		confog.put("out", downclass);
+		confog.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36");
+		confog.put("cookie", cookie);
+		params.add(confog);
+		obj.put("params", params);
+		return obj;
+	}
 	/**
 	 * @param downlink
 	 * @param downpath

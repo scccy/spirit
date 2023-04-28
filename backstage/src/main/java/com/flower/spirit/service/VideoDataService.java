@@ -48,6 +48,9 @@ public class VideoDataService {
 				if(seachDate != null && StringUtil.isString(seachDate.getVideodesc())) {
 					predicate.getExpressions().add(criteriaBuilder.like(root.get("videodesc"), "%"+seachDate.getVideodesc()+"%"));
 				}
+				if(seachDate != null && StringUtil.isString(seachDate.getVideoname())) {
+					predicate.getExpressions().add(criteriaBuilder.like(root.get("videoname"), "%"+seachDate.getVideoname()+"%"));
+				}
 				if(seachDate != null && StringUtil.isString(seachDate.getVideoplatform())) {
 					predicate.getExpressions().add(criteriaBuilder.like(root.get("videoplatform"), "%"+seachDate.getVideoplatform()+"%"));
 				}
