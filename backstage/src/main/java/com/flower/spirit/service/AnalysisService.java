@@ -106,12 +106,12 @@ public class AnalysisService {
 	 * @param video
 	 * @throws Exception
 	 */
-	@SuppressWarnings("static-access")
 	public void dyvideo(String platform,String  video) throws Exception {
 		 Map<String, String> downVideo = DouUtil.downVideo(video);
 		
 		 this.putRecord(downVideo.get("awemeid"), downVideo.get("desc"), downVideo.get("videoplay"), downVideo.get("cover"), platform,video,downVideo.get("type"),downVideo.get("cookie"));
 		 
+		 System.gc();
 		 
 		
 		 
