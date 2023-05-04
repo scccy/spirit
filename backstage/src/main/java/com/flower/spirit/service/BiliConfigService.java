@@ -30,6 +30,7 @@ public class BiliConfigService {
 	}
 
 	/**
+	 * 修改配置
 	 * @param entity
 	 * @return
 	 */
@@ -45,12 +46,21 @@ public class BiliConfigService {
 		return new AjaxEntity(Global.ajax_success, "操作成功", entity);
 	}
 
+	/**
+	 * 获取登录二维码
+	 * @return
+	 */
 	public AjaxEntity getBiliCode() {
 		String httpGet = HttpUtil.httpGet("https://passport.bilibili.com/x/passport-login/web/qrcode/generate", "UTF-8");
 		
 		return new AjaxEntity(Global.ajax_success,"请求成功", JSONObject.parseObject(httpGet));
 	}
 
+	/**
+	 * 检测登录状态并设置ck
+	 * @param qrcodekey
+	 * @return
+	 */
 	public AjaxEntity checkBiliLogin(String qrcodekey) {
 		String httpGet = HttpUtil.httpGetBypoll("https://passport.bilibili.com/x/passport-login/web/qrcode/poll?qrcode_key="+qrcodekey, "UTF-8");
 		if(httpGet != null) {

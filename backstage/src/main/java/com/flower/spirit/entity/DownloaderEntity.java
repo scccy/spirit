@@ -9,6 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+/**
+ * 下载器配置
+ * @author flower
+ *
+ */
 @Entity
 @Table(name = "biz_downloader")
 public class DownloaderEntity implements Serializable {

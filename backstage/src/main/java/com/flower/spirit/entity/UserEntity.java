@@ -10,6 +10,11 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 
+/**
+ * 系统用户
+ * @author flower
+ *
+ */
 @Entity
 @Table(name = "biz_user")
 public class UserEntity implements Serializable {

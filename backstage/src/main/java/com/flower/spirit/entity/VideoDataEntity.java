@@ -13,6 +13,11 @@ import javax.persistence.TableGenerator;
 import com.flower.spirit.common.DataEntity;
 
 
+/**
+ * 视频资源
+ * @author flower
+ *
+ */
 @Entity
 @Table(name = "biz_video")
 public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Serializable {
@@ -32,6 +37,9 @@ public class VideoDataEntity  extends DataEntity<VideoDataEntity> implements Ser
 	 */
 	private String videoid;
 	
+	/**
+	 * 源地址
+	 */
 	public String originaladdress;
 	
 	private String videoname;

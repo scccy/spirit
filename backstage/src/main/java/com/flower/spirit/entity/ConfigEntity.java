@@ -9,6 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+/**
+ * 基础配置 app 配置
+ * @author flower
+ *
+ */
 @Entity
 @Table(name = "biz_config")
 public class ConfigEntity implements Serializable {
