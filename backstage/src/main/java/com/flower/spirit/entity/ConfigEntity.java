@@ -31,6 +31,8 @@ public class ConfigEntity implements Serializable {
 	private String apptoken;
 	
 	private String ipauth;
+	
+	private String openprocesshistory;
 
 	public Integer getId() {
 		return id;
@@ -55,6 +57,15 @@ public class ConfigEntity implements Serializable {
 	public void setIpauth(String ipauth) {
 		this.ipauth = ipauth;
 	}
+
+	public String getOpenprocesshistory() {
+		return openprocesshistory;
+	}
+
+	public void setOpenprocesshistory(String openprocesshistory) {
+		this.openprocesshistory = openprocesshistory;
+	}
+	
 	
 	
 
