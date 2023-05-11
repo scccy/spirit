@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.common.RequestEntity;
 import com.flower.spirit.entity.BiliConfigEntity;
+import com.flower.spirit.entity.CollectDataEntity;
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.DownloaderEntity;
 import com.flower.spirit.entity.ProcessHistoryEntity;
 import com.flower.spirit.entity.UserEntity;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.service.BiliConfigService;
+import com.flower.spirit.service.CollectDataService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.ProcessHistoryService;
@@ -58,6 +60,9 @@ public class AdminController {
 	
 	@Autowired
 	private ProcessHistoryService processHistoryService;
+	
+	@Autowired
+	private CollectDataService collectDataService;
 	
 	/**  
 	
@@ -233,4 +238,15 @@ public class AdminController {
 	public AjaxEntity deleteProcessHistoryData(ProcessHistoryEntity processHistoryEntity,HttpServletRequest request) {
 		return processHistoryService.deleteProcessHistoryData(processHistoryEntity);
 	}
+	
+	@PostMapping(value = "/findCollectDataList")
+	public AjaxEntity findCollectDataList(CollectDataEntity collectDataEntity,HttpServletRequest request) {
+		return collectDataService.findPage(collectDataEntity);
+	}
+	
+	@GetMapping(value = "/deleteCollectData")
+	public AjaxEntity deleteCollectData(CollectDataEntity collectDataEntity,HttpServletRequest request) {
+		return collectDataService.deleteCollectData(collectDataEntity);
+	}
+	
 } 

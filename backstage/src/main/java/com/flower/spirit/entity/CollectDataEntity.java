@@ -9,9 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import com.flower.spirit.common.DataEntity;
+
 @Entity
 @Table(name = "biz_collect_data")
-public class CollectDataEntity implements Serializable {
+public class CollectDataEntity   extends DataEntity<CollectDataEntity> implements Serializable {
 
 	/**
 	 * 

@@ -135,4 +135,9 @@ public class PageController {
 	public String processHistoryList() {
 		return "admin/processHistoryList";
 	}
+	
+	@RequestMapping(value = "/collectDataList")
+	public String collectDataList() {
+		return "admin/collectDataList";
+	}
 }
