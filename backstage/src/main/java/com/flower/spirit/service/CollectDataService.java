@@ -151,24 +151,30 @@ public class CollectDataService {
 			String avid = data.getString("id");
 			String bvid = data.getString("bvid");
 			Map<String, String> videoDataInfo = BiliUtil.getVideoDataInfo("/video/"+bvid);
-			String cid = videoDataInfo.get("cid");
-			List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(cid);
-			if(findByVideoid.size() == 0) {
-				Map<String, String> findVideoStreaming =  BiliUtil.findVideoStreamingNoData(videoDataInfo,"/video/"+bvid,Global.bilicookies,videofile);
-				String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
-				String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
-				 //封面down
-				HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), findVideoStreaming.get("cid")+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
-				//封面down
-				VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), "哔哩", coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,bvid);
-			    videoDataDao.save(videoDataEntity);
-			    logger.info("收藏"+(i+1)+"下载流程结束");
+			String status ="";
+			if(videoDataInfo !=  null) {
+				String cid = videoDataInfo.get("cid");
+				List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(cid);
+				if(findByVideoid.size() == 0) {
+					Map<String, String> findVideoStreaming =  BiliUtil.findVideoStreamingNoData(videoDataInfo,"/video/"+bvid,Global.bilicookies,videofile);
+					String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
+					String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
+					 //封面down
+					HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), findVideoStreaming.get("cid")+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+					//封面down
+					VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), "哔哩", coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,bvid);
+				    videoDataDao.save(videoDataEntity);
+				    logger.info("收藏"+(i+1)+"下载流程结束");
+				}
+				 //新建明细
+				status =findByVideoid.size() == 0?"已完成":"已完成(未下载已存在)";
+			}else {
+				status ="视频异常下载失败";
 			}
-		    //新建明细
-			String status =  findByVideoid.size() == 0?"已完成":"已完成(未下载已存在)";
+		   
 		    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
 		    collectDataDetailEntity.setDataid(entity.getId());
-		    collectDataDetailEntity.setVideoid(videoDataInfo.get("cid"));
+		    collectDataDetailEntity.setVideoid(videoDataInfo == null ?bvid:videoDataInfo.get("cid"));
 		    collectDataDetailEntity.setOriginaladdress(bvid);
 		    collectDataDetailEntity.setStatus(status);
 		    collectDataDetailService.save(collectDataDetailEntity);

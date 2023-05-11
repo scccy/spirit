@@ -113,19 +113,23 @@ public class BiliUtil {
 		String serchPersion = HttpUtil.getSerchPersion(api, "UTF-8");
 		JSONObject videoData = JSONObject.parseObject(serchPersion);
 		System.out.println(serchPersion);
-		String bvid = videoData.getJSONObject("data").getString("bvid");
-		String aid = videoData.getJSONObject("data").getString("aid");
-		String cid = videoData.getJSONObject("data").getString("cid");
-		String title = videoData.getJSONObject("data").getString("title");
-		String pic = videoData.getJSONObject("data").getString("pic");
-		String desc = videoData.getJSONObject("data").getString("desc");
-		res.put("title", title);
-		res.put("bvid", bvid);
-		res.put("aid", aid);
-		res.put("cid", cid);
-		res.put("pic", pic);
-		res.put("desc", desc);
-		return res;
+		if(videoData.getString("code").equals("0")) {		
+			String bvid = videoData.getJSONObject("data").getString("bvid");
+			String aid = videoData.getJSONObject("data").getString("aid");
+			String cid = videoData.getJSONObject("data").getString("cid");
+			String title = videoData.getJSONObject("data").getString("title");
+			String pic = videoData.getJSONObject("data").getString("pic");
+			String desc = videoData.getJSONObject("data").getString("desc");
+			res.put("title", title);
+			res.put("bvid", bvid);
+			res.put("aid", aid);
+			res.put("cid", cid);
+			res.put("pic", pic);
+			res.put("desc", desc);
+			return res;
+		}else {
+			return null;
+		}
 	}
 	
 	
