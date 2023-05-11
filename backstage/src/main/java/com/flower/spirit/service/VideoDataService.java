@@ -1,5 +1,6 @@
 package com.flower.spirit.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -34,6 +35,11 @@ public class VideoDataService {
 	
 	@Autowired
 	private VideoDataDao videoDataDao;
+	
+	public List<VideoDataEntity> findByVideoid(String videoid){
+		return videoDataDao.findByVideoid(videoid);
+	}
+	
 
 	@SuppressWarnings("serial")
 	public AjaxEntity findPage(VideoDataEntity res) {

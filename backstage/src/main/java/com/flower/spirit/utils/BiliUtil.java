@@ -11,6 +11,50 @@ import com.alibaba.fastjson.JSONObject;
 import com.flower.spirit.config.Global;
 public class BiliUtil {
 	
+	
+	/**
+	 * @throws Exception 
+	 * 
+	 */
+	public static  Map<String, String> findVideoStreamingNoData(Map<String, String> videoDataInfo,String url,String token,String filepath) throws Exception {
+		String api ="https://api.bilibili.com/x/player/playurl";
+		api=api+"?avid="+videoDataInfo.get("aid")+"&cid="+videoDataInfo.get("cid");
+		//公共部分结束
+		//按照配置处理码流设置  优先使用用户配置
+		if(null != token && !token.equals("")) {
+			if(!Global.bilibitstream.equals("64")) {
+				//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
+				api =api+"&qn="+Global.bilibitstream;
+			}else {
+				api =api+"&qn=80";
+			}
+		}else {
+			api =api+"&qn=64";
+		}
+		api =api+"&fnval=1&fnver=0";
+		//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
+		if(Global.bilibitstream.equals("120") && Global.bilimember) {
+			api =api+"&fourk=1";
+		}else {
+			api =api+"&fourk=0";
+		}
+		
+		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
+		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
+		System.out.println(parseObject);
+		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
+		
+		if(Global.downtype.equals("http")) {
+			HttpUtil.downBiliFromUrl(video, videoDataInfo.get("cid")+".mp4", filepath);
+		}
+		if(Global.downtype.equals("a2")) {
+			Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), videoDataInfo.get("cid")+".mp4", Global.a2_token));
+		}
+		videoDataInfo.put("video", filepath+"/"+videoDataInfo.get("cid")+".mp4");
+		videoDataInfo.put("videoname", videoDataInfo.get("cid")+".mp4");
+		return videoDataInfo;
+	}
+	
 	/**
 	 * @throws Exception 
 	 * 
