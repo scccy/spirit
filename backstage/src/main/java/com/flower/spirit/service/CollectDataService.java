@@ -15,7 +15,6 @@ import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.dao.CollectdDataDao;
 import com.flower.spirit.entity.CollectDataEntity;
-import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.utils.StringUtil;
 
 @Service
@@ -53,6 +52,16 @@ public class CollectDataService {
 	public AjaxEntity deleteCollectData(CollectDataEntity collectDataEntity) {
 		collectdDataDao.deleteById(collectDataEntity.getId());
 		return new AjaxEntity(Global.ajax_success, "操作成功", null);
+	}
+
+	/**
+	 * 提交任务 
+	 * @param collectDataEntity
+	 * @return
+	 */
+	public AjaxEntity submitCollectData(CollectDataEntity collectDataEntity) {
+		
+		return null;
 	}
 	
 	
