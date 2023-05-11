@@ -33,6 +33,23 @@ public class ProcessHistoryEntity implements Serializable {
 	
 	private String status;
 
+	
+	
+	
+	public ProcessHistoryEntity() {
+		super();
+	}
+
+	
+	public ProcessHistoryEntity(Integer id, String originaladdress, String videoplatform, String status) {
+		super();
+		this.id = id;
+		this.originaladdress = originaladdress;
+		this.videoplatform = videoplatform;
+		this.status = status;
+	}
+
+
 	public Integer getId() {
 		return id;
 	}

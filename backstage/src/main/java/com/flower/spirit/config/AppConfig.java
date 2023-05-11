@@ -32,6 +32,9 @@ public class AppConfig {
 		downloaderService.renovate();
 		ConfigEntity data = configService.getData();
 		Global.apptoken =data.getApptoken();
+		if(null != data.getOpenprocesshistory() && data.getOpenprocesshistory().equals("1")) {
+			Global.openprocesshistory =true;
+		}
 		BiliConfigEntity bili = biliConfigService.getData();
 		Global.bilicookies =bili.getBilicookies();
 		if(null != bili.getBigmember() && bili.getBigmember().equals("是")) {

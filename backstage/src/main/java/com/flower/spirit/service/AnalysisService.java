@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.dao.VideoDataDao;
+import com.flower.spirit.entity.ProcessHistoryEntity;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.utils.Aria2Util;
 import com.flower.spirit.utils.BiliUtil;
@@ -55,6 +56,9 @@ public class AnalysisService {
 	
 	private Logger logger = LoggerFactory.getLogger(AnalysisService.class);
 	
+	@Autowired
+	private ProcessHistoryService processHistoryService;
+	
 	
 
 	/**解析资源
@@ -64,8 +68,10 @@ public class AnalysisService {
 	 */
 	public void processingVideos(String token, String video) throws Exception {
 			if(null == token || !token.equals(Global.apptoken)) {
+				logger.info("token异常");
 				return;
 			}
+			logger.info("解析开始~原地址:"+video);
 			String platform = this.getPlatform(video);
 			if(platform.equals("抖音")) {
 				this.dyvideo(platform, this.getUrl(video));
@@ -91,7 +97,9 @@ public class AnalysisService {
 			 Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
 			 String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
 			 String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
+			 //封面down
 			 HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), findVideoStreaming.get("cid")+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+			//封面down
 			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,video);
 		     videoDataDao.save(videoDataEntity);
 		     logger.info("下载流程结束");
@@ -107,53 +115,14 @@ public class AnalysisService {
 	 * @throws Exception
 	 */
 	public void dyvideo(String platform,String  video) throws Exception {
+		 ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, video, platform);
 		 Map<String, String> downVideo = DouUtil.downVideo(video);
 		
 		 this.putRecord(downVideo.get("awemeid"), downVideo.get("desc"), downVideo.get("videoplay"), downVideo.get("cover"), platform,video,downVideo.get("type"),downVideo.get("cookie"));
-		 
 		 System.gc();
 		 
-		
-		 
-		 
-		 
-		 
-//		 logger.info("WebClient客户端开始启动");
-//		 WebClient webClient = ThreadConfig.getWebClient();
-//	        HtmlPage page = null;
-//	        try {
-//	            page = webClient.getPage(this.findAddr(video));
-//		        webClient.waitForBackgroundJavaScript(300);
-//		        String pageXml = page.asXml();
-//		        Document parse = Jsoup.parse(pageXml);
-//		        Element render_data = parse.getElementById("RENDER_DATA");
-//		        String encode = URLDecoder.decode(render_data.html().substring("//<![CDATA[".length(), render_data.html().length() - "//]]>".length()).trim(), "UTF-8");
-//		        JSONObject jsonObject = JSON.parseObject(encode);
-//		        jsonObject.forEach((key, value) -> {
-//		        	if(this.isJSONString(value.toString())) {
-//		        		  JSONObject aweme = JSONObject.parseObject(value.toString()).getJSONObject("aweme");
-//		        		  if(aweme != null) {
-//		        			  JSONObject detail = aweme.getJSONObject("detail");
-//		        			  String awemeId = detail.getString("awemeId");
-//		        			  String desc = detail.getString("desc");
-//		        			  JSONObject videoobj = detail.getJSONObject("video");
-//		        	          String playApi = videoobj.getString("playApi");
-//		        	          String cover = videoobj.getString("cover");
-//		        	          this.putRecord(awemeId, desc, playApi, cover, platform,video);
-//		        		  }
-//		        	}
-//					
-//				});
-//	        } catch (Exception e) {
-//	        	throw e;
-//	        }finally {
-//				//如果后续观察内存占用问题比较大 考虑取消此处注释
-//				webClient.getCurrentWindow().getJobManager().removeAllJobs();
-//				webClient.getCurrentWindow().getJobManager().shutdown();
-//				webClient.close();
-//				System.gc();
-//	        }
-//	        logger.info("下载流程结束");
+		 processHistoryService.saveProcess(saveProcess.getId(), video, platform);
+
 	}
 	
 	
@@ -170,6 +139,7 @@ public class AnalysisService {
         String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
 		if(type.equals("client")) {
+			    logger.info("已使用htmlunit进行解析,下载器类型为:"+Global.downtype);
 		        if(Global.downtype.equals("a2")) {
 		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token));
 		        }
@@ -182,6 +152,7 @@ public class AnalysisService {
 		        HttpUtil.downLoadFromUrl("https:"+cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 		}
 		if(type.equals("api")) {
+			logger.info("已使用api进行解析,下载器类型为:"+Global.downtype);
 	        if(Global.downtype.equals("a2")) {
 		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token,cookie));
 		   }
@@ -195,7 +166,7 @@ public class AnalysisService {
         //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
         VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId,desc, desc, platform, coverunaddr, videofile,videounrealaddr,originaladdress);
         videoDataDao.save(videoDataEntity);
-		
+		logger.info("下载流程结束");
 	}
 	
 	/**

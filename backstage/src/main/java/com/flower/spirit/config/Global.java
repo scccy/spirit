@@ -59,4 +59,6 @@ public class Global {
 	public static boolean bilimember =false;
 	
 	public static String bilibitstream ="64";
+	
+	public static boolean openprocesshistory = false;
 }
