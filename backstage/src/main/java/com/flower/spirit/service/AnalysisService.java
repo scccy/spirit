@@ -1,22 +1,15 @@
 package com.flower.spirit.service;
 
 
-import java.net.URLDecoder;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.htmlunit.WebClient;
-import org.htmlunit.html.HtmlPage;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.dao.VideoDataDao;
@@ -27,7 +20,6 @@ import com.flower.spirit.utils.BiliUtil;
 import com.flower.spirit.utils.DateUtils;
 import com.flower.spirit.utils.DouUtil;
 import com.flower.spirit.utils.HttpUtil;
-import com.flower.spirit.utils.ThreadConfig;
 import com.flower.spirit.utils.URLUtil;
 
 
@@ -92,6 +84,7 @@ public class AnalysisService {
 	 */
 	public void bilivideo(String platform,String  video) throws Exception {
 		  logger.info("bilivideo down");
+		  ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, video, platform);
 		  String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
 		  try {
 			 Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
@@ -103,6 +96,7 @@ public class AnalysisService {
 			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,video);
 		     videoDataDao.save(videoDataEntity);
 		     logger.info("下载流程结束");
+		     processHistoryService.saveProcess(saveProcess.getId(), video, platform);
 		} catch (Exception e) {
 			throw e;
 		}

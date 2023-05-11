@@ -9,9 +9,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import com.flower.spirit.common.DataEntity;
+
 @Entity
 @Table(name = "biz_process_history")
-public class ProcessHistoryEntity implements Serializable {
+public class ProcessHistoryEntity  extends DataEntity<ProcessHistoryEntity> implements Serializable {
 
 	/**
 	 * 
@@ -32,6 +34,8 @@ public class ProcessHistoryEntity implements Serializable {
 	private String videoplatform;
 	
 	private String status;
+	
+	private String createtime;
 
 	
 	
@@ -80,6 +84,16 @@ public class ProcessHistoryEntity implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+
+	public String getCreatetime() {
+		return createtime;
+	}
+
+
+	public void setCreatetime(String createtime) {
+		this.createtime = createtime;
 	}
 	
 	

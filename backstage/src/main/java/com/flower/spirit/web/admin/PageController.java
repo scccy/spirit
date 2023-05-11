@@ -129,4 +129,10 @@ public class PageController {
 	public String videoDataList() {
 		return "admin/videoDataList";
 	}
+	
+	
+	@RequestMapping(value = "/processHistoryList")
+	public String processHistoryList() {
+		return "admin/processHistoryList";
+	}
 }

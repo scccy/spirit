@@ -13,11 +13,13 @@ import com.flower.spirit.common.RequestEntity;
 import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.DownloaderEntity;
+import com.flower.spirit.entity.ProcessHistoryEntity;
 import com.flower.spirit.entity.UserEntity;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
+import com.flower.spirit.service.ProcessHistoryService;
 import com.flower.spirit.service.SystemService;
 import com.flower.spirit.service.UserService;
 import com.flower.spirit.service.VideoDataService;
@@ -53,6 +55,9 @@ public class AdminController {
 	
 	@Autowired
 	private BiliConfigService biliConfigService;
+	
+	@Autowired
+	private ProcessHistoryService processHistoryService;
 	
 	/**  
 	
@@ -217,5 +222,15 @@ public class AdminController {
 	@GetMapping(value = "/checkBiliLogin")
 	public AjaxEntity checkBiliLogin(String qrcodekey) {
 		return biliConfigService.checkBiliLogin(qrcodekey);
+	}
+	
+	@PostMapping(value = "/findProcessHistoryList")
+	public AjaxEntity findProcessHistoryList(ProcessHistoryEntity processHistoryEntity,HttpServletRequest request) {
+		return processHistoryService.findPage(processHistoryEntity);
+	}
+	
+	@GetMapping(value = "/deleteProcessHistoryData")
+	public AjaxEntity deleteProcessHistoryData(ProcessHistoryEntity processHistoryEntity,HttpServletRequest request) {
+		return processHistoryService.deleteProcessHistoryData(processHistoryEntity);
 	}
 } 
