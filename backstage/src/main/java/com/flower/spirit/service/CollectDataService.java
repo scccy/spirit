@@ -111,7 +111,7 @@ public class CollectDataService {
 			if(Global.bilicookies.equals("")) {
 				return new AjaxEntity(Global.ajax_uri_error, "必须填写bili ck", null);
 			}
-			String api = "https://api.bilibili.com/x/v3/fav/resource/ids"+collectDataEntity.getOriginaladdress();
+			String api = "https://api.bilibili.com/x/v3/fav/resource/ids?media_id="+collectDataEntity.getOriginaladdress()+"&platform=web";
 			String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", Global.bilicookies);
 			JSONArray jsonArray = JSONObject.parseObject(httpGetBili).getJSONArray("data");
 			if(jsonArray.size() >0) {
@@ -128,11 +128,14 @@ public class CollectDataService {
 						e.printStackTrace();
 					}
 				});
-				return new AjaxEntity(Global.ajax_success, "已提交线程处理", null);
+				return new AjaxEntity(Global.ajax_success, "已提交线程处理,如填错但线程已开启请重启容器解决", null);
 			}
 			return new AjaxEntity(Global.ajax_uri_error, "数据为空 请检查收藏ID", null);
 			
 			
+		}
+		if(null != collectDataEntity.getPlatform() && collectDataEntity.getPlatform().equals("抖音") ) {
+			return new AjaxEntity(Global.ajax_uri_error, "我还没做 哈哈~ 再等一下", null);
 		}
 		return null;
 	}
@@ -170,13 +173,13 @@ public class CollectDataService {
 		    collectDataDetailEntity.setStatus(status);
 		    collectDataDetailService.save(collectDataDetailEntity);
 		    //修改主体
-		    String carriedout = entity.getCarriedout() == null ?"0":String.valueOf(Integer.parseInt(entity.getCarriedout())+1);
+		    String carriedout = entity.getCarriedout() == null ?"1":String.valueOf(Integer.parseInt(entity.getCarriedout())+1);
 		    entity.setCarriedout(carriedout);
 		    collectdDataDao.save(entity);
 		}
-		
-		
-		
+		entity.setTaskstatus("处理完成");
+		entity.setEndtime(DateUtils.formatDateTime(new Date()));
+		collectdDataDao.save(entity);
 		
 		
 		

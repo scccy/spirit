@@ -147,10 +147,16 @@ public class BiliUtil {
 	
 	
 	public static String findUrlAidOrBid(String url) {
-		String replace = url.replaceAll("http://", "").replaceAll("https://", "").replace("www.bilibili.com/video/", "");
-		int indexOf = replace.indexOf("/");
-		String id = replace.substring(0, indexOf);
-		return id;
+		String replace ="";
+		if(url.contains("http")) {
+			replace = url.replaceAll("http://", "").replaceAll("https://", "").replace("www.bilibili.com/video/", "");
+			int indexOf = replace.indexOf("/");
+			String id = replace.substring(0, indexOf);
+			return id;
+		}else {
+			replace = url.replaceAll("/video/", "");
+			return replace;
+		}
 	}
 
 	public static void main(String[] args) throws Exception {

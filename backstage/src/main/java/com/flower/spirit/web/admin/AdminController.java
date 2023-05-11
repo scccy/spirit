@@ -248,7 +248,7 @@ public class AdminController {
 	public AjaxEntity deleteCollectData(CollectDataEntity collectDataEntity,HttpServletRequest request) {
 		return collectDataService.deleteCollectData(collectDataEntity);
 	}
-	@GetMapping(value = "/submitCollectData")
+	@PostMapping(value = "/submitCollectData")
 	public AjaxEntity submitCollectData(CollectDataEntity collectDataEntity,HttpServletRequest request) {
 		return collectDataService.submitCollectData(collectDataEntity);
 	}

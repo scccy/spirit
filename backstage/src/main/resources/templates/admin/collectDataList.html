@@ -50,6 +50,7 @@
                                 <div class="layui-input-inline layui-show-xs-block">
                                 <button type="button" class="layui-btn layui-btn-normal search">搜索</button>
                                 <button type="button" class="layui-btn layui-btn-normal initList">重置列表</button>
+                                <button type="button" class="layui-btn layui-btn-normal addCollect">添加任务</button>
                                 </div>
                             </form>
                         </div>
@@ -66,9 +67,35 @@
             </div>
         </div> 
         
-        
+            
+         <div class="addCollectBox layui-form" style="display: none;padding: 20px;">
+	   		 <input class="optionid" type="hidden">
+			 <div class="layui-inline">
+			    <label class="layui-form-label">来源平台</label>
+			     <div class="layui-input-inline layui-show-xs-block">
+					<select class="platform">
+			               <option  value="哔哩">哔哩</option>
+			               <option  value="抖音">抖音</option>
+			         </select>   
+			       </div>
+			  </div>
+			
+			  <div class="layui-inline">
+			    <label class="layui-form-label">收藏链接</label>
+			    <div class="layui-input-inline">
+			      <input  type="text" name="originaladdress"  autocomplete="off" class="originaladdress layui-input">
+			    </div>
+			  </div>
+			  <div class="buttondiv" style=" padding-left: 10%; padding-top: 5%; "><button type="button" class="layui-btn submitCollect">保存信息</button></div>
+			  <div style="font-size: 1.2rem;">
+			  	<br/>
+			  		注意:哔哩哔哩 只需要填写收藏夹ID
+			  		    eg. https://www.bilibili.com/medialist/detail/ml12344  中只需要填写 12344
+			  </div>
+		</div>    
     </body>
 	<script type="text/html" th:inline="none" id="barLineTool">
+		<a class="layui-btn layui-btn-danger layui-btn-xs delData" lay-event="look">查看进程</a>
   		<a class="layui-btn layui-btn-danger layui-btn-xs delData" lay-event="del">删除</a>
 	</script>          
 	<script  th:inline="none">
@@ -78,9 +105,40 @@
     	 loadTable();
     	 search();
     	 initList();
-    	 updateData();
+    	 addCollect();
+    	 submitCollect();
      })
-     
+     function submitCollect(){
+    	 $('.submitCollect').click(function(){
+				var option ={
+						platform:$('.platform').val(),
+						originaladdress:$('.originaladdress').val(),
+				};
+				layer.load();
+				$.post("/admin/api/submitCollectData",option,function(data,status){
+					console.log(data);
+					if(data.resCode =="000001"){
+						layer.closeAll();
+						layer.alert(data.message,function(){
+							 window.location.reload();
+						})
+					}else{
+						layer.closeAll();
+						layer.alert(data.message);
+					}
+				})
+    	 })
+     }
+     function addCollect(){
+    	 $('.addCollect').click(function(){
+		   		layer.open({
+			   		  type: 1,
+			   		  skin: 'layui-layer-rim', 
+			   		  area: ['520px', '540px'], 
+			   		  content: $('.addCollectBox')
+			   	});
+    	 })
+     }
      function initList(){
     	 $('.initList').click(function(){
     	     window.location.reload();
@@ -145,7 +203,6 @@
     			     },
     			     cols: [[ 
     			    	 {field: 'id', title: 'ID', width:60},
-    			    	 {field: 'taskid', title: 'taskid', width:180},
     			    	 {field: 'originaladdress', title: '源地址', width:80},
     			    	 {field: 'platform', title: '来源平台', width:80},
     			    	 {field: 'taskstatus', title: '任务状态', width:180},
@@ -174,7 +231,7 @@
     			    var data = obj.data;
     			    console.log(obj)
     			    if(obj.event === 'del'){
-      			      layer.confirm("删除任务将会移除进程,正在进行的任务将会无条件移除！是否删除", function(index){
+      			      layer.confirm("删除任务会造成任务失败建议无执行任务时再删除！是否删除", function(index){
       			        //调用接口删除
       			        var id =obj.data.id;
       			        $.get("/admin/api/deleteCollectData?id="+id,function(res){
@@ -190,6 +247,9 @@
       			        layer.close(index);
       			      });
     			    }
+    			    if(obj.event === 'look'){
+						layer.alert("数据表已经预留设计,但是这个查看还没做~")
+      			    }
     			  });
     			  
     			  
