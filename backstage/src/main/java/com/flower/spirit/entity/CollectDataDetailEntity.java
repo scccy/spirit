@@ -32,6 +32,8 @@ public class CollectDataDetailEntity implements Serializable {
 	
 	private String status;
 	
+	private String createtime;
+	
 	
 	public Integer getId() {
 		return id;
@@ -71,6 +73,14 @@ public class CollectDataDetailEntity implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(String createtime) {
+		this.createtime = createtime;
 	}
 
 	

@@ -177,6 +177,7 @@ public class CollectDataService {
 		    collectDataDetailEntity.setVideoid(videoDataInfo == null ?bvid:videoDataInfo.get("cid"));
 		    collectDataDetailEntity.setOriginaladdress(bvid);
 		    collectDataDetailEntity.setStatus(status);
+		    collectDataDetailEntity.setCreatetime(DateUtils.formatDateTime(new Date()));
 		    collectDataDetailService.save(collectDataDetailEntity);
 		    //修改主体
 		    String carriedout = entity.getCarriedout() == null ?"1":String.valueOf(Integer.parseInt(entity.getCarriedout())+1);
@@ -186,11 +187,7 @@ public class CollectDataService {
 		entity.setTaskstatus("处理完成");
 		entity.setEndtime(DateUtils.formatDateTime(new Date()));
 		collectdDataDao.save(entity);
-		
-		
-		
-		
-		
+		System.gc();
 		
 	}
 	
