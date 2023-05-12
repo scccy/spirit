@@ -15,6 +15,7 @@ import com.flower.spirit.entity.CollectDataEntity;
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.DownloaderEntity;
 import com.flower.spirit.entity.ProcessHistoryEntity;
+import com.flower.spirit.entity.TikTokConfigEntity;
 import com.flower.spirit.entity.UserEntity;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.service.BiliConfigService;
@@ -23,6 +24,7 @@ import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.ProcessHistoryService;
 import com.flower.spirit.service.SystemService;
+import com.flower.spirit.service.TikTokConfigService;
 import com.flower.spirit.service.UserService;
 import com.flower.spirit.service.VideoDataService;
 
@@ -63,6 +65,10 @@ public class AdminController {
 	
 	@Autowired
 	private CollectDataService collectDataService;
+	
+	
+	@Autowired
+	private TikTokConfigService  tikTokConfigService;
 	
 	/**  
 	
@@ -251,5 +257,10 @@ public class AdminController {
 	@PostMapping(value = "/submitCollectData")
 	public AjaxEntity submitCollectData(CollectDataEntity collectDataEntity,HttpServletRequest request) {
 		return collectDataService.submitCollectData(collectDataEntity);
+	}
+	//updateTikTokConfig
+	@PostMapping(value = "/updateTikTokConfig")
+	public AjaxEntity updateTikTokConfig(TikTokConfigEntity tikTokConfigEntity,HttpServletRequest request) {
+		return tikTokConfigService.updateTikTokConfig(tikTokConfigEntity);
 	}
 } 

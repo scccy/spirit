@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.flower.spirit.config.Global;
 
 public class DouUtil {
 	
@@ -40,7 +41,7 @@ public class DouUtil {
 	
 	private static JSONObject ttwidData =  JSONObject.parseObject("{\"region\":\"cn\",\"aid\":1768,\"needFid\":false,\"service\":\"www.ixigua.com\",\"migrate_info\":{\"ticket\":\"\",\"source\":\"node\"},\"cbUrlProtocol\":\"https\",\"union\":true}");  //需要配合ttwid 使用
 	
-	private static String  token_generate ="https://spirit.lifeer.xyz/spirit-token";   //自建 
+//	private static String  token_generate ="https://spirit.lifeer.xyz/spirit-token";   //自建 
 	
 	
 	//private static String  token_generate ="http://127.0.0.1/spirit-token";   //自建 
@@ -123,7 +124,7 @@ public class DouUtil {
 	
 	public static  Map<String, String> getBogus(String aweme_id) throws HttpException, IOException {
 		Map<String, String> res = new HashMap<String, String>();
-		JSONObject token = HttpUtil.doPostNew(token_generate, DouUtil.generateparameters(aweme_id));
+		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver, DouUtil.generateparameters(aweme_id));
 		String code = token.getString("code");
 		if(code.equals("200")) {
 			 String url = token.getJSONObject("data").getString("url");
@@ -207,4 +208,6 @@ public class DouUtil {
 	    }
 	    return result;
 	}
+	
+	
 }

@@ -61,4 +61,8 @@ public class Global {
 	public static String bilibitstream ="64";
 	
 	public static boolean openprocesshistory = false;
+	
+	public static String tiktokCookie="";
+	
+	public static String analysiSserver="https://spirit.lifeer.xyz/spirit-token";
 }

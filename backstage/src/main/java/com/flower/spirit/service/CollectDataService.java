@@ -1,5 +1,6 @@
 package com.flower.spirit.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +30,11 @@ import com.flower.spirit.dao.VideoDataDao;
 import com.flower.spirit.entity.CollectDataDetailEntity;
 import com.flower.spirit.entity.CollectDataEntity;
 import com.flower.spirit.entity.VideoDataEntity;
+import com.flower.spirit.utils.Aria2Util;
 import com.flower.spirit.utils.BiliUtil;
 import com.flower.spirit.utils.DataUtil;
 import com.flower.spirit.utils.DateUtils;
+import com.flower.spirit.utils.DouUtil;
 import com.flower.spirit.utils.HttpUtil;
 import com.flower.spirit.utils.StringUtil;
 
@@ -135,7 +138,34 @@ public class CollectDataService {
 			
 		}
 		if(null != collectDataEntity.getPlatform() && collectDataEntity.getPlatform().equals("抖音") ) {
-			return new AjaxEntity(Global.ajax_uri_error, "我还没做 哈哈~ 再等一下", null);
+			if(Global.tiktokCookie.equals("")) {
+				return new AjaxEntity(Global.ajax_uri_error, "此功能必须填写ck", null);
+			}
+			if(collectDataEntity.getOriginaladdress().contains("post") || collectDataEntity.getOriginaladdress().contains("like")) {
+				try {
+					//进线程前创建collectDataEntity
+					collectDataEntity.setTaskstatus("已提交待处理");
+					collectDataEntity.setCreatetime(DateUtils.formatDateTime(new Date()));
+					collectDataEntity.setCount("0");
+					CollectDataEntity save = collectdDataDao.save(collectDataEntity);
+					//提交线程
+					exec.execute(() -> {
+						try {
+							this.createDyData(save);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					});
+					return new AjaxEntity(Global.ajax_success, "已提交线程处理,如填错但线程已开启请重启容器解决", null);
+					
+				} catch (Exception e) {
+					logger.error("异常"+e.getMessage());
+				}
+				
+			}else {
+				return new AjaxEntity(Global.ajax_uri_error, "请按页面要求填写地址", null);
+			}
+			
 		}
 		return null;
 	}
@@ -183,6 +213,7 @@ public class CollectDataService {
 		    String carriedout = entity.getCarriedout() == null ?"1":String.valueOf(Integer.parseInt(entity.getCarriedout())+1);
 		    entity.setCarriedout(carriedout);
 		    collectdDataDao.save(entity);
+		    Thread.sleep(2500);
 		}
 		entity.setTaskstatus("处理完成");
 		entity.setEndtime(DateUtils.formatDateTime(new Date()));
@@ -191,5 +222,109 @@ public class CollectDataService {
 		
 	}
 	
+	
+	public void createDyData(CollectDataEntity entity) throws Exception {
+
+		logger.info("任务开始"+entity.getOriginaladdress());
+		JSONArray allDYData = this.getAllDYData(entity);
+		
+		entity.setCount(String.valueOf(allDYData.size()));
+		entity.setTaskstatus("已开始处理");
+		collectdDataDao.save(entity);
+		
+		for(int i = 0;i<allDYData.size();i++) {
+			logger.info(entity.getOriginaladdress()+"任务中第"+i+"个");
+			JSONObject aweme_detail = allDYData.getJSONObject(i);	
+			String coveruri = "";
+			JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
+			if(cover.size() >=2) {
+				coveruri = cover.getString(2);
+			}else {
+				coveruri = cover.getString(0);
+			}
+			JSONArray jsonArray = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
+			String videoplay = "";
+			if(jsonArray.size() >=2) {
+				videoplay = jsonArray.getString(2);
+			}else {
+				videoplay = jsonArray.getString(0);
+			}
+			String desc = aweme_detail.getString("desc");
+			String awemeId = aweme_detail.getString("aweme_id");
+			String status ="";
+			List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(awemeId);
+			if(findByVideoid.size()==0) {
+				 // 复制代码 懒得优化 后期再说
+			     String videofile = Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+		         String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+		         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
+		         logger.info("已使用批量下载,下载器类型为:"+Global.downtype);
+		         if(Global.downtype.equals("a2")) {
+			      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(videoplay, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token,Global.tiktokCookie));
+			     }
+		         if(Global.downtype.equals("http")) {
+		        	//内置下载器
+		        	HttpUtil.downDouFromUrl(videoplay, awemeId+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),Global.tiktokCookie);
+		        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+		         }
+		         HttpUtil.downLoadFromUrl(coveruri, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
+		         VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId,desc, desc, "抖音", coverunaddr, videofile,videounrealaddr,entity.getOriginaladdress());
+		         videoDataDao.save(videoDataEntity);
+		 		logger.info("下载流程结束");
+			}
+			status =findByVideoid.size() == 0?"已完成":"已完成(未下载已存在)";
+	 		Thread.sleep(2500);
+		    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
+		    collectDataDetailEntity.setDataid(entity.getId());
+		    collectDataDetailEntity.setVideoid(awemeId);
+		    collectDataDetailEntity.setOriginaladdress(awemeId);
+		    collectDataDetailEntity.setStatus(status);
+		    collectDataDetailEntity.setCreatetime(DateUtils.formatDateTime(new Date()));
+		    collectDataDetailService.save(collectDataDetailEntity);
+		    //修改主体
+		    String carriedout = entity.getCarriedout() == null ?"1":String.valueOf(Integer.parseInt(entity.getCarriedout())+1);
+		    entity.setCarriedout(carriedout);
+		    collectdDataDao.save(entity);
+	 		
+		}
+		entity.setTaskstatus("处理完成");
+		entity.setEndtime(DateUtils.formatDateTime(new Date()));
+		collectdDataDao.save(entity);
+		System.gc();
+		logger.info("任务结束"+entity.getOriginaladdress());
+	}
+	
+
+	public JSONArray getAllDYData(CollectDataEntity entity) throws IOException, InterruptedException {
+		String api ="";
+		if(entity.getOriginaladdress().contains("post")) {
+			api = "https://www.douyin.com/aweme/v1/web/aweme/post/?aid=6383&sec_user_id=#uid#&count=35&max_cursor=#max_cursor#&cookie_enabled=true&platform=PC&downlink=10";
+		}
+		if(entity.getOriginaladdress().contains("like")) {
+			api = "https://www.douyin.com/aweme/v1/web/aweme/favorite/?aid=6383&sec_user_id=#uid#&count=35&max_cursor=#max_cursor#&cookie_enabled=true&platform=PC&downlink=10";
+		}
+		String sec_user_id = entity.getOriginaladdress().replaceAll("post", "");
+		api =api.replaceAll("#uid#", sec_user_id);
+		JSONArray dyNextData = this.getDYNextData(api, new JSONArray(),"0");
+		return dyNextData;
+		
+	}
+	
+	public JSONArray  getDYNextData(String api,JSONArray data,String max_cursor) throws IOException, InterruptedException {
+		String apiaddt = api.replaceAll("#max_cursor#", max_cursor);
+		String httpget = DouUtil.httpget(apiaddt, Global.tiktokCookie);
+		JSONObject parseObject = JSONObject.parseObject(httpget);
+		JSONArray jsonArray = parseObject.getJSONArray("aweme_list");
+		max_cursor = parseObject.getString("max_cursor");
+		if(!max_cursor.equals("0")) {
+			//需要递归
+			data.addAll(jsonArray);
+			Thread.sleep(2500);
+			return this.getDYNextData(api, data, max_cursor);
+		}else {
+			data.addAll(jsonArray);
+			return data;
+		}
+	}
 
 }

@@ -7,9 +7,11 @@ import org.springframework.context.annotation.Configuration;
 
 import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
+import com.flower.spirit.entity.TikTokConfigEntity;
 import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
+import com.flower.spirit.service.TikTokConfigService;
 
 /**
  * @author flower
@@ -27,6 +29,11 @@ public class AppConfig {
 
 	@Autowired
 	private BiliConfigService biliConfigService;
+	
+	@Autowired
+	private TikTokConfigService  tikTokConfigService;
+	
+	
 	@PostConstruct
 	public void init() {
 		downloaderService.renovate();
@@ -42,6 +49,13 @@ public class AppConfig {
 		}
 		if(null != bili.getBitstream() && !"".equals(bili.getBitstream())) {
 			Global.bilibitstream= bili.getBitstream();
+		}
+		TikTokConfigEntity tiktok = tikTokConfigService.getData();
+		if(null !=tiktok.getCookies() && !"".equals(tiktok.getCookies())) {
+			Global.tiktokCookie =tiktok.getCookies();
+		}
+		if(null != tiktok.getAnalysisserver() && !"".equals(tiktok.getAnalysisserver())) {
+			Global.analysiSserver =tiktok.getAnalysisserver();
 		}
 	}
 
