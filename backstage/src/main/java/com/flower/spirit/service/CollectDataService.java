@@ -233,7 +233,7 @@ public class CollectDataService {
 		collectdDataDao.save(entity);
 		
 		for(int i = 0;i<allDYData.size();i++) {
-			System.out.println(allDYData.get(i));
+//			System.out.println(allDYData.get(i));
 			logger.info(entity.getOriginaladdress()+"任务中第"+i+"个");
 			String status ="";
 			JSONObject aweme_detail = allDYData.getJSONObject(i);	
@@ -362,6 +362,7 @@ public class CollectDataService {
 		json.put("ua", "");
 		String apiaddt = api.replaceAll("#max_cursor#", max_cursor);
 		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token-update", json);
+		logger.info("使用的:"+Global.analysiSserver+"服务器");
 		String xbogus = token.getJSONObject("data").getString("xbogus");
 		apiaddt = apiaddt+"&X-Bogus="+xbogus;
 //		System.out.println(apiaddt);
