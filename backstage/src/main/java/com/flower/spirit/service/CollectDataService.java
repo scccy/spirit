@@ -239,8 +239,26 @@ public class CollectDataService {
 			JSONObject aweme_detail = allDYData.getJSONObject(i);	
 			String aweme_type = aweme_detail.getString("aweme_type");
 			String awemeId = aweme_detail.getString("aweme_id");
-			if(aweme_type.equals("68")) {
-				status ="图集不支持下载";
+			try {
+				if(aweme_type.equals("68")) {
+					status ="图集不支持下载";
+			 		Thread.sleep(2500);
+				    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
+				    collectDataDetailEntity.setDataid(entity.getId());
+				    collectDataDetailEntity.setVideoid(awemeId);
+				    collectDataDetailEntity.setOriginaladdress(awemeId);
+				    collectDataDetailEntity.setStatus(status);
+				    collectDataDetailEntity.setCreatetime(DateUtils.formatDateTime(new Date()));
+				    collectDataDetailService.save(collectDataDetailEntity);
+				    //修改主体
+				    String carriedout = entity.getCarriedout() == null ?"1":String.valueOf(Integer.parseInt(entity.getCarriedout())+1);
+				    entity.setCarriedout(carriedout);
+				    collectdDataDao.save(entity);
+					continue;
+				}
+			} catch (Exception e) {
+				//异常了 没有type
+				status ="视频异常";
 		 		Thread.sleep(2500);
 			    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
 			    collectDataDetailEntity.setDataid(entity.getId());
@@ -254,6 +272,7 @@ public class CollectDataService {
 			    entity.setCarriedout(carriedout);
 			    collectdDataDao.save(entity);
 				continue;
+				
 			}
 			String coveruri = "";
 			JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
@@ -335,19 +354,19 @@ public class CollectDataService {
 	}
 	
 	public JSONArray  getDYNextData(String api,JSONArray data,String max_cursor,String sign) throws IOException, InterruptedException {
-		System.out.println(sign);
+//		System.out.println(sign);
 		JSONObject json =  new JSONObject();
 		String newsign = sign.replaceAll("#max_cursor#", max_cursor);
-		System.out.println(newsign);
+//		System.out.println(newsign);
 		json.put("str", newsign);
 		json.put("ua", "");
 		String apiaddt = api.replaceAll("#max_cursor#", max_cursor);
 		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token-update", json);
 		String xbogus = token.getJSONObject("data").getString("xbogus");
 		apiaddt = apiaddt+"&X-Bogus="+xbogus;
-		System.out.println(apiaddt);
+//		System.out.println(apiaddt);
 		String httpget = DouUtil.httpget(apiaddt, Global.tiktokCookie);
-		System.out.println(httpget);
+//		System.out.println(httpget);
 		JSONObject parseObject = JSONObject.parseObject(httpget);
 		JSONArray jsonArray = parseObject.getJSONArray("aweme_list");
 		max_cursor = parseObject.getString("max_cursor");
