@@ -233,8 +233,12 @@ public class CollectDataService {
 		collectdDataDao.save(entity);
 		
 		for(int i = 0;i<allDYData.size();i++) {
+			System.out.println(allDYData.get(i));
 			logger.info(entity.getOriginaladdress()+"任务中第"+i+"个");
+			
 			JSONObject aweme_detail = allDYData.getJSONObject(i);	
+			String aweme_type = aweme_detail.getString("aweme_type");
+			String status ="";
 			String coveruri = "";
 			JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
 			if(cover.size() >=2) {
@@ -251,7 +255,23 @@ public class CollectDataService {
 			}
 			String desc = aweme_detail.getString("desc");
 			String awemeId = aweme_detail.getString("aweme_id");
-			String status ="";
+			if(aweme_type.equals("68")) {
+				status ="图集不支持下载";
+		 		Thread.sleep(2500);
+			    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
+			    collectDataDetailEntity.setDataid(entity.getId());
+			    collectDataDetailEntity.setVideoid(awemeId);
+			    collectDataDetailEntity.setOriginaladdress(awemeId);
+			    collectDataDetailEntity.setStatus(status);
+			    collectDataDetailEntity.setCreatetime(DateUtils.formatDateTime(new Date()));
+			    collectDataDetailService.save(collectDataDetailEntity);
+			    //修改主体
+			    String carriedout = entity.getCarriedout() == null ?"1":String.valueOf(Integer.parseInt(entity.getCarriedout())+1);
+			    entity.setCarriedout(carriedout);
+			    collectdDataDao.save(entity);
+				continue;
+			}
+
 			List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(awemeId);
 			if(findByVideoid.size()==0) {
 				 // 复制代码 懒得优化 后期再说
@@ -272,7 +292,9 @@ public class CollectDataService {
 		         videoDataDao.save(videoDataEntity);
 		 		logger.info("下载流程结束");
 			}
-			status =findByVideoid.size() == 0?"已完成":"已完成(未下载已存在)";
+			if(status.equals("")) {
+				status =findByVideoid.size() == 0?"已完成":"已完成(未下载已存在)";
+			}
 	 		Thread.sleep(2500);
 		    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
 		    collectDataDetailEntity.setDataid(entity.getId());
@@ -312,7 +334,9 @@ public class CollectDataService {
 	
 	public JSONArray  getDYNextData(String api,JSONArray data,String max_cursor) throws IOException, InterruptedException {
 		String apiaddt = api.replaceAll("#max_cursor#", max_cursor);
+		System.out.println(apiaddt);
 		String httpget = DouUtil.httpget(apiaddt, Global.tiktokCookie);
+		System.out.println(httpget);
 		JSONObject parseObject = JSONObject.parseObject(httpget);
 		JSONArray jsonArray = parseObject.getJSONArray("aweme_list");
 		max_cursor = parseObject.getString("max_cursor");
