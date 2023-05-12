@@ -235,25 +235,9 @@ public class CollectDataService {
 		for(int i = 0;i<allDYData.size();i++) {
 			System.out.println(allDYData.get(i));
 			logger.info(entity.getOriginaladdress()+"任务中第"+i+"个");
-			
+			String status ="";
 			JSONObject aweme_detail = allDYData.getJSONObject(i);	
 			String aweme_type = aweme_detail.getString("aweme_type");
-			String status ="";
-			String coveruri = "";
-			JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
-			if(cover.size() >=2) {
-				coveruri = cover.getString(2);
-			}else {
-				coveruri = cover.getString(0);
-			}
-			JSONArray jsonArray = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
-			String videoplay = "";
-			if(jsonArray.size() >=2) {
-				videoplay = jsonArray.getString(2);
-			}else {
-				videoplay = jsonArray.getString(0);
-			}
-			String desc = aweme_detail.getString("desc");
 			String awemeId = aweme_detail.getString("aweme_id");
 			if(aweme_type.equals("68")) {
 				status ="图集不支持下载";
@@ -271,6 +255,22 @@ public class CollectDataService {
 			    collectdDataDao.save(entity);
 				continue;
 			}
+			String coveruri = "";
+			JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
+			if(cover.size() >=2) {
+				coveruri = cover.getString(2);
+			}else {
+				coveruri = cover.getString(0);
+			}
+			JSONArray jsonArray = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
+			String videoplay = "";
+			if(jsonArray.size() >=2) {
+				videoplay = jsonArray.getString(2);
+			}else {
+				videoplay = jsonArray.getString(0);
+			}
+			String desc = aweme_detail.getString("desc");
+			
 
 			List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(awemeId);
 			if(findByVideoid.size()==0) {
@@ -319,21 +319,32 @@ public class CollectDataService {
 
 	public JSONArray getAllDYData(CollectDataEntity entity) throws IOException, InterruptedException {
 		String api ="";
+		String sign = "aid=6383&sec_user_id=#uid#&count=35&max_cursor=#max_cursor#&cookie_enabled=true&platform=PC&downlink=10";
 		if(entity.getOriginaladdress().contains("post")) {
-			api = "https://www.douyin.com/aweme/v1/web/aweme/post/?aid=6383&sec_user_id=#uid#&count=35&max_cursor=#max_cursor#&cookie_enabled=true&platform=PC&downlink=10";
+			api = "https://www.douyin.com/aweme/v1/web/aweme/post/?";
 		}
 		if(entity.getOriginaladdress().contains("like")) {
-			api = "https://www.douyin.com/aweme/v1/web/aweme/favorite/?aid=6383&sec_user_id=#uid#&count=35&max_cursor=#max_cursor#&cookie_enabled=true&platform=PC&downlink=10";
+			api = "https://www.douyin.com/aweme/v1/web/aweme/favorite/?";
 		}
-		String sec_user_id = entity.getOriginaladdress().replaceAll("post", "");
-		api =api.replaceAll("#uid#", sec_user_id);
-		JSONArray dyNextData = this.getDYNextData(api, new JSONArray(),"0");
+		String sec_user_id = entity.getOriginaladdress().replaceAll("post", "").replaceAll("like", "");
+		String singnew = sign.replaceAll("#uid#", sec_user_id);
+		api =api+singnew;
+		JSONArray dyNextData = this.getDYNextData(api, new JSONArray(),"0",singnew);
 		return dyNextData;
 		
 	}
 	
-	public JSONArray  getDYNextData(String api,JSONArray data,String max_cursor) throws IOException, InterruptedException {
+	public JSONArray  getDYNextData(String api,JSONArray data,String max_cursor,String sign) throws IOException, InterruptedException {
+		System.out.println(sign);
+		JSONObject json =  new JSONObject();
+		String newsign = sign.replaceAll("#max_cursor#", max_cursor);
+		System.out.println(newsign);
+		json.put("str", newsign);
+		json.put("ua", "");
 		String apiaddt = api.replaceAll("#max_cursor#", max_cursor);
+		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token-update", json);
+		String xbogus = token.getJSONObject("data").getString("xbogus");
+		apiaddt = apiaddt+"&X-Bogus="+xbogus;
 		System.out.println(apiaddt);
 		String httpget = DouUtil.httpget(apiaddt, Global.tiktokCookie);
 		System.out.println(httpget);
@@ -344,7 +355,7 @@ public class CollectDataService {
 			//需要递归
 			data.addAll(jsonArray);
 			Thread.sleep(2500);
-			return this.getDYNextData(api, data, max_cursor);
+			return this.getDYNextData(api, data, max_cursor,sign);
 		}else {
 			data.addAll(jsonArray);
 			return data;

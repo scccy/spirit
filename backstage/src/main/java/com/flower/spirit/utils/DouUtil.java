@@ -124,7 +124,7 @@ public class DouUtil {
 	
 	public static  Map<String, String> getBogus(String aweme_id) throws HttpException, IOException {
 		Map<String, String> res = new HashMap<String, String>();
-		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver, DouUtil.generateparameters(aweme_id));
+		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token", DouUtil.generateparameters(aweme_id));
 		String code = token.getString("code");
 		if(code.equals("200")) {
 			 String url = token.getJSONObject("data").getString("url");

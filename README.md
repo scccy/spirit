@@ -206,3 +206,5 @@ docker 部署下 容器端口 为28081
 https://github.com/SocialSisterYi/bilibili-API-collect
 
 https://toscode.gitee.com/zong_zh/parsing-tiktok-video
+
+https://github.com/Johnserf-Seed/TikTokDownload
