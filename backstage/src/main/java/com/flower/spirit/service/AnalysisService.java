@@ -136,6 +136,7 @@ public class AnalysisService {
 			    logger.info("已使用htmlunit进行解析,下载器类型为:"+Global.downtype);
 		        if(Global.downtype.equals("a2")) {
 		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token));
+		      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
 		        }
 		        if(Global.downtype.equals("http")) {
 		        	//内置下载器
@@ -149,7 +150,8 @@ public class AnalysisService {
 			logger.info("已使用api进行解析,下载器类型为:"+Global.downtype);
 	        if(Global.downtype.equals("a2")) {
 		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token,cookie));
-		   }
+		      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+	        }
 	        if(Global.downtype.equals("http")) {
 	        	//内置下载器
 	        	HttpUtil.downDouFromUrl(playApi, awemeId+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),cookie);

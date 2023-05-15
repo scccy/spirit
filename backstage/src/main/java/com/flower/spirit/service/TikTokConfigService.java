@@ -38,6 +38,9 @@ public class TikTokConfigService {
 		if(null != tikTokConfigEntity.getCookies() && !"".equals(tikTokConfigEntity.getCookies())) {
 			Global.tiktokCookie = tikTokConfigEntity.getCookies();
 		}
+		if(null != tikTokConfigEntity.getAnalysisserver() && !"".equals(tikTokConfigEntity.getAnalysisserver())) {
+			Global.analysiSserver = tikTokConfigEntity.getAnalysisserver();
+		}
 		return new AjaxEntity(Global.ajax_success, "操作成功", tikTokConfigEntity);
 	}
 
