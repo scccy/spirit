@@ -20,6 +20,7 @@ import com.flower.spirit.utils.BiliUtil;
 import com.flower.spirit.utils.DateUtils;
 import com.flower.spirit.utils.DouUtil;
 import com.flower.spirit.utils.HttpUtil;
+import com.flower.spirit.utils.StringUtil;
 import com.flower.spirit.utils.URLUtil;
 
 
@@ -88,12 +89,13 @@ public class AnalysisService {
 		  String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
 		  try {
 			 Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
+			 String filename = StringUtil.getFileName(findVideoStreaming.get("title"), findVideoStreaming.get("cid"));
 			 String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
 			 String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
 			 //封面down
-			 HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), findVideoStreaming.get("cid")+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+			 HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
 			//封面down
-			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,video);
+			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+filename+".jpg", findVideoStreaming.get("video"),videounaddr,video);
 		     videoDataDao.save(videoDataEntity);
 		     logger.info("下载流程结束");
 		     processHistoryService.saveProcess(saveProcess.getId(), video, platform);
@@ -132,32 +134,33 @@ public class AnalysisService {
 	    String videofile = Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
         String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
+        String filename = StringUtil.getFileName(desc, awemeId);
 		if(type.equals("client")) {
 			    logger.info("已使用htmlunit进行解析,下载器类型为:"+Global.downtype);
 		        if(Global.downtype.equals("a2")) {
-		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token));
-		      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
+		      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		        }
 		        if(Global.downtype.equals("http")) {
 		        	//内置下载器
-		        	HttpUtil.downLoadFromUrl("https:"+playApi, awemeId+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
-		        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+		        	HttpUtil.downLoadFromUrl("https:"+playApi, filename+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+		        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		        }
 		        //下载封面图当容器映射目录
-		        HttpUtil.downLoadFromUrl("https:"+cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
+		        HttpUtil.downLoadFromUrl("https:"+cover, filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 		}
 		if(type.equals("api")) {
 			logger.info("已使用api进行解析,下载器类型为:"+Global.downtype);
 	        if(Global.downtype.equals("a2")) {
-		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token,cookie));
-		      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token,cookie));
+		      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 	        }
 	        if(Global.downtype.equals("http")) {
 	        	//内置下载器
-	        	HttpUtil.downDouFromUrl(playApi, awemeId+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),cookie);
-	        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+	        	HttpUtil.downDouFromUrl(playApi, filename+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),cookie);
+	        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 	        }
-	        HttpUtil.downLoadFromUrl(cover, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
+	        HttpUtil.downLoadFromUrl(cover, filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 		}
         //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
         VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId,desc, desc, platform, coverunaddr, videofile,videounrealaddr,originaladdress);

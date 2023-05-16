@@ -183,6 +183,12 @@
      function preVideo(e){
     	 console.log(e);
      }
+     function transferName(str){
+    	  var obj=str.lastIndexOf("/");
+    	  var filename = str.substr(obj+1);
+    	  var path = str.substr(0,obj);
+    	  return path+"/"+encodeURIComponent(filename);
+     }
      function loadTable(){
     		layui.use(['table','form'], function(){
     			  table = layui.table;
@@ -211,7 +217,7 @@
     			    	 {field: 'videodesc', title: '视频简介', width:180},
     			    	 {field: 'videoplatform', title: '来源平台', width:80},
     			    	 {field: 'videocover', title: '视频封面', width:180,templet:function(d){
-    			    		 var html = "<div><image class='cover' src='"+d.videocover+"'></image></div>";
+    			    		 var html = "<div><image class='cover' src='"+transferName(d.videocover)+"'></image></div>";
     			    		 return html;
     			    	 }},
     			    	 {field: 'videoaddr', title: '视频真实地址', width:180},
@@ -272,7 +278,7 @@
         			   		  type: 1,
         			   		  skin: 'layui-layer-rim', 
         			   		  area: ['800px', '520px'], 
-        			   		  content: "<video src='"+obj.data.videounrealaddr+"' height='100%' width='100%' controls='controls'>"
+        			   		  content: "<video src='"+transferName(obj.data.videounrealaddr)+"' height='100%' width='100%' controls='controls'>"
         			   	});
 			  	 	}
     			  });

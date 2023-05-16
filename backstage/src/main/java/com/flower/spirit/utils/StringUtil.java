@@ -1,5 +1,7 @@
 package com.flower.spirit.utils;
 
+
+
 /**  
 
 * <p>Title: StringUtil</p>  
@@ -29,5 +31,28 @@ public class StringUtil {
 		}
 		return true;
 	}
-
+	
+	/**
+	 *处理 特殊字符串 并返回名称
+	 * @param name
+	 * @return
+	 */
+	 public static String getFileName(String obj,String aid) {
+		
+		 try {
+			 if(obj.trim().equals("") || obj.length() == 0) {
+				 return aid;
+			 }
+			 String reSub = "[^\\u4e00-\\u9fa5^a-z^A-Z^0-9^#]";
+		     if (obj.length() > 64) {
+		         obj = obj.substring(0, 64);
+		     }
+		     return obj.replaceAll(reSub, "_");
+		} catch (Exception e) {
+			return aid;
+		}
+	 }
+	 public static void main(String[] args) {
+		 System.out.println(StringUtil.getFileName("反恐精英1.6 #动画制作 #游戏 #反恐精英 #童年回忆", "123"));
+	}
 }

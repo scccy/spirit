@@ -183,6 +183,7 @@ public class CollectDataService {
 			Map<String, String> videoDataInfo = BiliUtil.getVideoDataInfo("/video/"+bvid);
 			String status ="";
 			if(videoDataInfo !=  null) {
+				String filename =StringUtil.getFileName(videoDataInfo.get("title"), videoDataInfo.get("cid"));
 				String cid = videoDataInfo.get("cid");
 				List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(cid);
 				if(findByVideoid.size() == 0) {
@@ -190,9 +191,9 @@ public class CollectDataService {
 					String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
 					String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
 					 //封面down
-					HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), findVideoStreaming.get("cid")+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+					HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
 					//封面down
-					VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), "哔哩", coverunaddr+"/"+findVideoStreaming.get("cid")+".jpg", findVideoStreaming.get("video"),videounaddr,bvid);
+					VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), "哔哩", coverunaddr+"/"+filename+".jpg", findVideoStreaming.get("video"),videounaddr,bvid);
 				    videoDataDao.save(videoDataEntity);
 				    logger.info("收藏"+(i+1)+"下载流程结束");
 				}
@@ -294,20 +295,22 @@ public class CollectDataService {
 			List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(awemeId);
 			if(findByVideoid.size()==0) {
 				 // 复制代码 懒得优化 后期再说
-			     String videofile = Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
-		         String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
-		         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".jpg";
+				 String filename = StringUtil.getFileName(desc, awemeId);
+			     String videofile = Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
+		         String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
+		         String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".jpg";
+		        
 		         logger.info("已使用批量下载,下载器类型为:"+Global.downtype);
 		         if(Global.downtype.equals("a2")) {
-			      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(videoplay, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), awemeId+".mp4", Global.a2_token,Global.tiktokCookie));
-			      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+			      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(videoplay, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token,Global.tiktokCookie));
+			      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		         }
 		         if(Global.downtype.equals("http")) {
 		        	//内置下载器
-		        	HttpUtil.downDouFromUrl(videoplay, awemeId+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),Global.tiktokCookie);
-		        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+awemeId+".mp4";
+		        	HttpUtil.downDouFromUrl(videoplay, filename+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),Global.tiktokCookie);
+		        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		         }
-		         HttpUtil.downLoadFromUrl(coveruri, awemeId+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
+		         HttpUtil.downLoadFromUrl(coveruri, filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 		         VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId,desc, desc, "抖音", coverunaddr, videofile,videounrealaddr,entity.getOriginaladdress());
 		         videoDataDao.save(videoDataEntity);
 		 		logger.info("下载流程结束");
