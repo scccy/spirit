@@ -40,6 +40,9 @@ public class CollectDataDetailService {
 				if(seachDate != null && seachDate.getDataid() != null) {
 					predicate.getExpressions().add(criteriaBuilder.like(root.get("dataid"), "%"+seachDate.getDataid()+"%"));
 				}
+				if(seachDate != null && seachDate.getStatus() != null) {
+					predicate.getExpressions().add(criteriaBuilder.like(root.get("status"), "%"+seachDate.getStatus()+"%"));
+				}
 
 				query.orderBy(criteriaBuilder.desc(root.get("id")));
 				return predicate;
