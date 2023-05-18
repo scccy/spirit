@@ -43,7 +43,8 @@ public class StringUtil {
 			 if(obj.trim().equals("") || obj.length() == 0) {
 				 return aid;
 			 }
-			 String reSub = "[^\\u4e00-\\u9fa5^a-z^A-Z^0-9^#]";
+//			 String reSub = "[^\\u4e00-\\u9fa5^a-z^A-Z^0-9^#]";
+			 String reSub = "[^A-Za-z0-9\\u4e00-\\u9fa5]";
 		     if (obj.length() > 64) {
 		         obj = obj.substring(0, 64);
 		     }
