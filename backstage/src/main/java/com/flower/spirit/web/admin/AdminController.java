@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.common.RequestEntity;
 import com.flower.spirit.entity.BiliConfigEntity;
+import com.flower.spirit.entity.CollectDataDetailEntity;
 import com.flower.spirit.entity.CollectDataEntity;
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.DownloaderEntity;
@@ -19,6 +20,7 @@ import com.flower.spirit.entity.TikTokConfigEntity;
 import com.flower.spirit.entity.UserEntity;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.service.BiliConfigService;
+import com.flower.spirit.service.CollectDataDetailService;
 import com.flower.spirit.service.CollectDataService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
@@ -69,6 +71,10 @@ public class AdminController {
 	
 	@Autowired
 	private TikTokConfigService  tikTokConfigService;
+	
+	
+	@Autowired
+	private CollectDataDetailService collectDataDetailService;
 	
 	/**  
 	
@@ -262,5 +268,11 @@ public class AdminController {
 	@PostMapping(value = "/updateTikTokConfig")
 	public AjaxEntity updateTikTokConfig(TikTokConfigEntity tikTokConfigEntity,HttpServletRequest request) {
 		return tikTokConfigService.updateTikTokConfig(tikTokConfigEntity);
+	}
+	
+	
+	@GetMapping(value = "/findCollectDataDetail")
+	public AjaxEntity findCollectDataDetail(CollectDataDetailEntity entity) {
+		return collectDataDetailService.findPage(entity);
 	}
 } 
