@@ -37,17 +37,13 @@
                             <form class="layui-form layui-col-space5">
         
                                 <div class="layui-input-inline layui-show-xs-block">
-  									<select id="platform">
+  									<select id="status">
   										<option value="">请选择</option>
   										<option value="已完成">已完成</option>
   										<option value="未下载">未下载</option>
   										<option value="不支持">不支持</option>
                            			 </select>   
                                 </div>
-                                 <div class="layui-input-inline layui-show-xs-block">
-                                  	<input type="text" id="taskid" name="taskid" placeholder="taskid" autocomplete="off" class="layui-input">
-                                 </div>
-   
                                 <div class="layui-input-inline layui-show-xs-block">
                                 <button type="button" class="layui-btn layui-btn-normal search">搜索</button>
                                 <button type="button" class="layui-btn layui-btn-normal initList">重置列表</button>
@@ -99,13 +95,13 @@
      function search(){
     		$('.search').click(function(){
     			 var option = {}
-    			 var  platform = $('#platform').val();
-    			 if(platform != "" ){
-    				 option['platform']= platform;
+    			 var  status = $('#status').val();
+    			 if(status != "" ){
+    				 option['status']= status;
     			 }
     			 var  dataid = $('#taskid').val();
     			 if(dataid != "" ){
-    				 option['dataid']= taskid;
+    				 option['dataid']= dataid;
     			 }
     	         table.reload('projectList', {
     	             page: {
