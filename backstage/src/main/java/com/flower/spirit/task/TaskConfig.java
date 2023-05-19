@@ -10,6 +10,7 @@ import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
+import org.springframework.scheduling.support.CronExpression;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
@@ -34,15 +35,22 @@ public class TaskConfig implements SchedulingConfigurer {
 	@Override
 	public void configureTasks(ScheduledTaskRegistrar scheduledTaskRegistrar) {
 		
-		cron = "0 0/1 * * * ?";
+		cron = "0 0 0/3 * * ?";
         Runnable task = () -> {
         	collectDataService.findMonitor();
         };
         Trigger trigger = (triggerContext) -> {
          //在这检查数据库
         	ConfigEntity data = configService.getData();
+      
         	if(null !=data.getTaskcron() && !data.getTaskcron().equals("")) {
-        		cron = "data.getTaskcron()";
+        	  	boolean validExpression = CronExpression.isValidExpression(data.getTaskcron());
+        		if(validExpression) {
+        			cron = data.getTaskcron();
+        		}else {
+        			logger.info("未设置有效定时器规则,本次不执行,将执行默认定时器");
+        		}
+        	  	
         	}else {
         		logger.info("未设置定时器,将执行默认定时器");
         	}    

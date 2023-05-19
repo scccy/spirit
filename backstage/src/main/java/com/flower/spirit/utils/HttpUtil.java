@@ -240,6 +240,7 @@ public class HttpUtil {
 
 	public static void  downBiliFromUrl(String urlStr,String fileName,String savePath) throws Exception{
         try {
+//        	System.out.println(urlStr);
         	 URL url = new URL(urlStr); 
              HttpURLConnection conn = (HttpURLConnection)url.openConnection();  
              conn.setConnectTimeout(5*1000);

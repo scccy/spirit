@@ -224,7 +224,7 @@ public class CollectDataService {
 			    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
 			    collectDataDetailEntity.setDataid(entity.getId());
 			    collectDataDetailEntity.setVideoname(map.get("title"));
-			    collectDataDetailEntity.setVideoid(videoDataInfo == null ?bvid:map.get("cid"));
+			    collectDataDetailEntity.setVideoid(map == null ?bvid:map.get("cid"));
 			    collectDataDetailEntity.setOriginaladdress(bvid);
 			    collectDataDetailEntity.setStatus(status);
 			    collectDataDetailEntity.setCreatetime(DateUtils.formatDateTime(new Date()));

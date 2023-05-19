@@ -126,7 +126,7 @@ public class BiliUtil {
 		System.out.println(serchPersion);
 		if(videoData.getString("code").equals("0")) {		
 			//优化多集问题 从page 里取
-			Map<String, String> data = new HashMap<String, String>(); 
+			
 			String bvid = videoData.getJSONObject("data").getString("bvid");
 			String aid = videoData.getJSONObject("data").getString("aid");
 //			String cid = videoData.getJSONObject("data").getString("cid");
@@ -134,14 +134,19 @@ public class BiliUtil {
 //			String pic = videoData.getJSONObject("data").getString("pic");
 			String desc = videoData.getJSONObject("data").getString("desc");
 			JSONArray jsonArray = videoData.getJSONObject("data").getJSONArray("pages");
-			data.put("aid", aid);
-			data.put("bvid", bvid);
-			data.put("desc", desc);
+	
 			for(int i = 0;i<jsonArray.size();i++) {
+				Map<String, String> data = new HashMap<String, String>(); 
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
 				String cid = jsonObject.getString("cid");
 				String title = jsonObject.getString("part");
 				String pic = jsonObject.getString("first_frame");
+				data.put("aid", aid);
+				data.put("bvid", bvid);
+				data.put("desc", desc);
+				if(null == pic) {
+					pic = videoData.getJSONObject("data").getString("pic");
+				}
 				data.put("cid", cid);
 				data.put("title", title);
 				data.put("pic", pic);

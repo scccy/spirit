@@ -58,6 +58,12 @@
 		     </select>
       </div>
     </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">监控定时器cron</label>
+      <div class="layui-input-inline">
+        <input type="type" name="taskcron"  id ="taskcron" autocomplete="off" class="layui-input"  placeholder="默认0 0 0/3 * * ?  三小时一次">
+      </div>
+    </div>
   </div>
    <div class="layui-form-item">
     <div class="layui-input-block">
@@ -274,10 +280,14 @@
 		 var appid = $('.appid').val();
 		 var apptoken = $('.apptoken').val();
 		 var openprocesshistory = $('.openprocesshistory').val();
+		 var taskcron =$('#taskcron').val(); 
 		 var option = {};
 		 option['id'] = appid;
 		 option['apptoken'] = apptoken;
 		 option['openprocesshistory'] = openprocesshistory;
+		 if(taskcron!=""){
+			 option['taskcron'] = taskcron;
+		 }
 		 $.post("/admin/api/saveConfig",option,function(data,status){
 			if(data.resCode =="000001"){
 				layer.closeAll();
