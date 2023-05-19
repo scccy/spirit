@@ -1,6 +1,7 @@
 package com.flower.spirit.service;
 
 
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,17 +89,21 @@ public class AnalysisService {
 		  ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, video, platform);
 		  String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
 		  try {
-			 Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
-			 String filename = StringUtil.getFileName(findVideoStreaming.get("title"), findVideoStreaming.get("cid"));
-			 String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
-			 String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
-			 //封面down
-			 HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
-			//封面down
-			 VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), platform, coverunaddr+"/"+filename+".jpg", findVideoStreaming.get("video"),videounaddr,video);
-		     videoDataDao.save(videoDataEntity);
-		     logger.info("下载流程结束");
-		     processHistoryService.saveProcess(saveProcess.getId(), video, platform);
+//			 Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
+			 List<Map<String, String>> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
+			 for(int i = 0;i<findVideoStreaming.size();i++) {
+				 Map<String, String> map = findVideoStreaming.get(i);
+				 String filename = StringUtil.getFileName(map.get("title"), map.get("cid"));
+				 String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
+				 String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+map.get("videoname");//映射
+				 //封面down
+				 HttpUtil.downBiliFromUrl(map.get("pic"), filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+				//封面down
+				 VideoDataEntity videoDataEntity = new VideoDataEntity(map.get("cid"),map.get("title"), map.get("desc"), platform, coverunaddr+"/"+filename+".jpg", map.get("video"),videounaddr,video);
+			     videoDataDao.save(videoDataEntity);
+			     logger.info("下载流程结束");
+			     processHistoryService.saveProcess(saveProcess.getId(), video, platform);
+			 }
 		} catch (Exception e) {
 			throw e;
 		}
