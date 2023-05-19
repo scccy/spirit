@@ -30,6 +30,8 @@ public class CollectDataDetailEntity extends DataEntity<CollectDataDetailEntity>
 	
 	private String videoid;
 	
+	private String videoname;
+	
 	private String originaladdress;
 	
 	private String status;
@@ -59,6 +61,15 @@ public class CollectDataDetailEntity extends DataEntity<CollectDataDetailEntity>
 
 	public void setVideoid(String videoid) {
 		this.videoid = videoid;
+	}
+
+	
+	public String getVideoname() {
+		return videoname;
+	}
+
+	public void setVideoname(String videoname) {
+		this.videoname = videoname;
 	}
 
 	public String getOriginaladdress() {

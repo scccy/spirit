@@ -38,7 +38,7 @@ public class CollectDataDetailService {
 				Predicate predicate=criteriaBuilder.conjunction();
 				CollectDataDetailEntity seachDate = (CollectDataDetailEntity) res;
 				if(seachDate != null && seachDate.getDataid() != null) {
-					predicate.getExpressions().add(criteriaBuilder.like(root.get("dataid"), "%"+seachDate.getDataid()+"%"));
+					predicate.getExpressions().add(criteriaBuilder.equal(root.get("dataid"), seachDate.getDataid()));
 				}
 				if(seachDate != null && seachDate.getStatus() != null) {
 					predicate.getExpressions().add(criteriaBuilder.like(root.get("status"), "%"+seachDate.getStatus()+"%"));

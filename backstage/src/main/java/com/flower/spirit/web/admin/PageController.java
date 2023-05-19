@@ -147,4 +147,12 @@ public class PageController {
 	public String collectDataList() {
 		return "admin/collectDataList";
 	}
+	
+	
+	@RequestMapping(value = "/collectDataDetailList")
+	public String collectDataDetailList(HttpServletRequest request,Model model) {
+		String taskid = request.getParameter("taskid");
+		model.addAttribute("taskid", taskid);
+		return "admin/collectDataDetailList";
+	}
 }

@@ -271,7 +271,7 @@ public class AdminController {
 	}
 	
 	
-	@GetMapping(value = "/findCollectDataDetail")
+	@PostMapping(value = "/findCollectDataDetail")
 	public AjaxEntity findCollectDataDetail(CollectDataDetailEntity entity) {
 		return collectDataDetailService.findPage(entity);
 	}

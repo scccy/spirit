@@ -94,7 +94,7 @@
 			  		    抖音  作品/喜欢页面 需要填写用户id 如果是喜欢页面 请确认开放所有人可见<br/>
 			  		    eg. https://www.douyin.com/user/12345   中只需要 123456<br/>
 			  		    如果获取作品 链接请填写 post12345<br/>
-			  		    如果获取作品 链接请填写 like12345  如果ck 是这个账号的 则不强制所有人可见权限<br/>
+			  		    如果获取喜欢 链接请填写 like12345  如果ck 是这个账号的 则不强制所有人可见权限<br/>
 			  		    抖音使用此功能建议部署<a href="https://hub.docker.com/r/qingfeng2336/spirit-assist-node" target="_blank">spirit-assist-node</a><br/>
 			  		    该功能处于测试阶段<br/>
 			  </div>
@@ -254,7 +254,15 @@
       			      });
     			    }
     			    if(obj.event === 'look'){
-						layer.alert("数据表已经预留设计,但是这个查看还没做~")
+    			    	  var id =obj.data.id;
+    			    	 layer.open({
+    			    	        type: 2,
+    			    	        title: '任务进程',
+    			    	        shadeClose: true,
+    			    	        maxmin: true, //开启最大化最小化按钮
+    			    	        area: ['900px', '600px'],
+    			    	        content: '/admin/collectDataDetailList?taskid='+id
+    			    	   });
       			    }
     			  });
     			  

@@ -27,7 +27,7 @@
     </style>
     </head>
     <body>
-
+		<input id="taskid" type="hidden" th:value="${taskid}"/> 
         <div class="layui-fluid">
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
@@ -51,7 +51,6 @@
                                 <div class="layui-input-inline layui-show-xs-block">
                                 <button type="button" class="layui-btn layui-btn-normal search">搜索</button>
                                 <button type="button" class="layui-btn layui-btn-normal initList">重置列表</button>
-                                <button type="button" class="layui-btn layui-btn-normal addCollect">添加任务</button>
                                 </div>
                             </form>
                         </div>
@@ -76,40 +75,7 @@
     	 loadTable();
     	 search();
     	 initList();
-    	 addCollect();
-    	 submitCollect();
      })
-     function submitCollect(){
-    	 $('.submitCollect').click(function(){
-				var option ={
-						platform:$('.platform').val(),
-						originaladdress:$('.originaladdress').val(),
-				};
-				layer.load();
-				$.post("/admin/api/submitCollectData",option,function(data,status){
-					console.log(data);
-					if(data.resCode =="000001"){
-						layer.closeAll();
-						layer.alert(data.message,function(){
-							 window.location.reload();
-						})
-					}else{
-						layer.closeAll();
-						layer.alert(data.message);
-					}
-				})
-    	 })
-     }
-     function addCollect(){
-    	 $('.addCollect').click(function(){
-		   		layer.open({
-			   		  type: 1,
-			   		  skin: 'layui-layer-rim', 
-			   		  area: ['520px', '540px'], 
-			   		  content: $('.addCollectBox')
-			   	});
-    	 })
-     }
      function initList(){
     	 $('.initList').click(function(){
     	     window.location.reload();
@@ -137,22 +103,27 @@
     			 if(platform != "" ){
     				 option['platform']= platform;
     			 }
-    			 var  taskid = $('#taskid').val();
-    			 if(taskid != "" ){
-    				 option['taskid']= taskid;
+    			 var  dataid = $('#taskid').val();
+    			 if(dataid != "" ){
+    				 option['dataid']= taskid;
     			 }
     	         table.reload('projectList', {
     	             page: {
     	                 curr:1
     	             }, 
     	 			 method:'post',
-    	 			 url: '/admin/api/findCollectDataList',
+    	 			 url: '/admin/api/findCollectDataDetail',
     	             where: option
     	         })
     		})
      }
      function loadTable(){
     		layui.use(['table','form'], function(){
+    			 var option = {}
+    			 var  dataid = $('#taskid').val();
+    			 if(dataid != "" ){
+    				 option['dataid']= dataid;
+    			 }
     			  table = layui.table;
     			  var form = layui.form;
     			  table.render({
@@ -160,7 +131,8 @@
     				elem: '#projectList',
     				height: 700,
     				method:'post',
-    				url: '/admin/api/findCollectDataList',
+    				url: '/admin/api/findCollectDataDetail',
+    				where: option,
     				limit:15,
     				request: {
     				     pageName: 'pageNo',
@@ -174,14 +146,11 @@
     			     },
     			     cols: [[ 
     			    	 {field: 'id', title: 'ID', width:60},
-    			    	 {field: 'platform', title: '来源平台', width:80},
     			    	 {field: 'videoid', title: 'videoid', width:180},
+    			    	 {field: 'videoname', title: '视频名称', width:180},
     			    	 {field: 'originaladdress', title: 'originaladdress', width:180},
-    			    	 {field: 'carriedout', title: '已完成的任务数', width:180},
     			    	 {field: 'status', title: '状态', width:180},
     			    	 {field: 'createtime', title: '提交时间', width:180},
-    			    	 {field: 'endtime', title: '结束时间', width:180},
-    			    	 {fixed: 'right', title:'操作',  minWidth: 180, toolbar: '#barLineTool'}
     			     ]],
     			     title: '媒体表'	,
     			     parseData:function(res){

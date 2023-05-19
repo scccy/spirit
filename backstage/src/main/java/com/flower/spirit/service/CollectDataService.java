@@ -205,6 +205,7 @@ public class CollectDataService {
 		   
 		    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
 		    collectDataDetailEntity.setDataid(entity.getId());
+		    collectDataDetailEntity.setVideoname(videoDataInfo.get("title"));
 		    collectDataDetailEntity.setVideoid(videoDataInfo == null ?bvid:videoDataInfo.get("cid"));
 		    collectDataDetailEntity.setOriginaladdress(bvid);
 		    collectDataDetailEntity.setStatus(status);
@@ -320,6 +321,7 @@ public class CollectDataService {
 			}
 	 		Thread.sleep(2500);
 		    CollectDataDetailEntity collectDataDetailEntity = new CollectDataDetailEntity();
+		    collectDataDetailEntity.setVideoname(desc);
 		    collectDataDetailEntity.setDataid(entity.getId());
 		    collectDataDetailEntity.setVideoid(awemeId);
 		    collectDataDetailEntity.setOriginaladdress(awemeId);
