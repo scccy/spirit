@@ -19,6 +19,8 @@ public interface CollectdDataDao extends PagingAndSortingRepository<CollectDataE
 	
 	public List<CollectDataEntity> findAll();
 
+	public List<CollectDataEntity> findByMonitoring(String string);
+
 	
 
 }

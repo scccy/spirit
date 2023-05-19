@@ -71,6 +71,19 @@ public class CollectDataService {
     @Value("${file.save}")
     private String savefile;
     
+    
+    public void findMonitor(){
+    	List<CollectDataEntity> list = collectdDataDao.findByMonitoring("Y");
+    	if(list.size() == 0) {
+    		logger.info("未设置监控收藏夹");
+    		return;
+    	}
+    	for(CollectDataEntity data:list) {
+    		//开始执行
+    		this.submitCollectData(data);
+    	}
+		
+    }
 	
 	
 	@SuppressWarnings("serial")
@@ -112,6 +125,7 @@ public class CollectDataService {
 		if(null != collectDataEntity.getPlatform() && collectDataEntity.getPlatform().equals("哔哩") ) {
 			//必须授权ck
 			if(Global.bilicookies.equals("")) {
+				logger.info("必须填写bili ck,本次执行失败");
 				return new AjaxEntity(Global.ajax_uri_error, "必须填写bili ck", null);
 			}
 			String api = "https://api.bilibili.com/x/v3/fav/resource/ids?media_id="+collectDataEntity.getOriginaladdress()+"&platform=web";

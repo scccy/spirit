@@ -33,6 +33,8 @@ public class ConfigEntity implements Serializable {
 	private String ipauth;
 	
 	private String openprocesshistory;
+	
+	private String taskcron; //任务定时器
 
 	public Integer getId() {
 		return id;
@@ -64,6 +66,14 @@ public class ConfigEntity implements Serializable {
 
 	public void setOpenprocesshistory(String openprocesshistory) {
 		this.openprocesshistory = openprocesshistory;
+	}
+
+	public String getTaskcron() {
+		return taskcron;
+	}
+
+	public void setTaskcron(String taskcron) {
+		this.taskcron = taskcron;
 	}
 	
 	

@@ -86,6 +86,15 @@
 			      <input  type="text" name="originaladdress"  autocomplete="off" class="originaladdress layui-input">
 			    </div>
 			  </div>
+			 <div class="layui-inline">
+			    <label class="layui-form-label">是否开启监控</label>
+			     <div class="layui-input-inline layui-show-xs-block">
+					<select class="monitoring">
+			               <option  value="N">否</option>
+			               <option  value="Y">是</option>
+			         </select>   
+			       </div>
+			  </div>
 			  <div class="buttondiv" style=" padding-left: 10%; padding-top: 5%; "><button type="button" class="layui-btn submitCollect">保存信息</button></div>
 			  <div style="font-size: 1.2rem;">
 			  	<br/>
@@ -96,7 +105,8 @@
 			  		    如果获取作品 链接请填写 post12345<br/>
 			  		    如果获取喜欢 链接请填写 like12345  如果ck 是这个账号的 则不强制所有人可见权限<br/>
 			  		    抖音使用此功能建议部署<a href="https://hub.docker.com/r/qingfeng2336/spirit-assist-node" target="_blank">spirit-assist-node</a><br/>
-			  		    该功能处于测试阶段<br/>
+			  		    请注意监控按需开启 监控和本功能公用一个线程如果监控过多,会造成手动添加排队时间过长<br/>
+			  		    该功能处于测试阶段,会有bug 但是我不知道<br/>
 			  </div>
 		</div>    
     </body>
@@ -119,6 +129,7 @@
 				var option ={
 						platform:$('.platform').val(),
 						originaladdress:$('.originaladdress').val(),
+						monitoring:$('.monitoring').val(),
 				};
 				layer.load();
 				$.post("/admin/api/submitCollectData",option,function(data,status){

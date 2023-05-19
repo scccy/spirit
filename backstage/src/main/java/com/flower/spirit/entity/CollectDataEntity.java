@@ -41,6 +41,8 @@ public class CollectDataEntity   extends DataEntity<CollectDataEntity> implement
 	private String carriedout;
 	
 	private String originaladdress;
+	
+	private String monitoring;   //是否监控
 
 	public Integer getId() {
 		return id;
@@ -113,6 +115,14 @@ public class CollectDataEntity   extends DataEntity<CollectDataEntity> implement
 
 	public void setOriginaladdress(String originaladdress) {
 		this.originaladdress = originaladdress;
+	}
+
+	public String getMonitoring() {
+		return monitoring;
+	}
+
+	public void setMonitoring(String monitoring) {
+		this.monitoring = monitoring;
 	}
 	
 	
