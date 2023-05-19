@@ -63,10 +63,11 @@ public class BiliUtil {
 	 * 
 	 */
 	public static List<Map<String, String>> findVideoStreaming(String url,String token,String filepath) throws Exception {
-		String api ="https://api.bilibili.com/x/player/playurl";
+	
 		List<Map<String, String>> videoDataInfo = BiliUtil.getVideoDataInfo(url);
 		List<Map<String, String>> res = new ArrayList<Map<String,String>>();
 		for(int i =0;i<videoDataInfo.size();i++) {
+			String api ="https://api.bilibili.com/x/player/playurl";
 			Map<String, String> map = videoDataInfo.get(i);
 			api=api+"?avid="+map.get("aid")+"&cid="+map.get("cid");
 			//公共部分结束
@@ -88,7 +89,7 @@ public class BiliUtil {
 			}else {
 				api =api+"&fourk=0";
 			}
-			
+			System.out.println(api);
 			String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 			JSONObject parseObject = JSONObject.parseObject(httpGetBili);
 			System.out.println(parseObject);
