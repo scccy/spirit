@@ -31,7 +31,7 @@ public class Aria2Util {
         try {
             response = HttpClients.createDefault().execute(httpPost);
         } catch (HttpHostConnectException e) {
-        	logger.debug("Aria2 无法连接");
+        	logger.info("Aria2 无法连接"+"---------"+e.getMessage()+"----");
             return null;
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,9 +39,12 @@ public class Aria2Util {
         }
         int statusCode = response.getStatusLine().getStatusCode();
         HttpEntity entity = response.getEntity();
+
         String result = null;
         try {
             result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+            logger.info("Aria2 statusCode = " + statusCode);
+            logger.info("Aria2 result = " + result);
             if (statusCode == HttpStatus.SC_OK) {
                 EntityUtils.consume(entity);
                 return result;
@@ -49,8 +52,7 @@ public class Aria2Util {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("statusCode = " + statusCode);
-        System.out.println("result = " + result);
+
         return null;
 	}
 	
