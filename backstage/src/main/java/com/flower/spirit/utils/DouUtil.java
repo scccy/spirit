@@ -41,8 +41,7 @@ public class DouUtil {
 	public static String ua="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36";
 	public static String  odin_tt ="324fb4ea4a89c0c05827e18a1ed9cf9bf8a17f7705fcc793fec935b637867e2a5a9b8168c885554d029919117a18ba69";
 	public static String  passport_csrf_token ="2f142a9bb5db1f81f249d6fc997fe4a1";
-	
-	
+
 	public static  Map<String, String>  downVideo(String url) {
 		Document document = null;
 		Map<String, String>  data = new HashMap<String, String>();
@@ -116,11 +115,28 @@ public class DouUtil {
 	
 	public static  Map<String, String> getBogus(String aweme_id) throws HttpException, IOException {
 		Map<String, String> res = new HashMap<String, String>();
-		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token", DouUtil.generateparameters(aweme_id));
-		String code = token.getString("code");
+		 String url ="";
+		 String cookie ="";
+		 String code = "";
+		// 2023.07.10 优先本地模式  懒得改了 先这样写
+		Map<String, String> generatetoken = generatetoken(aweme_id);
+		if(generatetoken != null) {
+			logger.info("使用本地生成");
+			code="200";
+			url = generatetoken.get("url");
+			cookie = generatetoken.get("cookie");
+		}else {
+			logger.info("使用远程生成");
+			JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token", DouUtil.generateparameters(aweme_id));
+			code = token.getString("code");
+			if(code.equals("200")) {
+				code="200";
+				url = token.getJSONObject("data").getString("url");
+				cookie = token.getJSONObject("data").getString("cookie"); 
+			}
+		}
+		// 2023.07.10 优先本地模式  懒得改了 先这样写
 		if(code.equals("200")) {
-			 String url = token.getJSONObject("data").getString("url");
-			 String cookie = token.getJSONObject("data").getString("cookie"); 
 			 String httpget = DouUtil.httpget(url.trim(), cookie.trim());
 			 JSONObject data = JSONObject.parseObject(httpget);
 			 JSONObject aweme_detail = data.getJSONObject("aweme_detail");
@@ -199,14 +215,18 @@ public class DouUtil {
 	
 	
 	public static Map<String, String> generatetoken(String aid) {
+		String url ="https://www.douyin.com/aweme/v1/web/aweme/detail/?aweme_id=#awemeid#&aid=6383&cookie_enabled=true&platform=PC&downlink=10&X-Bogus=#bogus#";
+		
 		Map<String, String> res = new HashMap<String, String>();
 	    String urlPath = "aweme_id="+aid+"&aid=6383&cookie_enabled=true&platform=PC&downlink=10";
 		String ttwidtoken= getTtwid();
 		try {
 			String xbogusToken = XbogusUtil.getXBogus(urlPath);
 			String cookie ="msToken="+xbogusToken+";ttwid="+ttwidtoken+";odin_tt="+odin_tt+";passport_csrf_token="+passport_csrf_token;
+			String queryurl = url.replace("#awemeid#",aid).replace("#bogus#",xbogusToken);
 			res.put("xbogus", xbogusToken);
 			res.put("cookie", cookie);
+			res.put("url", queryurl);
 			return res;
 		} catch (NoSuchAlgorithmException e) {
 			return null;
