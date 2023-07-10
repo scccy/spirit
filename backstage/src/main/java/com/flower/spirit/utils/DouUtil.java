@@ -55,6 +55,7 @@ public class DouUtil {
 		    	  String vedioId = matcher.group(0);
 		    	  data  = DouUtil.getBogus(vedioId);
 		    	  if(data != null) {
+		    		  logger.info("接口解析数据"+data);
 		    		  return data;
 		    	  }else {
 		    		  return DouUtil.htmlclient(url);

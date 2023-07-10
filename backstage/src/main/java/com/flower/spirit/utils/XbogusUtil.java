@@ -202,9 +202,8 @@ public class XbogusUtil {
         for (int i = 0; i < garbledCode.length(); i += 3) {
             xb.append(calculation((int) garbledCode.charAt(i), (int) garbledCode.charAt(i + 1), (int) garbledCode.charAt(i + 2)));
         }
-
-        String params = urlPath + "&X-Bogus=" + xb.toString();
-        return params;
+//        String params = urlPath + "&X-Bogus=" + xb.toString();
+        return xb.toString();
     }
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
