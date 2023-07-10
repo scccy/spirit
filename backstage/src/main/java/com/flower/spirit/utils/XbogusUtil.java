@@ -95,29 +95,31 @@ public class XbogusUtil {
             S[i] = i;
         }
 
-        // 生成密钥流
+        j = 0;
         for (int i = 0; i < 256; i++) {
             j = (j + S[i] + key[i % key.length]) % 256;
             int temp = S[i];
-            if(j>0) {
-                S[i] = S[j];
-                S[j] = temp;
-            }
+            S[i] = S[(j>0?j:0)];
+            S[(j>0?j:0)] = temp;
         }
 
-        // 加密数据
-        int i = 0, k = 0;
-        for (int idx = 0; idx < data.length; idx++) {
+        // 生成密文
+        int i = 0;
+        j = 0;
+        for (int k = 0; k < data.length; k++) {
             i = (i + 1) % 256;
             j = (j + S[i]) % 256;
             int temp = S[i];
             S[i] = S[j];
             S[j] = temp;
-            encryptedData[idx] = (byte) (data[idx] ^ S[(S[i] + S[j]) % 256]);
+            int t = (S[i] + S[j]) % 256;
+            int encryptedByte = data[k] ^ S[t];
+            encryptedData[k] = (byte) encryptedByte;
         }
 
         return encryptedData;
     }
+
 
     public String calculation(int a1, int a2, int a3) {
         int x1 = (a1 & 255) << 16;
@@ -206,7 +208,7 @@ public class XbogusUtil {
     }
 
     public static void main(String[] args) throws NoSuchAlgorithmException {
-        String urlPath = "aweme_id=7196239141472980280&aid=1128&version_name=23.5.0&device_platform=android&os_version=2333";
+        String urlPath = "aweme_id=7221047525594139944&aid=6383&cookie_enabled=true&platform=PC&downlink=10";
         XbogusUtil xb = new XbogusUtil();
         String xbogus = xb.getXBogus(urlPath);
         System.out.println(xbogus);
