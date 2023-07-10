@@ -4,9 +4,11 @@ package com.flower.spirit.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -32,24 +34,14 @@ public class DouUtil {
 	
 	//  备用
 	
-//	private static String  token_generate ="https://tiktok.iculture.cc/X-Bogus";   //网上找的
-	
-	
-	private static String ttwid ="https://ttwid.bytedance.com/ttwid/union/register/";  //ttwid申请  暂时不用 需要配合 https://tiktok.iculture.cc/X-Bogus
-	
-	public static String icultureapi = "https://api.iculture.cc/api/douyin/?url=";  //备用   先不用  开源用别人的公开API不太好
+	private static String ttwid ="https://ttwid.bytedance.com/ttwid/union/register/";  //ttwid申请 
 	
 	private static JSONObject ttwidData =  JSONObject.parseObject("{\"region\":\"cn\",\"aid\":1768,\"needFid\":false,\"service\":\"www.ixigua.com\",\"migrate_info\":{\"ticket\":\"\",\"source\":\"node\"},\"cbUrlProtocol\":\"https\",\"union\":true}");  //需要配合ttwid 使用
 	
-//	private static String  token_generate ="https://spirit.lifeer.xyz/spirit-token";   //自建 
-	
-	
-	//private static String  token_generate ="http://127.0.0.1/spirit-token";   //自建 
-	
-//	private static String ua="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36";  //有毒 不知道哪里有问题  这个ua 有问题 先记录一下
-	
 	public static String ua="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36";
-
+	public static String  odin_tt ="324fb4ea4a89c0c05827e18a1ed9cf9bf8a17f7705fcc793fec935b637867e2a5a9b8168c885554d029919117a18ba69";
+	public static String  passport_csrf_token ="2f142a9bb5db1f81f249d6fc997fe4a1";
+	
 	
 	public static  Map<String, String>  downVideo(String url) {
 		Document document = null;
@@ -186,11 +178,7 @@ public class DouUtil {
 		data.put("ua", ua);
 		return data;
 	}
-	
-	public static void main(String[] args) throws HttpException, IOException {
-		downVideo("https://v.douyin.com/A3bMHaT/");
-		
-	}
+
 	
 	/**
 	 * 判断是否为json
@@ -209,5 +197,71 @@ public class DouUtil {
 	    return result;
 	}
 	
+	
+	public static Map<String, String> generatetoken(String aid) {
+		Map<String, String> res = new HashMap<String, String>();
+	    String urlPath = "aweme_id="+aid+"&aid=6383&cookie_enabled=true&platform=PC&downlink=10";
+		String ttwidtoken= getTtwid();
+		try {
+			String xbogusToken = XbogusUtil.getXBogus(urlPath);
+			String cookie ="msToken="+xbogusToken+";ttwid="+ttwidtoken+";odin_tt="+odin_tt+";passport_csrf_token="+passport_csrf_token;
+			res.put("xbogus", xbogusToken);
+			res.put("cookie", cookie);
+			return res;
+		} catch (NoSuchAlgorithmException e) {
+			return null;
+		}
+	}
+	
+	public static String getTtwid() {
+        try {
+            String data = "{\"region\":\"cn\",\"aid\":1768,\"needFid\":false,\"service\":\"www.ixigua.com\",\"migrate_info\":{\"ticket\":\"\",\"source\":\"node\"},\"cbUrlProtocol\":\"https\",\"union\":true}";
+
+            URL url = new URL(ttwid);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("user-agent", ua);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(data.getBytes());
+            outputStream.flush();
+            outputStream.close();
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                String setCookie = connection.getHeaderField("Set-Cookie");
+                if (setCookie != null) {
+                	  String[] parts = setCookie.split(";");
+                      for (String part : parts) {
+                          if (part.trim().startsWith("ttwid=")) {
+                              String[] keyValue = part.split("=", 2);
+                              if (keyValue.length == 2) {
+                                  return keyValue[1].trim();
+                              }
+                          }
+                      }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+	public static void main(String[] args) {
+		DouUtil.generatetoken("x");
+		
+		
+	}
+
 	
 }

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class XbogusUtil {
-    private final Integer[] Array = {
+    private static final Integer[] Array = {
         null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
         null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
         null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
@@ -15,9 +15,9 @@ public class XbogusUtil {
         null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
         null, null, null, null, null, null, null, null, null, null, null, null, 10, 11, 12, 13, 14, 15
     };
-    private final String character = "Dkdpgh4ZKsQB80/Mfvw36XI1R25-WUAlEi7NLboqYTOPuzmFjJnryx9HVGcaStCe=";
+    private static final String character = "Dkdpgh4ZKsQB80/Mfvw36XI1R25-WUAlEi7NLboqYTOPuzmFjJnryx9HVGcaStCe=";
 
-    public Integer[] md5StrToArray(String md5Str) {
+    public static Integer[] md5StrToArray(String md5Str) {
         if (md5Str instanceof String && md5Str.length() > 32) {
             Integer[] array = new Integer[md5Str.length()];
             for (int i = 0; i < md5Str.length(); i++) {
@@ -35,7 +35,7 @@ public class XbogusUtil {
         }
     }
 
-    public String md5Encrypt(String urlPath) throws NoSuchAlgorithmException {
+    public static String md5Encrypt(String urlPath) throws NoSuchAlgorithmException {
         Integer[] hashedUrlPath = md5StrToArray(md5(md5StrToArray(md5(urlPath))));
         StringBuilder sb = new StringBuilder();
         for (Integer value : hashedUrlPath) {
@@ -44,7 +44,7 @@ public class XbogusUtil {
         return sb.toString();
     }
 
-    public String md5(Object input) throws NoSuchAlgorithmException {
+    public static String md5(Object input) throws NoSuchAlgorithmException {
         Integer[] array;
         if (input instanceof String) {
             array = md5StrToArray((String) input);
@@ -68,7 +68,7 @@ public class XbogusUtil {
         return sb.toString();
     }
 
-    public String encodingConversion(Integer a, Integer b, Integer c, Integer e, Integer d, Integer t, Integer f, Integer r, Integer n, Integer o, Integer i,Integer z, Integer x,
+    public static String encodingConversion(Integer a, Integer b, Integer c, Integer e, Integer d, Integer t, Integer f, Integer r, Integer n, Integer o, Integer i,Integer z, Integer x,
     		Integer u, Integer s, Integer l, Integer v, Integer h, Integer p) {
         List<Integer> y = new ArrayList<>();
         y.add(a);
@@ -81,11 +81,11 @@ public class XbogusUtil {
         return new String(byteArray, StandardCharsets.ISO_8859_1);
     }
 
-    public String encodingConversion2(int a, int b, String c) {
+    public static String encodingConversion2(int a, int b, String c) {
         return Character.toString((char) a) + Character.toString((char) b) + c;
     }
 
-    public byte[] rc4Encrypt(byte[] key, byte[] data) {
+    public static byte[] rc4Encrypt(byte[] key, byte[] data) {
         int[] S = new int[256];
         int j = 0;
         byte[] encryptedData = new byte[data.length];
@@ -121,7 +121,7 @@ public class XbogusUtil {
     }
 
 
-    public String calculation(int a1, int a2, int a3) {
+    public static String calculation(int a1, int a2, int a3) {
         int x1 = (a1 & 255) << 16;
         int x2 = (a2 & 255) << 8;
         int x3 = x1 | x2 | a3;
@@ -131,7 +131,7 @@ public class XbogusUtil {
                 + character.charAt(x3 & 63);
     }
 
-    public String getXBogus(String urlPath) throws NoSuchAlgorithmException {
+    public static String getXBogus(String urlPath) throws NoSuchAlgorithmException {
         Integer[] array1 = md5StrToArray("d88201c9344707acde7261b158656c0e");
         Integer[] array2 = md5StrToArray(md5(md5StrToArray("d41d8cd98f00b204e9800998ecf8427e")));
         Integer[] urlPathArray = md5Encrypt(urlPath).chars().boxed().toArray(Integer[]::new);
