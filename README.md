@@ -1,20 +1,24 @@
 ```
 请勿滥用，本项目仅用于学习和测试！请勿滥用.
 ```
-### 我正在试图解决htmlunit内存占用问题
-     dev分支上 docker 内jar 启动已添加内存限制
-     内存占用问题
-     目前正在解决 预计实行三种方案将htmlunit作为备选
-     优化抖音解析方式  第一种 调用别人的API 第二种 调用自建API 第三种 htmlunit 优先前两种 只要不用htmlunit就不会有内存问题~！
 
 ### 抖音解析接口注释
 ```
-   默认调用我的vercel函数部署的接口 由于所在服务器地址问题可自行搭建 并在系统配置中修改解析地址http://ip:port
-```
-```
-     docker run --name spirit-assist -d -p 53123:80 qingfeng2336/spirit-assist-node:latest
+  docker dev 分支 新增java 生成Xbogus  不再需要调用node的接口  后续稳定后会合并到latest分支  默认情况下 会先本地生成
+  本地生成无效是会在调用api类型  不过应该不会 所以基本上只会走本地调用 所以 解析地址和qingfeng2336/spirit-assist-node无需在关注
 ```
 
+```
+   vercel函数部署的接口 由于所在服务器地址问题可自行搭建 并在系统配置中修改解析地址http://ip:port
+```
+```
+   docker run --name spirit-assist -d -p 53123:80 qingfeng2336/spirit-assist-node:latest
+```
+### 版本问题
+
+```
+  后续没什么问题的话基本上也是手机问题  一个月一更新了 无法解析 解析异常 这种紧急问题会及时修复
+```
 
 ### 目前应该是一个小的稳定版本了
 ```
