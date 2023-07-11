@@ -53,7 +53,7 @@ public class DouUtil {
 		     Matcher matcher = compile.matcher(baseUri);
 		     if(matcher.find()) {
 		    	  String vedioId = matcher.group(0);
-		    	  data  = DouUtil.getBogus(vedioId);
+		    	  data  = DouUtil.getBogus(vedioId,"local");
 		    	  if(data != null) {
 		    		  logger.info("接口解析数据"+data);
 		    		  return data;
@@ -114,20 +114,30 @@ public class DouUtil {
 	
 	}
 	
-	public static  Map<String, String> getBogus(String aweme_id) throws HttpException, IOException {
+	public static  Map<String, String> getBogus(String aweme_id,String type) throws HttpException, IOException {
 		Map<String, String> res = new HashMap<String, String>();
 		 String url ="";
 		 String cookie ="";
 		 String code = "";
 		// 2023.07.10 优先本地模式  懒得改了 先这样写
-		Map<String, String> generatetoken = generatetoken(aweme_id);
-		if(generatetoken != null) {
-			logger.info("使用本地生成");
-			code="200";
-			url = generatetoken.get("url");
-			cookie = generatetoken.get("cookie");
+		if(type.equals("local")) {
+			Map<String, String> generatetoken = generatetoken(aweme_id);
+			try {
+				if(generatetoken != null) {
+					logger.info("使用本地生成xBogus");
+					code="200";
+					url = generatetoken.get("url");
+					cookie = generatetoken.get("cookie");
+				}else {
+					 logger.info("本地生成异常(空信息)--正在使用remote模式");
+					 return getBogus(aweme_id, "remote");
+				}
+			} catch (Exception e) {
+				 logger.info("本地生成异常--正在使用remote模式");
+				 return getBogus(aweme_id, "remote");
+			}
 		}else {
-			logger.info("使用远程生成");
+			logger.info("使用远程生成xBogus");
 			JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token", DouUtil.generateparameters(aweme_id));
 			code = token.getString("code");
 			if(code.equals("200")) {
@@ -141,6 +151,9 @@ public class DouUtil {
 			 String httpget = DouUtil.httpget(url.trim(), cookie.trim());
 			 JSONObject data = JSONObject.parseObject(httpget);
 			 JSONObject aweme_detail = data.getJSONObject("aweme_detail");
+			 if(null == aweme_detail && type.equals("local")) {
+				 return getBogus(aweme_id, "remote");
+			 }
 			 String coveruri = "";
 			 JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
 			 if(cover.size() >=2) {
