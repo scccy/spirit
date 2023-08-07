@@ -230,47 +230,97 @@ public class AdminController {
 		return biliConfigService.updateBiliConfig(biliConfigEntity);
 	}
 	
+	/**
+	 * 获取Bili 登录验证码
+	 * @return
+	 */
 	@GetMapping(value = "/getBiliCode")
 	public AjaxEntity getBiliCode() {
 		return biliConfigService.getBiliCode();
 	}
 	
 	
+	/**
+	 * 检查Bili 登录状态
+	 * @param qrcodekey
+	 * @return
+	 */
 	@GetMapping(value = "/checkBiliLogin")
 	public AjaxEntity checkBiliLogin(String qrcodekey) {
 		return biliConfigService.checkBiliLogin(qrcodekey);
 	}
 	
+	/**
+	 * 获取历史进度数据
+	 * @param processHistoryEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/findProcessHistoryList")
 	public AjaxEntity findProcessHistoryList(ProcessHistoryEntity processHistoryEntity,HttpServletRequest request) {
 		return processHistoryService.findPage(processHistoryEntity);
 	}
 	
+	/**
+	 * 删除历史进度数据
+	 * @param processHistoryEntity
+	 * @param request
+	 * @return
+	 */
 	@GetMapping(value = "/deleteProcessHistoryData")
 	public AjaxEntity deleteProcessHistoryData(ProcessHistoryEntity processHistoryEntity,HttpServletRequest request) {
 		return processHistoryService.deleteProcessHistoryData(processHistoryEntity);
 	}
 	
+	/**
+	 * 获取收藏夹分页
+	 * @param collectDataEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/findCollectDataList")
 	public AjaxEntity findCollectDataList(CollectDataEntity collectDataEntity,HttpServletRequest request) {
 		return collectDataService.findPage(collectDataEntity);
 	}
 	
+	/**
+	 * 删除收藏夹信息
+	 * @param collectDataEntity
+	 * @param request
+	 * @return
+	 */
 	@GetMapping(value = "/deleteCollectData")
 	public AjaxEntity deleteCollectData(CollectDataEntity collectDataEntity,HttpServletRequest request) {
 		return collectDataService.deleteCollectData(collectDataEntity);
 	}
+	/**
+	 * 新建收藏夹信息
+	 * @param collectDataEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/submitCollectData")
 	public AjaxEntity submitCollectData(CollectDataEntity collectDataEntity,HttpServletRequest request) {
 		return collectDataService.submitCollectData(collectDataEntity);
 	}
 	//updateTikTokConfig
+	/**
+	 * 更新抖音相关下载配置
+	 * @param tikTokConfigEntity
+	 * @param request
+	 * @return
+	 */
 	@PostMapping(value = "/updateTikTokConfig")
 	public AjaxEntity updateTikTokConfig(TikTokConfigEntity tikTokConfigEntity,HttpServletRequest request) {
 		return tikTokConfigService.updateTikTokConfig(tikTokConfigEntity);
 	}
 	
 	
+	/**
+	 * 获取对应收藏夹明细
+	 * @param entity
+	 * @return
+	 */
 	@PostMapping(value = "/findCollectDataDetail")
 	public AjaxEntity findCollectDataDetail(CollectDataDetailEntity entity) {
 		return collectDataDetailService.findPage(entity);

@@ -53,14 +53,18 @@ public class DouUtil {
 		     Matcher matcher = compile.matcher(baseUri);
 		     if(matcher.find()) {
 		    	  String vedioId = matcher.group(0);
+		    	  logger.info("DouYin vedioId="+vedioId);
+		    	  // getBogus 方法名有问题  歧义  其实 这个方法就是生成xBogus并返回视频信息
 		    	  data  = DouUtil.getBogus(vedioId,"local");
 		    	  if(data != null) {
 		    		  logger.info("接口解析数据"+data);
 		    		  return data;
 		    	  }else {
+		    		  //失败 使用htmlclient
 		    		  return DouUtil.htmlclient(url);
 		    	  }
 		     }else {
+		    	 //失败 使用htmlclient
 		    	 return DouUtil.htmlclient(url);
 		     }
 			
@@ -230,7 +234,6 @@ public class DouUtil {
 	
 	public static Map<String, String> generatetoken(String aid) {
 		String url ="https://www.douyin.com/aweme/v1/web/aweme/detail/?aweme_id=#awemeid#&aid=6383&cookie_enabled=true&platform=PC&downlink=10&X-Bogus=#bogus#";
-		
 		Map<String, String> res = new HashMap<String, String>();
 	    String urlPath = "aweme_id="+aid+"&aid=6383&cookie_enabled=true&platform=PC&downlink=10";
 		String ttwidtoken= getTtwid();
@@ -247,22 +250,25 @@ public class DouUtil {
 		}
 	}
 	
+	/**
+	 * 
+	 * 获取Ttwid 其实可以加缓存 复用ttwid  暂时没有加缓存
+	 * 后续添加
+	 * @return
+	 */
 	public static String getTtwid() {
         try {
             String data = "{\"region\":\"cn\",\"aid\":1768,\"needFid\":false,\"service\":\"www.ixigua.com\",\"migrate_info\":{\"ticket\":\"\",\"source\":\"node\"},\"cbUrlProtocol\":\"https\",\"union\":true}";
-
             URL url = new URL(ttwid);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setRequestProperty("user-agent", ua);
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
-
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(data.getBytes());
             outputStream.flush();
             outputStream.close();
-
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
