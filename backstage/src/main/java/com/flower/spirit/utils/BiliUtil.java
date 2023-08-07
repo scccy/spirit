@@ -33,13 +33,13 @@ public class BiliUtil {
 			}
 		}else {
 			api =api+"&qn=64";
-		}
-		api =api+"&fnval=1&fnver=0";
+		}	
+		api =api+"&fnver=0";
 		//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
 		if(Global.bilibitstream.equals("120") && Global.bilimember) {
-			api =api+"&fourk=1";
+			api =api+"&fourk=1&fnval=128";
 		}else {
-			api =api+"&fourk=0";
+			api =api+"&fourk=0&fnval=1";
 		}
 		
 		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
@@ -82,12 +82,12 @@ public class BiliUtil {
 			}else {
 				api =api+"&qn=64";
 			}
-			api =api+"&fnval=1&fnver=0";
+			api =api+"&fnver=0";
 			//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
 			if(Global.bilibitstream.equals("120") && Global.bilimember) {
-				api =api+"&fourk=1";
+				api =api+"&fourk=1&fnval=128";
 			}else {
-				api =api+"&fourk=0";
+				api =api+"&fourk=0&fnval=1";
 			}
 			System.out.println(api);
 			String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
