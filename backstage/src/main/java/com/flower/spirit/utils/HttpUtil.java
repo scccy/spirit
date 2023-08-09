@@ -3,6 +3,7 @@ package com.flower.spirit.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -266,6 +267,34 @@ public class HttpUtil {
 		}
     }
     
+	  private static class InputStreamWithProgress extends FilterInputStream {
+	        private long totalBytes;
+	        private long bytesRead;
+
+	        protected InputStreamWithProgress(InputStream in, long totalBytes) {
+	            super(in);
+	            this.totalBytes = totalBytes;
+	            this.bytesRead = 0;
+	        }
+
+	        @Override
+	        public int read(byte[] b, int off, int len) throws IOException {
+	            int bytesRead = super.read(b, off, len);
+	            if (bytesRead != -1) {
+	                this.bytesRead += bytesRead;
+	            }
+	            return bytesRead;
+	        }
+
+	        public int getProgress() {
+	            if (totalBytes > 0) {
+	                return (int) ((bytesRead * 100) / totalBytes);
+	            } else {
+	                return 0;
+	            }
+	        }
+	    }
+	
 	
 	public static void  downDouFromUrl(String urlStr,String fileName,String savePath,String cookie) {
         try {

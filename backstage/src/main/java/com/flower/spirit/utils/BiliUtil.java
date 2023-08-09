@@ -1,19 +1,52 @@
 package com.flower.spirit.utils;
 
+import java.io.File;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.flower.spirit.config.Global;
+import com.flower.spirit.dao.FfmpegQueueDao;
+import com.flower.spirit.dao.FfmpegQueueDataDao;
+import com.flower.spirit.entity.FfmpegQueueDataEntity;
+import com.flower.spirit.entity.FfmpegQueueEntity;
+
+@Component
 public class BiliUtil {
 	
+	private static Logger logger = LoggerFactory.getLogger(BiliUtil.class);
+	
+	
+	@Autowired
+	private  FfmpegQueueDataDao ffmpegQueueDataDao;
+	
+	
+	@Autowired
+	private  FfmpegQueueDao ffmpegQueueDao;
+	
+	
+	private static BiliUtil biliUtil;
+	
+	@PostConstruct
+	public void init(){
+		biliUtil = this;
+		biliUtil.ffmpegQueueDataDao = this.ffmpegQueueDataDao;
+		biliUtil.ffmpegQueueDao = this.ffmpegQueueDao;
+    }
 	
 	/**
 	 * 
@@ -28,6 +61,11 @@ public class BiliUtil {
 //		System.out.println(parseObject);
 		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
 		String filename = StringUtil.getFileName(videoDataInfo.get("title"), videoDataInfo.get("cid"));
+		if(Integer.valueOf(Global.bilibitstream) >=120 && quality.equals("1")) {
+			//执行DASH格式合并  默认取第一个  最大清晰度
+			Map<String, String> processing = processing(parseObject, videoDataInfo, filepath, filename);
+			return processing;
+		}
 		if(Global.downtype.equals("http")) {
 			HttpUtil.downBiliFromUrl(video, filename+".mp4", filepath);
 		}
@@ -58,26 +96,8 @@ public class BiliUtil {
 			String filename = StringUtil.getFileName(map.get("title"), map.get("cid"));
 			if(Integer.valueOf(Global.bilibitstream) >=120 && quality.equals("1")) {
 				//执行DASH格式合并  默认取第一个  最大清晰度
-				String video = parseObject.getJSONObject("data").getJSONObject("dash").getJSONArray("video").getJSONObject(0).getString("base_url");
-				String audio = parseObject.getJSONObject("data").getJSONObject("dash").getJSONArray("audio").getJSONObject(0).getString("base_url");
-				//创建临时目录用于合并生成
-				if(Global.downtype.equals("http")) {
-					//http  需要创建临时目录
-					String newpath =filepath+"/"+map.get("cid");
-					FileUtils.createDirectory(newpath);
-					HttpUtil.downBiliFromUrl(video, filename+"-video.m4s", newpath);
-					HttpUtil.downBiliFromUrl(audio, filename+"-audio.m4s", newpath);
-					
-				}
-				if(Global.downtype.equals("a2")) {
-					//a2 不需要 目录有a2托管  此处路径应该可以优化
-					String a2path= Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+map.get("cid");
-					Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video,a2path , filename+"-video.m4s", Global.a2_token));
-					Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(audio,a2path , filename+"-audio.m4s", Global.a2_token));
-				}
-				map.put("video", filepath+"/"+filename+".mp4");
-				map.put("videoname", filename+".mp4");
-				res.add(map);
+				Map<String, String> processing = processing(parseObject, map, filepath, filename);
+				res.add(processing);
 				return res;
 			}
 			//普通mp4
@@ -96,6 +116,67 @@ public class BiliUtil {
 		
 		
 		return res;
+	}
+	
+	private static Map<String, String> processing(JSONObject parseObject,Map<String, String> map,String filepath,String filename) throws Exception {
+		//执行DASH格式合并  默认取第一个  最大清晰度
+		String video = parseObject.getJSONObject("data").getJSONObject("dash").getJSONArray("video").getJSONObject(0).getString("base_url");
+		String audio = parseObject.getJSONObject("data").getJSONObject("dash").getJSONArray("audio").getJSONObject(0).getString("base_url");
+		//创建临时目录用于合并生成
+		if(Global.downtype.equals("http")) {
+			//http  需要创建临时目录
+			String newpath =filepath+"/"+map.get("cid");
+			FileUtils.createDirectory(newpath);
+			HttpUtil.downBiliFromUrl(video, filename+"-video.m4s", newpath);
+			HttpUtil.downBiliFromUrl(audio, filename+"-audio.m4s", newpath);
+			//此处可以直接合并 由于http 不是异步
+			//ffmpeg -i video.m4s -i audio.m4s -c:v copy -c:a copy -f mp4 Download_video.mp4
+			CommandUtil.command("ffmpeg -i "+newpath+File.separator+filename+"-video.m4s -i "+newpath+File.separator+filename+"-audio.m4s -c:v copy -c:a copy -f mp4 "+filepath+"/"+filename+".mp4");
+			//删除
+			FileUtils.deleteDirectory(newpath);
+			
+		}
+		if(Global.downtype.equals("a2")) {
+			//a2 不需要 目录有a2托管  此处路径应该可以优化
+			String a2path= Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+map.get("cid");
+			String videores = Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video,a2path , filename+"-video.m4s", Global.a2_token));
+			String audiores = Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(audio,a2path , filename+"-audio.m4s", Global.a2_token));
+			//保存到FfmpegQueueEntity队列
+			logger.info("4k以上仅支持dash 提交到ffmpeg队列等待下载完成合并-前置任务结束");
+			FfmpegQueueEntity ffmpegQueueEntity = new FfmpegQueueEntity();
+			ffmpegQueueEntity.setVideoid(map.get("cid"));
+			ffmpegQueueEntity.setVideoname(map.get("title"));
+			ffmpegQueueEntity.setPendingfolder(a2path);
+			ffmpegQueueEntity.setAudiostatus("0");
+			ffmpegQueueEntity.setVideostatus("0");
+			ffmpegQueueEntity.setFilepath(filepath+"/"+filename+".mp4");
+			ffmpegQueueEntity.setStatus("0");
+			ffmpegQueueEntity.setCreatetime(DateUtils.getDateTime());
+			biliUtil.ffmpegQueueDao.save(ffmpegQueueEntity);
+			//数据
+			FfmpegQueueDataEntity videoData = new FfmpegQueueDataEntity();
+			videoData.setQueueid(ffmpegQueueEntity.getId());
+			videoData.setTaskid(JSONObject.parseObject(videores).getString("result"));
+			videoData.setFiletype("v");
+			videoData.setStatus("0");
+			videoData.setFilepath(a2path+File.separator+filename+"-video.m4s");
+			videoData.setCreatetime(DateUtils.getDateTime());
+			biliUtil.ffmpegQueueDataDao.save(videoData);
+			
+			
+			FfmpegQueueDataEntity audioData = new FfmpegQueueDataEntity();
+			audioData.setQueueid(ffmpegQueueEntity.getId());
+			audioData.setTaskid(JSONObject.parseObject(audiores).getString("result"));
+			audioData.setFiletype("a");
+			audioData.setStatus("0");
+			audioData.setFilepath(a2path+File.separator+filename+"-audio.m4s");
+			audioData.setCreatetime(DateUtils.getDateTime());
+			biliUtil.ffmpegQueueDataDao.save(audioData);
+			//创建完成交由数据库处理
+		}
+		map.put("video", filepath+"/"+filename+".mp4");
+		map.put("videoname", filename+".mp4");
+		return map;
 	}
 	
 	
@@ -194,13 +275,14 @@ public class BiliUtil {
 	public static String buildInterfaceAddress(String aid,String cid,String token,String quality) {
 		String bilibitstream = Global.bilibitstream;
 		if(quality.equals("0")) {
+			logger.info("视频没有2k以上进行画质降级");
 			bilibitstream ="112"; //画质降级
 		}
 		String api ="https://api.bilibili.com/x/player/playurl?avid="+aid+"&cid="+cid;
 		if(null != token && !token.equals("")) {
 			if(!bilibitstream.equals("64")) {
 				//vip
-				if(Integer.valueOf(bilibitstream) >120) {
+				if(Integer.valueOf(bilibitstream) >=120) {
 					api =api+"&qn=0";
 				}else {
 					api =api+"&qn="+bilibitstream;
@@ -238,6 +320,7 @@ public class BiliUtil {
 	public static void main(String[] args) throws Exception {
 		//video/BV1mz4y1q7Pb
 		///video/BV1qM4y1w716
+
 		List<Map<String, String>> findVideoStreaming = BiliUtil.findVideoStreaming("/video/BV1mz4y1q7Pb","buvid3=0E48097F-7998-C304-EA26-A098353B564E24664infoc; b_nut=1686316524; buvid4=19EFF99F-6593-1F59-BC30-D78EE91531EC24664-023060921-bpBB5Rug64HYSZoY1HTn2w%3D%3D; _uuid=92C36E106-9BF10-47105-DD10A-C83929B37CC757865infoc; rpdid=|(u||)R|~lYY0J'uY)YYkllY|; i-wanna-go-back=-1; header_theme_version=CLOSE; DedeUserID=3493262113376423; DedeUserID__ckMd5=d6afd5e2e0cb60b3; b_ut=5; FEED_LIVE_VERSION=V8; nostalgia_conf=-1; LIVE_BUVID=AUTO9316868115562984; CURRENT_BLACKGAP=0; CURRENT_FNVAL=4048; buvid_fp_plain=undefined; fingerprint=fe5542d30670ff1dc868f3bcd89b0534; buvid_fp=fe5542d30670ff1dc868f3bcd89b0534; home_feed_column=5; SESSDATA=cf15d78d%2C1706946744%2C5e06a%2A812WyG5Tqqb1IsCB42co5czmGI5HoS9rQENjjkTFkTGZrXkefl6eewX1fF_uDMZaWd9unlnAAAFwA; bili_jct=068800b8a727ccecfa7230a91c3c44f8; sid=72894xqr; CURRENT_QUALITY=112; PVID=2; bili_ticket=eyJhbGciOiJFUzM4NCIsImtpZCI6ImVjMDIiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2OTE3NDE5MTEsImlhdCI6MTY5MTQ4MjcxMSwicGx0IjotMX0.fnyP8J8jj_uQpZAAtHDovqp6JDXLXoL9JdqOi7nTog4X60UYpV44xVT6TqMSOO6ZZy56KwASTrsr3rhWeg2AhcbXkCUcnq2xi0oj4cZqesGqS2QXzRJ-J4cZTO_GUg3a; bili_ticket_expires=1691741911; bp_video_offset_3493262113376423=827618465414119457; b_lsid=105EFBC32_189D82FE2E9; browser_resolution=1920-331","D:\\flower\\uploadFile");
 		System.out.println(findVideoStreaming);
 	}

@@ -31,6 +31,10 @@ public class FfmpegQueueEntity implements Serializable {
 	
 	private String audiostatus;
 	
+	private String pendingfolder;
+	
+	private String filepath;
+	
 	private String status;
 	
 	private String createtime;
@@ -89,6 +93,22 @@ public class FfmpegQueueEntity implements Serializable {
 
 	public void setCreatetime(String createtime) {
 		this.createtime = createtime;
+	}
+
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+
+	public String getPendingfolder() {
+		return pendingfolder;
+	}
+
+	public void setPendingfolder(String pendingfolder) {
+		this.pendingfolder = pendingfolder;
 	}
 
 	

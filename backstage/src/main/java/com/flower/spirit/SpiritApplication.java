@@ -4,11 +4,13 @@ import java.io.File;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.flower.spirit.utils.FileUtil;
 
 
 @SpringBootApplication
+@EnableScheduling
 public class SpiritApplication {
 
 	public static void main(String[] args) {

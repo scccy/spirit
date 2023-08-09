@@ -27,9 +27,13 @@ public class FfmpegQueueDataEntity implements Serializable {
 	@TableGenerator(name = "biz_ffmpeg_queue_data", allocationSize = 1, table = "seq_common", pkColumnName = "seq_id", valueColumnName = "seq_count")
     private Integer id;
 	
-	private String queueid;
+	private Integer queueid;
 	
 	private String taskid;
+	
+	private String filepath;
+	
+	private String filetype;
 	
 	private String status;
 	
@@ -37,10 +41,6 @@ public class FfmpegQueueDataEntity implements Serializable {
 
 	public Integer getId() {
 		return id;
-	}
-
-	public String getQueueid() {
-		return queueid;
 	}
 
 	public String getTaskid() {
@@ -59,10 +59,6 @@ public class FfmpegQueueDataEntity implements Serializable {
 		this.id = id;
 	}
 
-	public void setQueueid(String queueid) {
-		this.queueid = queueid;
-	}
-
 	public void setTaskid(String taskid) {
 		this.taskid = taskid;
 	}
@@ -73,6 +69,30 @@ public class FfmpegQueueDataEntity implements Serializable {
 
 	public void setCreatetime(String createtime) {
 		this.createtime = createtime;
+	}
+
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+
+	public String getFiletype() {
+		return filetype;
+	}
+
+	public void setFiletype(String filetype) {
+		this.filetype = filetype;
+	}
+
+	public Integer getQueueid() {
+		return queueid;
+	}
+
+	public void setQueueid(Integer queueid) {
+		this.queueid = queueid;
 	}
 	
 	

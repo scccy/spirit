@@ -23,7 +23,7 @@ public class Aria2Util {
 	
 	private static Logger logger = LoggerFactory.getLogger(Aria2Util.class);
 	
-	public static Object sendMessage(String url,JSONObject post) {
+	public static String sendMessage(String url,JSONObject post) {
 		HttpPost httpPost = new HttpPost(url);
 	    httpPost.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
 	    httpPost.setEntity(new StringEntity(JSONObject.toJSONString(post), StandardCharsets.UTF_8));
@@ -122,6 +122,30 @@ public class Aria2Util {
 		JSONObject confog =  new JSONObject();
 		confog.put("dir", downpath);
 		confog.put("out", downclass);
+		confog.put("referer", "*");
+		params.add(confog);
+		obj.put("params", params);
+		return obj;
+	}
+	
+	
+	public static JSONObject createTaskStatus(String taskid,String token) {
+		JSONObject obj =  new JSONObject();
+		
+		obj.put("id", RandomStringUtils.randomNumeric(16));
+		obj.put("jsonrpc", "2.0");
+		obj.put("method", "aria2.tellStatus");
+		JSONArray params = new JSONArray();
+		if(token != null) {
+			params.add("token:"+token);
+		}
+		JSONArray fields = new JSONArray();
+		fields.add("status");
+		fields.add("totalLength");
+		fields.add("completedLength");
+		params.add(taskid);
+		params.add(fields);
+		JSONObject confog =  new JSONObject();
 		confog.put("referer", "*");
 		params.add(confog);
 		obj.put("params", params);
