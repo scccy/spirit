@@ -20,28 +20,7 @@ public class BiliUtil {
 	 * 
 	 */
 	public static  Map<String, String> findVideoStreamingNoData(Map<String, String> videoDataInfo,String url,String token,String filepath) throws Exception {
-		String api ="https://api.bilibili.com/x/player/playurl";
-		api=api+"?avid="+videoDataInfo.get("aid")+"&cid="+videoDataInfo.get("cid");
-		//公共部分结束
-		//按照配置处理码流设置  优先使用用户配置
-		if(null != token && !token.equals("")) {
-			if(!Global.bilibitstream.equals("64")) {
-				//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
-				api =api+"&qn="+Global.bilibitstream;
-			}else {
-				api =api+"&qn=80";
-			}
-		}else {
-			api =api+"&qn=64";
-		}	
-		api =api+"&fnver=0";
-		//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
-		if(Global.bilibitstream.equals("120") && Global.bilimember) {
-			api =api+"&fourk=1&fnval=128";
-		}else {
-			api =api+"&fourk=0&fnval=1";
-		}
-		
+		String api = buildInterfaceAddress(videoDataInfo.get("aid"), videoDataInfo.get("cid"), token);
 		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
 //		System.out.println(parseObject);
@@ -67,29 +46,8 @@ public class BiliUtil {
 		List<Map<String, String>> videoDataInfo = BiliUtil.getVideoDataInfo(url);
 		List<Map<String, String>> res = new ArrayList<Map<String,String>>();
 		for(int i =0;i<videoDataInfo.size();i++) {
-			String api ="https://api.bilibili.com/x/player/playurl";
 			Map<String, String> map = videoDataInfo.get(i);
-			api=api+"?avid="+map.get("aid")+"&cid="+map.get("cid");
-			//公共部分结束
-			//按照配置处理码流设置  优先使用用户配置
-			if(null != token && !token.equals("")) {
-				if(!Global.bilibitstream.equals("64")) {
-					//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
-					api =api+"&qn="+Global.bilibitstream;
-				}else {
-					api =api+"&qn=80";
-				}
-			}else {
-				api =api+"&qn=64";
-			}
-			api =api+"&fnver=0";
-			//此处我相信了用户 在选择 选择大会员码率的时候 自己是大会员
-			if(Global.bilibitstream.equals("120") && Global.bilimember) {
-				api =api+"&fourk=1&fnval=128";
-			}else {
-				api =api+"&fourk=0&fnval=1";
-			}
-			System.out.println(api);
+			String api = buildInterfaceAddress(map.get("aid"), map.get("cid"), token);
 			String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 			JSONObject parseObject = JSONObject.parseObject(httpGetBili);
 			System.out.println(parseObject);
@@ -188,6 +146,28 @@ public class BiliUtil {
 			replace = url.replaceAll("/video/", "");
 			return replace;
 		}
+	}
+	
+	public static String buildInterfaceAddress(String aid,String cid,String token) {
+		String api ="https://api.bilibili.com/x/player/playurl?avid="+aid+"&cid="+cid;
+		if(null != token && !token.equals("")) {
+			if(!Global.bilibitstream.equals("64")) {
+				//vip
+				api =api+"&qn="+Global.bilibitstream;
+			}else {
+				api =api+"&qn=80";
+			}
+			
+		}else {
+			api =api+"&qn=64";
+		}
+		api =api+"&fnver=0";  //固定 0
+		if(Global.bilibitstream.equals("120") && Global.bilimember) {
+			api =api+"&fourk=1&fnval=128";   //4k 传128
+		}else {
+			api =api+"&fourk=0&fnval=1";      //非4k传1
+		}
+		return api;
 	}
 
 	public static void main(String[] args) throws Exception {
