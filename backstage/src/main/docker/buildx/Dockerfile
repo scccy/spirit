@@ -2,6 +2,7 @@ FROM alpine
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
     apk upgrade --update-cache && \
     apk add openjdk8 && \
+    apk add ffmpeg && \
     rm -rf /tmp/* /var/cache/apk/*
 VOLUME ["/tmp","/app"]
 COPY db /home/app/db/

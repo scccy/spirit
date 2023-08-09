@@ -185,6 +185,12 @@ public class CollectDataService {
 	}
 	
 	
+	/**
+	 * 方法需要代码优化  有时间再说
+	 * @param entity
+	 * @param json
+	 * @throws Exception
+	 */
 	public void createBiliData(CollectDataEntity entity,JSONArray json) throws Exception {
 		//线程开始  变更状态
 		String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
@@ -205,7 +211,7 @@ public class CollectDataService {
 					String cid = map.get("cid");
 					List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(cid);
 					if(findByVideoid.size() == 0) {
-						Map<String, String> findVideoStreaming =  BiliUtil.findVideoStreamingNoData(map,"/video/"+bvid,Global.bilicookies,videofile);
+						Map<String, String> findVideoStreaming =  BiliUtil.findVideoStreamingNoData(map,"/video/"+bvid,Global.bilicookies,videofile,map.get("quality"));
 						String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
 						String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
 						 //封面down
