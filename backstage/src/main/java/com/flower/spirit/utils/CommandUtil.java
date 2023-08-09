@@ -21,13 +21,13 @@ public class CommandUtil {
             Process process = processBuilder.start();
 
             // Read command output
-            InputStream inputStream = process.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
+//            InputStream inputStream = process.getInputStream();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+//
+//            String line;
+//            while ((line = reader.readLine()) != null) {
+//                System.out.println(line);
+//            }
 
             int exitCode = process.waitFor();
             System.out.println("Command executed with exit code: " + exitCode);

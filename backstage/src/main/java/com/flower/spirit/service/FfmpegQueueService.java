@@ -81,7 +81,7 @@ public class FfmpegQueueService {
 	 * 合并任务
 	 */
 	public void taskMergeTasks() {
-		List<FfmpegQueueEntity> list =  ffmpegQueueDao.findByVideostatusAndAudiostatus("1","1");
+		List<FfmpegQueueEntity> list =  ffmpegQueueDao.findByVideostatusAndAudiostatusAndStatus("1","1","0");
 		if(list.size()>0) {
 			logger.info("存在下载完成的任务 开始进入合并");
 			for(FfmpegQueueEntity entity:list) {
@@ -104,7 +104,9 @@ public class FfmpegQueueService {
 				CommandUtil.command("ffmpeg -i "+video+" -i "+audio+" -c:v copy -c:a copy -f mp4 "+entity.getFilepath());
 				//删除任务
 				FileUtils.deleteDirectory(entity.getPendingfolder());
-				
+				//合并结束修改装改
+				entity.setStatus("1");
+				ffmpegQueueDao.save(entity);
 			}
 		}
 	}

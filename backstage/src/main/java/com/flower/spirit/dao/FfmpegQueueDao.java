@@ -17,4 +17,6 @@ public interface FfmpegQueueDao  extends PagingAndSortingRepository<FfmpegQueueE
 
 	List<FfmpegQueueEntity> findByVideostatusAndAudiostatus(String string, String string2);
 
+	List<FfmpegQueueEntity> findByVideostatusAndAudiostatusAndStatus(String string, String string2, String string3);
+
 }
