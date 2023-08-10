@@ -1,6 +1,5 @@
 package com.flower.spirit.service;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -100,7 +99,6 @@ public class FfmpegQueueService {
 					
 				}
 				//执行合并任务
-				System.out.println("ffmpeg -i "+video+" -i "+audio+" -c:v copy -c:a copy -f mp4 "+entity.getFilepath());
 				CommandUtil.command("ffmpeg -i "+video+" -i "+audio+" -c:v copy -c:a copy -f mp4 "+entity.getFilepath());
 				//删除任务
 				FileUtils.deleteDirectory(entity.getPendingfolder());

@@ -111,13 +111,13 @@
 		        <option value="112"  th:selected="${bili.bitstream} eq '112'">1080P+ 高码率(需要大会员)</option>
 		        <option value="116"  th:selected="${bili.bitstream} eq '116'">1080P60 高帧率(需要大会员)</option>
 		        <option value="120"  th:selected="${bili.bitstream} eq '120'">4K 超清(需要大会员)</option>
- 		        <option value="125"  th:selected="${bili.bitstream} eq '125'">HDR 真彩色(需要大会员)</option>
-		        <option value="126"  th:selected="${bili.bitstream} eq '126'">杜比视界(需要大会员)</option>
+<!--  		        <option value="125"  th:selected="${bili.bitstream} eq '125'">HDR 真彩色(需要大会员)</option>
+		        <option value="126"  th:selected="${bili.bitstream} eq '126'">杜比视界(需要大会员)</option> -->
 		        <option value="127"  th:selected="${bili.bitstream} eq '127'">8K 超高清(需要大会员)</option>
 		      </select>
       </div>
       	<br>
-      	<div style="margin-top: 1rem;display: inline-block;margin-left: 5.9%;">是大会员的请选是,不是的不要选,以免出现奇怪的BUG</div>
+      	<div style="margin-top: 1rem;display: inline-block;margin-left: 5.9%;">是大会员可以选需要大会员的,不是不要选,以免出现奇怪的BUG,当选择4K/8K时 视频不存在对饮分别率时会自动降级请求1080分辨率的视频</div>
     </div>
   </div>
    <div class="layui-form-item">
@@ -147,7 +147,7 @@
       <div class="layui-input-inline">
         <input type="type" name="bilicookies"  autocomplete="off" class="layui-input analysisserver" th:value="${tiktok.analysisserver}">
       </div>
-       <div style="margin-top: 1rem;display: inline-block;margin-left: 5.9%;">默认是我的服务器,如果有需要请部署<a href="https://hub.docker.com/r/qingfeng2336/spirit-assist-node" target="_blank">spirit-assist-node</a>,如果遇到经常失败建议自行部署并填写地址</div>
+       <div style="margin-top: 1rem;display: inline-block;margin-left: 0.5%;">当前已经优先本地通过java 生成 备选是我的服务器,如果有需要请部署<a href="https://hub.docker.com/r/qingfeng2336/spirit-assist-node" target="_blank">spirit-assist-node</a>,如果遇到经常失败建议自行部署并填写地址</div>
     </div>    
   </div>
    <div class="layui-form-item">
