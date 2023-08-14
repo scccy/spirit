@@ -222,7 +222,7 @@ public class BiliUtil {
 				data.put("aid", aid);
 				data.put("bvid", bvid);
 				data.put("desc", desc);
-				if(width>1920 ||height >1920) {
+				if(width>=1920 ||height >=1920) {
 					data.put("quality", "1");
 				}else {
 					data.put("quality", "0");
@@ -276,7 +276,7 @@ public class BiliUtil {
 		String bilibitstream = Global.bilibitstream;
 		if(quality.equals("0")) {
 			logger.info("视频没有2k以上进行画质降级");
-			bilibitstream ="112"; //画质降级
+			bilibitstream ="80"; //画质降级
 		}
 		String api ="https://api.bilibili.com/x/player/playurl?avid="+aid+"&cid="+cid;
 		if(null != token && !token.equals("")) {
@@ -297,6 +297,15 @@ public class BiliUtil {
 		}
 		api =api+"&fnver=0";  //固定 0
 		switch (bilibitstream) {
+		case "80":
+			api =api+"&fourk=1&fnval="+Integer.toString(16|128);   //4k 传128
+			break;
+		case "112":
+			api =api+"&fourk=1&fnval="+Integer.toString(16|128);   //4k 传128
+			break;
+		case "116":
+			api =api+"&fourk=1&fnval="+Integer.toString(16|128);   //4k 传128
+			break;
 		case "120":
 			api =api+"&fourk=1&fnval="+Integer.toString(16|128);   //4k 传128
 			break;
@@ -321,7 +330,7 @@ public class BiliUtil {
 		//video/BV1mz4y1q7Pb
 		///video/BV1qM4y1w716
 
-		List<Map<String, String>> findVideoStreaming = BiliUtil.findVideoStreaming("/video/BV1mz4y1q7Pb","buvid3=0E48097F-7998-C304-EA26-A098353B564E24664infoc; b_nut=1686316524; buvid4=19EFF99F-6593-1F59-BC30-D78EE91531EC24664-023060921-bpBB5Rug64HYSZoY1HTn2w%3D%3D; _uuid=92C36E106-9BF10-47105-DD10A-C83929B37CC757865infoc; rpdid=|(u||)R|~lYY0J'uY)YYkllY|; i-wanna-go-back=-1; header_theme_version=CLOSE; DedeUserID=3493262113376423; DedeUserID__ckMd5=d6afd5e2e0cb60b3; b_ut=5; FEED_LIVE_VERSION=V8; nostalgia_conf=-1; LIVE_BUVID=AUTO9316868115562984; CURRENT_BLACKGAP=0; CURRENT_FNVAL=4048; buvid_fp_plain=undefined; fingerprint=fe5542d30670ff1dc868f3bcd89b0534; buvid_fp=fe5542d30670ff1dc868f3bcd89b0534; home_feed_column=5; SESSDATA=cf15d78d%2C1706946744%2C5e06a%2A812WyG5Tqqb1IsCB42co5czmGI5HoS9rQENjjkTFkTGZrXkefl6eewX1fF_uDMZaWd9unlnAAAFwA; bili_jct=068800b8a727ccecfa7230a91c3c44f8; sid=72894xqr; CURRENT_QUALITY=112; PVID=2; bili_ticket=eyJhbGciOiJFUzM4NCIsImtpZCI6ImVjMDIiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2OTE3NDE5MTEsImlhdCI6MTY5MTQ4MjcxMSwicGx0IjotMX0.fnyP8J8jj_uQpZAAtHDovqp6JDXLXoL9JdqOi7nTog4X60UYpV44xVT6TqMSOO6ZZy56KwASTrsr3rhWeg2AhcbXkCUcnq2xi0oj4cZqesGqS2QXzRJ-J4cZTO_GUg3a; bili_ticket_expires=1691741911; bp_video_offset_3493262113376423=827618465414119457; b_lsid=105EFBC32_189D82FE2E9; browser_resolution=1920-331","D:\\flower\\uploadFile");
+		List<Map<String, String>> findVideoStreaming = BiliUtil.findVideoStreaming("/video/BV1mz4y1q7Pb","cookie","D:\\flower\\uploadFile");
 		System.out.println(findVideoStreaming);
 	}
 }

@@ -72,7 +72,7 @@ public class Aria2Util {
 		JSONObject confog =  new JSONObject();
 		confog.put("dir", downpath);
 		confog.put("out", downclass);
-		confog.put("User-Agent", "Mozilla/5.0 BiliDroid/7.25.0 (bbcallen@gmail.com)");
+		confog.put("User-Agent", "Mozilla/5.0 BiliDroid/7.42.0 (bbcallen@gmail.com)");
 		confog.put("referer", "https://www.bilibili.com");
 		params.add(confog);
 		obj.put("params", params);
