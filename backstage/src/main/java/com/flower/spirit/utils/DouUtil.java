@@ -119,6 +119,38 @@ public class DouUtil {
 	}
 	
 	public static  Map<String, String> getBogus(String aweme_id,String type) throws HttpException, IOException {
+		 Map<String, String> res = new HashMap<String, String>();
+		 String cookie = simplifycookie(Global.tiktokCookie);
+		 Map<String, String> generatetoken = generatetoken(aweme_id);
+		 String httpget = DouUtil.httpget(generatetoken.get("url").trim(),cookie);
+		 JSONObject data = JSONObject.parseObject(httpget);
+		 JSONObject aweme_detail = data.getJSONObject("aweme_detail");
+		 String coveruri = "";
+		 JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
+		 if(cover.size() >=2) {
+			 coveruri = cover.getString(2);
+		 }else {
+			 coveruri = cover.getString(0);
+		 }
+		 JSONArray jsonArray = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
+		 String videoplay = "";
+		 if(jsonArray.size() >=2) {
+			 videoplay = jsonArray.getString(2);
+		 }else {
+			 videoplay = jsonArray.getString(0);
+		 }
+		 String desc = aweme_detail.getString("desc");
+		 res.put("awemeid", aweme_id);
+		 res.put("videoplay", videoplay);
+		 res.put("desc", desc);
+		 res.put("cover", coveruri);
+		 res.put("cookie", cookie.trim());
+		 res.put("type", "api");
+		 return res;
+	}
+	
+	@Deprecated
+	public static  Map<String, String> getBogusDiscard(String aweme_id,String type) throws HttpException, IOException {
 		Map<String, String> res = new HashMap<String, String>();
 		 String url ="";
 		 String cookie ="";
@@ -154,6 +186,9 @@ public class DouUtil {
 		if(code.equals("200")) {
 			 String httpget = DouUtil.httpget(url.trim(), cookie.trim());
 			 JSONObject data = JSONObject.parseObject(httpget);
+			 if(null == data) {
+				 return getBogus(aweme_id, "remote");
+			 }
 			 JSONObject aweme_detail = data.getJSONObject("aweme_detail");
 			 if(null == aweme_detail && type.equals("local")) {
 				 return getBogus(aweme_id, "remote");
@@ -192,6 +227,7 @@ public class DouUtil {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("user-agent", ua);
+        conn.setRequestProperty("referer", "https://www.douyin.com/");
         conn.setRequestProperty("cookie", cookie);
         BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         String inputLine;
@@ -233,16 +269,14 @@ public class DouUtil {
 	
 	
 	public static Map<String, String> generatetoken(String aid) {
-		String url ="https://www.douyin.com/aweme/v1/web/aweme/detail/?aweme_id=#awemeid#&aid=6383&cookie_enabled=true&platform=PC&downlink=10&X-Bogus=#bogus#";
+		String url ="https://www.douyin.com/aweme/v1/web/aweme/detail/?aweme_id=#awemeid#&aid=1128&version_name=23.5.0&device_platform=android&os_version=2333&X-Bogus=#bogus#";
 		Map<String, String> res = new HashMap<String, String>();
-	    String urlPath = "aweme_id="+aid+"&aid=6383&cookie_enabled=true&platform=PC&downlink=10";
-		String ttwidtoken= getTtwid();
+//	    String urlPath = "aweme_id="+aid+"&aid=1128&cookie_enabled=true&platform=android&downlink=10";
+	    String urlPath = "aweme_id="+aid+"&aid=1128&version_name=23.5.0&device_platform=android&os_version=2333";
 		try {
 			String xbogusToken = XbogusUtil.getXBogus(urlPath);
-			String cookie ="msToken="+xbogusToken+";ttwid="+ttwidtoken+";odin_tt="+odin_tt+";passport_csrf_token="+passport_csrf_token;
 			String queryurl = url.replace("#awemeid#",aid).replace("#bogus#",xbogusToken);
 			res.put("xbogus", xbogusToken);
-			res.put("cookie", cookie);
 			res.put("url", queryurl);
 			return res;
 		} catch (NoSuchAlgorithmException e) {
@@ -297,9 +331,35 @@ public class DouUtil {
         }
         return "";
     }
-	public static void main(String[] args) {
-		DouUtil.generatetoken("x");
+	public static String simplifycookie(String cookie) {
+		Map<String, String> parseCookieString = parseCookieString(cookie);
+		String ck ="odin_tt="+parseCookieString.get("odin_tt")+";sessionid_ss="+parseCookieString.get("sessionid_ss")+";ttwid="+parseCookieString.get("ttwid")+";passport_csrf_token="+parseCookieString.get("passport_csrf_token")+";msToken="+parseCookieString.get("msToken")+";";
+		return ck;
 		
+	}
+	
+	
+	public static Map<String, String> parseCookieString(String cookieString) {
+        Map<String, String> cookieMap = new HashMap<>();
+
+        if (cookieString != null && !cookieString.isEmpty()) {
+            String[] cookiePairs = cookieString.split("; ");
+            for (String cookiePair : cookiePairs) {
+                String[] parts = cookiePair.split("=");
+                if (parts.length == 2) {
+                    String name = parts[0];
+                    String value = parts[1];
+                    cookieMap.put(name, value);
+                }
+            }
+        }
+
+        return cookieMap;
+    }
+
+	public static void main(String[] args) {
+		Map<String, String> generatetoken = DouUtil.generatetoken("7221047525594139944");
+		System.out.println(generatetoken);
 		
 	}
 
