@@ -140,7 +140,7 @@
         <input type="type" name="bilicookies"  autocomplete="off" class="layui-input tiktokcookies" th:value="${tiktok.cookies}">
       </div>
       <br/>
-      <div style="margin-top: 1rem;display: inline-block;margin-left: 5.9%;">ck 目前必填填写登录后的cookie</div>
+      <div style="margin-top: 1rem;display: inline-block;margin-left: 5.9%;">ck 目前必填填写登录后的cookie,不填无法使用批量下载及单个视频将使用htmlclient方式获取。<br/>htmlclient方式缺点:内存回收机制有问题。会出现内存占用高问题。需要定时重启容器<br/>建议填写cookie,解析全在本地。</div>
     </div>    
   </div>
    <div class="layui-form-item">
