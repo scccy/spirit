@@ -118,6 +118,14 @@ public class DouUtil {
 	
 	}
 	
+	/**
+	 * 获取xBogus 并获取视频数据
+	 * @param aweme_id
+	 * @param type
+	 * @return
+	 * @throws HttpException
+	 * @throws IOException
+	 */
 	public static  Map<String, String> getBogus(String aweme_id,String type) throws HttpException, IOException {
 		 Map<String, String> res = new HashMap<String, String>();
 		 String cookie = simplifycookie(Global.tiktokCookie);
@@ -149,6 +157,15 @@ public class DouUtil {
 		 return res;
 	}
 	
+	/**
+	 * 
+	 * 已废弃接口  目前需要填写用户cookie 所以暂时这个接口不用了
+	 * @param aweme_id
+	 * @param type
+	 * @return
+	 * @throws HttpException
+	 * @throws IOException
+	 */
 	@Deprecated
 	public static  Map<String, String> getBogusDiscard(String aweme_id,String type) throws HttpException, IOException {
 		Map<String, String> res = new HashMap<String, String>();
@@ -220,6 +237,13 @@ public class DouUtil {
 
 		
 	}
+	/**
+	 * get 请求 接口数据
+	 * @param addr
+	 * @param ck
+	 * @return
+	 * @throws IOException
+	 */
 	public static String httpget(String addr,String ck) throws IOException {
 		String cookie = ck;
         String urlString = addr;    
@@ -242,6 +266,11 @@ public class DouUtil {
 	
 
 	
+	/**
+	 * 构建请求数据
+	 * @param aweme_id
+	 * @return
+	 */
 	public static JSONObject generateparameters(String aweme_id) {
 		JSONObject data =  new JSONObject();
 		data.put("awemeid", aweme_id);
@@ -268,6 +297,11 @@ public class DouUtil {
 	}
 	
 	
+	/**
+	 * 生成Xbogus并返回 请求URL
+	 * @param aid
+	 * @return
+	 */
 	public static Map<String, String> generatetoken(String aid) {
 		String url ="https://www.douyin.com/aweme/v1/web/aweme/detail/?aweme_id=#awemeid#&aid=1128&version_name=23.5.0&device_platform=android&os_version=2333&X-Bogus=#bogus#";
 		Map<String, String> res = new HashMap<String, String>();
@@ -331,6 +365,11 @@ public class DouUtil {
         }
         return "";
     }
+	/**
+	 * 简化cookie
+	 * @param cookie
+	 * @return
+	 */
 	public static String simplifycookie(String cookie) {
 		Map<String, String> parseCookieString = parseCookieString(cookie);
 		String ck ="odin_tt="+parseCookieString.get("odin_tt")+";sessionid_ss="+parseCookieString.get("sessionid_ss")+";ttwid="+parseCookieString.get("ttwid")+";passport_csrf_token="+parseCookieString.get("passport_csrf_token")+";msToken="+parseCookieString.get("msToken")+";";
@@ -339,6 +378,11 @@ public class DouUtil {
 	}
 	
 	
+	/**
+	 * cookie 转map
+	 * @param cookieString
+	 * @return
+	 */
 	public static Map<String, String> parseCookieString(String cookieString) {
         Map<String, String> cookieMap = new HashMap<>();
 
