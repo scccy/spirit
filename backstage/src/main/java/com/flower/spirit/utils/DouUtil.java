@@ -128,33 +128,37 @@ public class DouUtil {
 	 */
 	public static  Map<String, String> getBogus(String aweme_id,String type) throws HttpException, IOException {
 		 Map<String, String> res = new HashMap<String, String>();
-		 String cookie = simplifycookie(Global.tiktokCookie);
-		 Map<String, String> generatetoken = generatetoken(aweme_id);
-		 String httpget = DouUtil.httpget(generatetoken.get("url").trim(),cookie);
-		 JSONObject data = JSONObject.parseObject(httpget);
-		 JSONObject aweme_detail = data.getJSONObject("aweme_detail");
-		 String coveruri = "";
-		 JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
-		 if(cover.size() >=2) {
-			 coveruri = cover.getString(2);
-		 }else {
-			 coveruri = cover.getString(0);
+		 if(null !=Global.tiktokCookie && !"".equals(Global.tiktokCookie) ) {
+			 String cookie = simplifycookie(Global.tiktokCookie);
+			 Map<String, String> generatetoken = generatetoken(aweme_id);
+			 String httpget = DouUtil.httpget(generatetoken.get("url").trim(),cookie);
+			 JSONObject data = JSONObject.parseObject(httpget);
+			 JSONObject aweme_detail = data.getJSONObject("aweme_detail");
+			 String coveruri = "";
+			 JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
+			 if(cover.size() >=2) {
+				 coveruri = cover.getString(2);
+			 }else {
+				 coveruri = cover.getString(0);
+			 }
+			 JSONArray jsonArray = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
+			 String videoplay = "";
+			 if(jsonArray.size() >=2) {
+				 videoplay = jsonArray.getString(2);
+			 }else {
+				 videoplay = jsonArray.getString(0);
+			 }
+			 String desc = aweme_detail.getString("desc");
+			 res.put("awemeid", aweme_id);
+			 res.put("videoplay", videoplay);
+			 res.put("desc", desc);
+			 res.put("cover", coveruri);
+			 res.put("cookie", cookie.trim());
+			 res.put("type", "api");
+			 return res;
 		 }
-		 JSONArray jsonArray = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
-		 String videoplay = "";
-		 if(jsonArray.size() >=2) {
-			 videoplay = jsonArray.getString(2);
-		 }else {
-			 videoplay = jsonArray.getString(0);
-		 }
-		 String desc = aweme_detail.getString("desc");
-		 res.put("awemeid", aweme_id);
-		 res.put("videoplay", videoplay);
-		 res.put("desc", desc);
-		 res.put("cover", coveruri);
-		 res.put("cookie", cookie.trim());
-		 res.put("type", "api");
-		 return res;
+		 return null;
+
 	}
 	
 	/**
