@@ -21,10 +21,11 @@ public class UploadConfig implements WebMvcConfigurer {
     @Value("${file.save.path}")
     private String uploadRealPath;
 	
-	 @Override
-	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	        registry.addResourceHandler(staticAccessPath).addResourceLocations("file:///"+uploadRealPath);
-	    }
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	    // 添加静态资源处理器，指定访问路径为staticAccessPath，资源位置为file:///uploadRealPath
+	    registry.addResourceHandler(staticAccessPath).addResourceLocations("file:///"+uploadRealPath);
+	}
 
 
 }
