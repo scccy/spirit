@@ -2,6 +2,22 @@
 请勿滥用，本项目仅用于学习和测试！请勿滥用.
 请勿滥用，本项目仅用于学习和测试！请勿滥用.
 ```
+
+### 更新预发布提示
+```
+老用户更新容器时 请务必查看更新记录
+请注意 从下一个大版本起 将优化以下两个目录
+/app/resources/video
+/app/resources/cover
+
+优化成
+/app/resources/{platform}/{yyyyMM}/{name}/{name}.mp4
+/app/resources/{platform}/{yyyyMM}/{name}/{name}.jpg
+
+也就是说将 图片和视频 放在一个文件夹下 方便手工管理
+
+```
+
 ### 更新记录
 
 ```
