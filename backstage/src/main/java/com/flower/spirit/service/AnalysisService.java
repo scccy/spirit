@@ -109,7 +109,7 @@ public class AnalysisService {
 //				 HttpUtil.downBiliFromUrl(map.get("pic"), filename+".jpg", uploadRealPath+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
 				 HttpUtil.downBiliFromUrl(map.get("pic"), filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename));
 				//封面down
-				 VideoDataEntity videoDataEntity = new VideoDataEntity(map.get("cid"),map.get("title"), map.get("desc"), platform, coverunaddr+"/"+filename+".jpg", map.get("video"),videounaddr,video);
+				 VideoDataEntity videoDataEntity = new VideoDataEntity(map.get("cid"),map.get("title"), map.get("desc"), platform, coverunaddr, map.get("video"),videounaddr,video);
 			     videoDataDao.save(videoDataEntity);
 			     logger.info("下载流程结束");
 			     processHistoryService.saveProcess(saveProcess.getId(), video, platform);
