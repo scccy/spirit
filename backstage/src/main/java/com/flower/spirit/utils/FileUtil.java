@@ -7,7 +7,29 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.flower.spirit.config.Global;
+
 public class FileUtil {
+	
+	
+	
+	/**
+	 * 创建目录文件 并返回路径
+	 * @param directory
+	 * @param ext
+	 * @param filename
+	 * @param platform
+	 * @return
+	 */
+	public static String createDirFile(String directory,String ext,String filename,String platform) {
+		String datepath = DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
+		String path =directory+System.getProperty("file.separator")+
+					 platform+System.getProperty("file.separator")+datepath+
+					 System.getProperty("file.separator")+filename+System.getProperty("file.separator")
+					 +filename+ext;
+		return path;
+	}
+	
 
 	
 	/**

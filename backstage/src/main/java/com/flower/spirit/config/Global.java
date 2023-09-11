@@ -49,7 +49,7 @@ public class Global {
 	public static String a2_token="123456";
 	
 	public static String down_path="/app/resources/video";
-	
+
 	
 	public static String apptoken="123456";
 	

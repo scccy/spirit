@@ -92,7 +92,6 @@ public class BiliUtil {
 			String api = buildInterfaceAddress(map.get("aid"), map.get("cid"), token,quality);
 			String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 			JSONObject parseObject = JSONObject.parseObject(httpGetBili);
-			System.out.println(parseObject);
 			String filename = StringUtil.getFileName(map.get("title"), map.get("cid"));
 			if(Integer.valueOf(Global.bilibitstream) >=120 && quality.equals("1")) {
 				//执行DASH格式合并  默认取第一个  最大清晰度
