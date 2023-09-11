@@ -94,10 +94,10 @@ public class AnalysisService {
 			 for(int i = 0;i<findVideoStreaming.size();i++) {
 				 Map<String, String> map = findVideoStreaming.get(i);
 				 String filename = StringUtil.getFileName(map.get("title"), map.get("cid"));
-				 String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
-				 String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+map.get("videoname");//映射
+				 String coverunaddr =  savefile+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
+				 String videounaddr =  savefile+"video/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+map.get("videoname");//映射
 				 //封面down
-				 HttpUtil.downBiliFromUrl(map.get("pic"), filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+				 HttpUtil.downBiliFromUrl(map.get("pic"), filename+".jpg", uploadRealPath+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
 				//封面down
 				 VideoDataEntity videoDataEntity = new VideoDataEntity(map.get("cid"),map.get("title"), map.get("desc"), platform, coverunaddr+"/"+filename+".jpg", map.get("video"),videounaddr,video);
 			     videoDataDao.save(videoDataEntity);
@@ -138,34 +138,34 @@ public class AnalysisService {
 	public void putRecord(String awemeId,String desc,String playApi,String cover,String platform,String originaladdress,String type,String cookie) {
 		String filename = StringUtil.getFileName(desc, awemeId);
 	    String videofile = Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
-        String videounrealaddr = savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
-        String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".jpg";
+        String videounrealaddr = savefile+"video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
+        String coverunaddr =  savefile+"cover/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".jpg";
 		if(type.equals("client")) {
 			    logger.info("已使用htmlunit进行解析,下载器类型为:"+Global.downtype);
 		        if(Global.downtype.equals("a2")) {
 		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
-		      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
+		      	   videofile = "/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		        }
 		        if(Global.downtype.equals("http")) {
 		        	//内置下载器
-		        	HttpUtil.downLoadFromUrl("https:"+playApi, filename+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
-		        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
+		        	HttpUtil.downLoadFromUrl("https:"+playApi, filename+".mp4","/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+		        	videofile = "/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		        }
 		        //下载封面图当容器映射目录
-		        HttpUtil.downLoadFromUrl("https:"+cover, filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
+		        HttpUtil.downLoadFromUrl("https:"+cover, filename+".jpg", uploadRealPath+"cover/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 		}
 		if(type.equals("api")) {
 			logger.info("已使用api进行解析,下载器类型为:"+Global.downtype);
 	        if(Global.downtype.equals("a2")) {
 		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token,cookie));
-		      	   videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
+		      	   videofile = "/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 	        }
 	        if(Global.downtype.equals("http")) {
 	        	//内置下载器
-	        	HttpUtil.downDouFromUrl(playApi, filename+".mp4","/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),cookie);
+	        	HttpUtil.downDouFromUrl(playApi, filename+".mp4","/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),cookie);
 	        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 	        }
-	        HttpUtil.downLoadFromUrl(cover, filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
+	        HttpUtil.downLoadFromUrl(cover, filename+".jpg", uploadRealPath+"cover/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 		}
         //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
         VideoDataEntity videoDataEntity = new VideoDataEntity(awemeId,desc, desc, platform, coverunaddr, videofile,videounrealaddr,originaladdress);

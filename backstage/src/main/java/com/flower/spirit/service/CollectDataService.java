@@ -211,8 +211,8 @@ public class CollectDataService {
 					List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(cid);
 					if(findByVideoid.size() == 0) {
 						Map<String, String> findVideoStreaming =  BiliUtil.findVideoStreamingNoData(map,"/video/"+bvid,Global.bilicookies,videofile,map.get("quality"));
-						String coverunaddr =  savefile+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
-						String videounaddr =  savefile+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
+						String coverunaddr =  savefile+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
+						String videounaddr =  savefile+"video/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
 						 //封面down
 						HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
 						//封面down
