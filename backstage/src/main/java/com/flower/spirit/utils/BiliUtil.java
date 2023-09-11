@@ -62,7 +62,6 @@ public class BiliUtil {
 		String api = buildInterfaceAddress(videoDataInfo.get("aid"), videoDataInfo.get("cid"), token,quality);
 		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
-		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
 		String filename = StringUtil.getFileName(videoDataInfo.get("title"), videoDataInfo.get("cid"));
 		if(Integer.valueOf(Global.bilibitstream) >=120 && quality.equals("1")) {
 			//执行DASH格式合并  默认取第一个  最大清晰度
@@ -70,6 +69,7 @@ public class BiliUtil {
 			Map<String, String> processing = processing(parseObject, videoDataInfo, filename);
 			return processing;
 		}
+		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
 		if(Global.downtype.equals("http")) {
 //			HttpUtil.downBiliFromUrl(video, filename+".mp4", filepath);
 			HttpUtil.downBiliFromUrl(video, filename+".mp4", FileUtil.createTemporaryDirectory( Global.platform.bilibili.name(),filename));
