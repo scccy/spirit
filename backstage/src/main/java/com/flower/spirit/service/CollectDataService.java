@@ -335,7 +335,7 @@ public class CollectDataService {
 		         logger.info("已使用批量下载,下载器类型为:"+Global.downtype);
 		         if(Global.downtype.equals("a2")) {
 			      	  // Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(videoplay, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token,Global.tiktokCookie));
-			      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(videoplay, FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), Global.down_path), filename+".mp4", Global.a2_token,Global.tiktokCookie));
+			      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(videoplay, FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), filename,Global.down_path), filename+".mp4", Global.a2_token,Global.tiktokCookie));
 			      	  // videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		         }
 		         if(Global.downtype.equals("http")) {
