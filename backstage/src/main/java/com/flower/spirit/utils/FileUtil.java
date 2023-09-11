@@ -54,6 +54,17 @@ public class FileUtil {
 		return path;
 	}
 	
+	public  static String createTemporaryDirectory(String platform,String filename,String directory) {
+		String datepath = DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
+		String videofile = directory+System.getProperty("file.separator")
+						   +platform
+						   +System.getProperty("file.separator")
+						   +datepath
+						   +System.getProperty("file.separator")
+						   +filename;
+		return videofile;
+	}
+	
 
 	public  static String createTemporaryDirectory(String platform,String filename) {
 		String datepath = DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");

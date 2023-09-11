@@ -75,7 +75,8 @@ public class BiliUtil {
 			HttpUtil.downBiliFromUrl(video, filename+".mp4", FileUtil.createTemporaryDirectory( Global.platform.bilibili.name(),filename));
 		}
 		if(Global.downtype.equals("a2")) {
-			Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
+			Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename, Global.down_path),filename+".mp4", Global.a2_token));
+			//Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
 		}
 //		videoDataInfo.put("video", filepath+"/"+filename+".mp4");
 		videoDataInfo.put("video", FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename,  Global.platform.bilibili.name()));
@@ -113,7 +114,8 @@ public class BiliUtil {
 				HttpUtil.downBiliFromUrl(video, filename+".mp4", FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename));
 			}
 			if(Global.downtype.equals("a2")) {
-				Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
+				Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename, Global.down_path),filename+".mp4", Global.a2_token));
+				//Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
 			}
 //			map.put("video", filepath+"/"+filename+".mp4");
 			map.put("video", FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename, Global.platform.bilibili.name()));
