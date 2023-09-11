@@ -76,9 +76,22 @@ public class AnalysisService {
 				this.bilivideo(platform, this.getUrl(video));
 				return;
 			}
+			if(platform.equals("steam")) {
+				this.steamwork(video);
+				return;
+			}
 	       
 	}
 	
+	/**
+	 * 支持从steam 工坊下载
+	 * @param video
+	 */
+	private void steamwork(String video) {
+		
+		
+	}
+
 	/**
 	 * 哔哩解析
 	 * @param platform
@@ -240,6 +253,9 @@ public class AnalysisService {
 		}
 		if(input.contains("哔哩")) {
 			return "哔哩";
+		}
+		if(input.contains("steamcommunity.com")) {
+			return "steam";
 		}
 		return URLUtil.urlAnalysis(input);
     }

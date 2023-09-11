@@ -6,6 +6,8 @@
 
 	docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t qingfeng2336/spirit:cors --push -f ./Dockerfile .
     
+
+	docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t qingfeng2336/spirit:steam --push -f ./Dockerfile.steam .
 ## 映射目录
 
 /resources/video   to download addr
