@@ -50,39 +50,46 @@ public class BiliUtil {
 	
 	/**
 	 * 
-	 * 方法需要代码优化  有时间再说
+	 * 用于收藏夹下载  
+	 * 
+	 * 2023/09/11 移除参数url  无用参数
+	 * 2023/09/11 移除参数filepath  优化路径生成
+	 * 
 	 * @throws Exception 
 	 * 
 	 */
-	public static  Map<String, String> findVideoStreamingNoData(Map<String, String> videoDataInfo,String url,String token,String filepath,String quality) throws Exception {
+	public static  Map<String, String> findVideoStreamingNoData(Map<String, String> videoDataInfo,String token,String quality) throws Exception {
 		String api = buildInterfaceAddress(videoDataInfo.get("aid"), videoDataInfo.get("cid"), token,quality);
 		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
-//		System.out.println(parseObject);
 		String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
 		String filename = StringUtil.getFileName(videoDataInfo.get("title"), videoDataInfo.get("cid"));
 		if(Integer.valueOf(Global.bilibitstream) >=120 && quality.equals("1")) {
 			//执行DASH格式合并  默认取第一个  最大清晰度
-			Map<String, String> processing = processing(parseObject, videoDataInfo, filepath, filename);
+//			Map<String, String> processing = processing(parseObject, videoDataInfo, filepath, filename);
+			Map<String, String> processing = processing(parseObject, videoDataInfo, filename);
 			return processing;
 		}
 		if(Global.downtype.equals("http")) {
-			HttpUtil.downBiliFromUrl(video, filename+".mp4", filepath);
+//			HttpUtil.downBiliFromUrl(video, filename+".mp4", filepath);
+			HttpUtil.downBiliFromUrl(video, filename+".mp4", FileUtil.createTemporaryDirectory( Global.platform.bilibili.name(),filename));
 		}
 		if(Global.downtype.equals("a2")) {
 			Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
 		}
-		videoDataInfo.put("video", filepath+"/"+filename+".mp4");
+//		videoDataInfo.put("video", filepath+"/"+filename+".mp4");
+		videoDataInfo.put("video", FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename,  Global.platform.bilibili.name()));
 		videoDataInfo.put("videoname", filename+".mp4");
 		return videoDataInfo;
 	}
 	
 	/**
-	 * 方法需要代码优化  有时间再说
+	 * 解释video 信息 并下载源信息  此处不下载封面  仅下载视频
+	 * 移除 方法参数用 String filepath 参数 2023/09/11
 	 * @throws Exception 
 	 * 
 	 */
-	public static List<Map<String, String>> findVideoStreaming(String url,String token,String filepath) throws Exception {
+	public static List<Map<String, String>> findVideoStreaming(String url,String token) throws Exception {
 	
 		List<Map<String, String>> videoDataInfo = BiliUtil.getVideoDataInfo(url);
 		List<Map<String, String>> res = new ArrayList<Map<String,String>>();
@@ -95,19 +102,21 @@ public class BiliUtil {
 			String filename = StringUtil.getFileName(map.get("title"), map.get("cid"));
 			if(Integer.valueOf(Global.bilibitstream) >=120 && quality.equals("1")) {
 				//执行DASH格式合并  默认取第一个  最大清晰度
-				Map<String, String> processing = processing(parseObject, map, filepath, filename);
+				Map<String, String> processing = processing(parseObject, map, filename);
 				res.add(processing);
 				return res;
 			}
 			//普通mp4
 			String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
 			if(Global.downtype.equals("http")) {
-				HttpUtil.downBiliFromUrl(video, filename+".mp4", filepath);
+//				HttpUtil.downBiliFromUrl(video, filename+".mp4", filepath);
+				HttpUtil.downBiliFromUrl(video, filename+".mp4", FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename));
 			}
 			if(Global.downtype.equals("a2")) {
 				Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
 			}
-			map.put("video", filepath+"/"+filename+".mp4");
+//			map.put("video", filepath+"/"+filename+".mp4");
+			map.put("video", FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename, Global.platform.bilibili.name()));
 			map.put("videoname", filename+".mp4");
 			res.add(map);
 		}
@@ -117,14 +126,27 @@ public class BiliUtil {
 		return res;
 	}
 	
-	private static Map<String, String> processing(JSONObject parseObject,Map<String, String> map,String filepath,String filename) throws Exception {
+	/**
+	 * 
+	 * 根据对应参数 下载视频 或者合并视频
+	 * 移除方法中参数 String filepath 2023/09/11
+	 * @param parseObject
+	 * @param map
+	 * @param filepath
+	 * @param filename
+	 * @return
+	 * @throws Exception
+	 */
+	private static Map<String, String> processing(JSONObject parseObject,Map<String, String> map,String filename) throws Exception {
 		//执行DASH格式合并  默认取第一个  最大清晰度
 		String video = parseObject.getJSONObject("data").getJSONObject("dash").getJSONArray("video").getJSONObject(0).getString("base_url");
 		String audio = parseObject.getJSONObject("data").getJSONObject("dash").getJSONArray("audio").getJSONObject(0).getString("base_url");
 		//创建临时目录用于合并生成
 		if(Global.downtype.equals("http")) {
 			//http  需要创建临时目录
-			String newpath =filepath+"/"+map.get("cid");
+//			String newpath =filepath+"/"+map.get("cid");
+			String newpath =FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), map.get("cid"));
+			String filepath =FileUtil.createDirFile("", ".mp4", filename,Global.platform.bilibili.name());
 			FileUtils.createDirectory(newpath);
 			HttpUtil.downBiliFromUrl(video, filename+"-video.m4s", newpath);
 			HttpUtil.downBiliFromUrl(audio, filename+"-audio.m4s", newpath);
@@ -148,7 +170,8 @@ public class BiliUtil {
 			ffmpegQueueEntity.setPendingfolder(a2path);
 			ffmpegQueueEntity.setAudiostatus("0");
 			ffmpegQueueEntity.setVideostatus("0");
-			ffmpegQueueEntity.setFilepath(filepath+"/"+filename+".mp4");
+			ffmpegQueueEntity.setFilepath(FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename,Global.platform.bilibili.name()));
+//			ffmpegQueueEntity.setFilepath(filepath+"/"+filename+".mp4");
 			ffmpegQueueEntity.setStatus("0");
 			ffmpegQueueEntity.setCreatetime(DateUtils.getDateTime());
 			biliUtil.ffmpegQueueDao.save(ffmpegQueueEntity);
@@ -173,7 +196,8 @@ public class BiliUtil {
 			biliUtil.ffmpegQueueDataDao.save(audioData);
 			//创建完成交由数据库处理
 		}
-		map.put("video", filepath+"/"+filename+".mp4");
+//		map.put("video", filepath+"/"+filename+".mp4");
+		map.put("video", FileUtil.createDirFile(FileUtil.uploadRealPath,".mp4",filename,Global.platform.bilibili.name()));
 		map.put("videoname", filename+".mp4");
 		return map;
 	}
@@ -196,7 +220,6 @@ public class BiliUtil {
 		}
 		String serchPersion = HttpUtil.getSerchPersion(api, "UTF-8");
 		JSONObject videoData = JSONObject.parseObject(serchPersion);
-		System.out.println(serchPersion);
 		if(videoData.getString("code").equals("0")) {		
 			//优化多集问题 从page 里取
 			
@@ -329,7 +352,7 @@ public class BiliUtil {
 		//video/BV1mz4y1q7Pb
 		///video/BV1qM4y1w716
 
-		List<Map<String, String>> findVideoStreaming = BiliUtil.findVideoStreaming("/video/BV1mz4y1q7Pb","cookie","D:\\flower\\uploadFile");
+		List<Map<String, String>> findVideoStreaming = BiliUtil.findVideoStreaming("/video/BV1mz4y1q7Pb","cookie");
 		System.out.println(findVideoStreaming);
 	}
 }

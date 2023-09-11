@@ -65,4 +65,9 @@ public class Global {
 	public static String tiktokCookie="";
 	
 	public static String analysiSserver="https://spirit.lifeer.xyz";
+	
+	public static enum platform{
+		bilibili,
+		douyin;
+	}
 }

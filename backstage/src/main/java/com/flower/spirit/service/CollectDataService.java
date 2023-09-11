@@ -210,7 +210,7 @@ public class CollectDataService {
 					String cid = map.get("cid");
 					List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(cid);
 					if(findByVideoid.size() == 0) {
-						Map<String, String> findVideoStreaming =  BiliUtil.findVideoStreamingNoData(map,"/video/"+bvid,Global.bilicookies,videofile,map.get("quality"));
+						Map<String, String> findVideoStreaming =  BiliUtil.findVideoStreamingNoData(map,Global.bilicookies,map.get("quality"));
 						String coverunaddr =  savefile+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
 						String videounaddr =  savefile+"video/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
 						 //封面down

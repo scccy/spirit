@@ -7,11 +7,35 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import com.flower.spirit.config.Global;
 
+@Component
 public class FileUtil {
 	
 	
+    /**
+     * 映射路径
+     */
+	public static String savefile;
+    
+    /**
+     * 文件储存真实路径
+     */
+    public static String uploadRealPath;
+	
+    @Value("${file.save}")
+    public void setSavefile(String savefile) {
+    	FileUtil.savefile =savefile;
+    }
+    @Value("${file.save.path}")
+    public void setUploadRealPath(String uploadRealPath) {
+    	FileUtil.uploadRealPath =uploadRealPath;
+    }
 	
 	/**
 	 * 创建目录文件 并返回路径
@@ -31,6 +55,17 @@ public class FileUtil {
 	}
 	
 
+	public  static String createTemporaryDirectory(String platform,String filename) {
+		String datepath = DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
+		String videofile = uploadRealPath+System.getProperty("file.separator")
+						   +platform
+						   +System.getProperty("file.separator")
+						   +datepath
+						   +System.getProperty("file.separator")
+						   +filename;
+		return videofile;
+	}
+	
 	
 	/**
      * 复制文件夹
