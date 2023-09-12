@@ -99,10 +99,10 @@ public class FfmpegQueueService {
 					
 				}
 				//执行合并任务
-				System.out.println("ffmpeg -i "+video+" -i "+audio+" -c:v copy -c:a copy -f mp4 "+entity.getFilepath());
 				CommandUtil.command("ffmpeg -i "+video+" -i "+audio+" -c:v copy -c:a copy -f mp4 "+entity.getFilepath());
 				//删除任务
-				FileUtils.deleteDirectory(entity.getPendingfolder());
+				FileUtils.deleteFile(video);
+				FileUtils.deleteFile(audio);
 				//合并结束修改装改
 				entity.setStatus("1");
 				ffmpegQueueDao.save(entity);

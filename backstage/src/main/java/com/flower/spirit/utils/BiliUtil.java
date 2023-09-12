@@ -63,7 +63,7 @@ public class BiliUtil {
 		String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 		JSONObject parseObject = JSONObject.parseObject(httpGetBili);
 		String filename = StringUtil.getFileName(videoDataInfo.get("title"), videoDataInfo.get("cid"));
-		if(Integer.valueOf(Global.bilibitstream) >=120 && quality.equals("1")) {
+		if(Integer.valueOf(Global.bilibitstream) >=80 && quality.equals("1")) {
 			//执行DASH格式合并  默认取第一个  最大清晰度
 //			Map<String, String> processing = processing(parseObject, videoDataInfo, filepath, filename);
 			Map<String, String> processing = processing(parseObject, videoDataInfo, filename);
@@ -101,14 +101,14 @@ public class BiliUtil {
 			String httpGetBili = HttpUtil.httpGetBili(api, "UTF-8", token);
 			JSONObject parseObject = JSONObject.parseObject(httpGetBili);
 			String filename = StringUtil.getFileName(map.get("title"), map.get("cid"));
-			if(Integer.valueOf(Global.bilibitstream) >=120 && quality.equals("1")) {
+			if(Integer.valueOf(Global.bilibitstream) >=80 && quality.equals("1")) {
 				//执行DASH格式合并  默认取第一个  最大清晰度
 				Map<String, String> processing = processing(parseObject, map, filename);
 				res.add(processing);
 				return res;
 			}
 			//普通mp4
-			String video = parseObject.getJSONObject("data").getJSONArray("durl").getJSONObject(0).getString("url");
+			String video = parseObject.getJSONObject("data").getJSONArray("dash").getJSONObject(0).getString("url");
 			if(Global.downtype.equals("http")) {
 //				HttpUtil.downBiliFromUrl(video, filename+".mp4", filepath);
 				HttpUtil.downBiliFromUrl(video, filename+".mp4", FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename));
@@ -195,7 +195,7 @@ public class BiliUtil {
 			audioData.setTaskid(JSONObject.parseObject(audiores).getString("result"));
 			audioData.setFiletype("a");
 			audioData.setStatus("0");
-			audioData.setFilepath(FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(),filename)+"/"+"-audio.m4s");
+			audioData.setFilepath(FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(),filename)+"/"+filename+"-audio.m4s");
 			audioData.setCreatetime(DateUtils.getDateTime());
 			biliUtil.ffmpegQueueDataDao.save(audioData);
 			//创建完成交由数据库处理

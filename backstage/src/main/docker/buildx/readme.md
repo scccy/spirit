@@ -7,10 +7,10 @@
 	docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t qingfeng2336/spirit:cors --push -f ./Dockerfile .
     
 
-	docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t qingfeng2336/spirit:steam --push -f ./Dockerfile.steam .
+	docker buildx build --platform linux/arm,linux/arm64,linux/amd64 -t qingfeng2336/spirit:steam --push -f ./Dockerfile.steam .     i386 arm 32 不支持  arm64 会造成ffmpeg 异常 没能力搞 
 
 
-	docker buildx build --platform linux/arm64,linux/amd64 -t qingfeng2336/spirit:steam --push -f ./Dockerfile.steam .
+	docker buildx build --platform linux/amd64 -t qingfeng2336/spirit:steam --push -f ./Dockerfile.steam .
 ## 映射目录
 
 /resources/video   to download addr

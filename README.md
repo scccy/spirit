@@ -11,10 +11,61 @@
 /app/resources/cover
 
 优化成
-/app/resources/{platform}/{yyyyMM}/{name}/{name}.mp4
-/app/resources/{platform}/{yyyyMM}/{name}/{name}.jpg
+/app/resources/{platform}/{yyyy}/{MM}/{name}/{name}.mp4
+/app/resources/{platform}/{yyyy}/{MM}/{name}/{name}.jpg
 
 也就是说将 图片和视频 放在一个文件夹下 方便手工管理
+
+
+目前已推送至dev 分支及steam分支
+
+没有wallpaperx需求不要使用steam分支 
+
+旧版本目录路径最后版本号为0.0.3 
+
+后续dev 测试完成后会合并到latest 分支
+
+```
+
+### docker cli
+#### 旧版本 0.0.3
+```
+docker run --name spirit -d -p 28081:28081 -v /home/spirit/log:/app/log -v /home/spirit/video:/app/resources/video -v /home/spirit/cover:/app/resources/cover -v /home/spirit/db:/app/db -v /home/spirit/tmp:/tmp qingfeng2336/spirit:latest
+```
+#### 新版本(dev,steam) 
+```
+docker run --name spirit -d -p 28081:28081 -v /home/spirit/log:/app/log -v /home/spirit:/app/resources -v /home/spirit/db:/app/db -v /home/spirit/tmp:/tmp qingfeng2336/spirit:latest
+```
+
+目前latest 分支版本还是0.0.3
+如果想从旧版本 升级到最新版的话  不要取消video  和cover 目录 
+
+0.0.3 版本会存在一些bug 会划分到latest 分支进行修复 
+
+0.0.3 已知遗留问题
+当Aria2下载目录与本镜像挂载目录不一致时 下载B站视频需要ffmpeg进行合并的 会造成合并失败
+当B站视频下载时候 单个视频会出现清晰度选择错误 造成无法下载
+
+### steamn分支介绍
+```
+   注意此分支目前加入了 steamcmd 并且构建镜像从alpine变更为ubuntu 并且不再支持arm架构
+
+   此分支不支持 steam手机令牌验证  目前仅支持没有验证后者邮箱验证
+
+   部署之后进入容器 
+   执行 steamcmd
+   输入 login account password
+   如果有邮箱验证的话steamcmd 会要求输入邮箱验证
+   登录完成后关闭终端
+
+   之后在挂载目录 的db 文件夹下新建account.txt文件
+   内容为
+      account:xxxxx
+      password:xxxxx
+   之后重启容器即可
+
+   之后像接口推送https://steamcommunity.com/sharedfiles/filedetails/?id=1234567这样的链接即可下载
+
 
 ```
 
