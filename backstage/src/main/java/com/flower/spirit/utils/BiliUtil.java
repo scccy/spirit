@@ -147,17 +147,18 @@ public class BiliUtil {
 		if(Global.downtype.equals("http")) {
 			//http  需要创建临时目录
 //			String newpath =filepath+"/"+map.get("cid");
-			String newpath =FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), map.get("cid"));
-			String filepath =FileUtil.createDirFile("", ".mp4", filename,Global.platform.bilibili.name());
+			String newpath =FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename,"/app/resources");
+			String filepath =FileUtil.createDirFile("/app/resources", ".mp4", filename,Global.platform.bilibili.name());
 			FileUtils.createDirectory(newpath);
 			HttpUtil.downBiliFromUrl(video, filename+"-video.m4s", newpath);
 			HttpUtil.downBiliFromUrl(audio, filename+"-audio.m4s", newpath);
 			//此处可以直接合并 由于http 不是异步
 			//ffmpeg -i video.m4s -i audio.m4s -c:v copy -c:a copy -f mp4 Download_video.mp4
-			CommandUtil.command("ffmpeg -i "+newpath+File.separator+filename+"-video.m4s -i "+newpath+File.separator+filename+"-audio.m4s -c:v copy -c:a copy -f mp4 "+filepath+"/"+filename+".mp4");
+			//System.out.println("ffmpeg -i "+newpath+File.separator+filename+"-video.m4s -i "+newpath+File.separator+filename+"-audio.m4s -c:v copy -c:a copy -f mp4 "+filepath);
+			CommandUtil.command("ffmpeg -i "+newpath+File.separator+filename+"-video.m4s -i "+newpath+File.separator+filename+"-audio.m4s -c:v copy -c:a copy -f mp4 "+filepath);
 			//删除
-			FileUtils.deleteDirectory(newpath);
-			
+			FileUtils.deleteDirectory(newpath+File.separator+filename+"-video.m4s");
+			FileUtils.deleteDirectory(newpath+File.separator+filename+"-audio.m4s");
 		}
 		if(Global.downtype.equals("a2")) {
 			//a2 不需要 目录有a2托管  此处路径应该可以优化

@@ -212,10 +212,13 @@ public class CollectDataService {
 					List<VideoDataEntity> findByVideoid = videoDataService.findByVideoid(cid);
 					if(findByVideoid.size() == 0) {
 						Map<String, String> findVideoStreaming =  BiliUtil.findVideoStreamingNoData(map,Global.bilicookies,map.get("quality"));
-						String coverunaddr =  savefile+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
-						String videounaddr =  savefile+"video/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+findVideoStreaming.get("videoname");//映射
+						//String coverunaddr =  savefile+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
+						String videounaddr =  savefile+"bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+"/"+findVideoStreaming.get("videoname");//映射
 						 //封面down
-						HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+						String coverunaddr = FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename, savefile);
+						//String videounaddr = FileUtil.createDirFile(savefile,".mp4",filename,Global.platform.bilibili.name());
+						//HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), filename+".jpg", uploadRealPath+"cover/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
+						HttpUtil.downBiliFromUrl(findVideoStreaming.get("pic"), filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename, uploadRealPath));
 						//封面down
 						VideoDataEntity videoDataEntity = new VideoDataEntity(findVideoStreaming.get("cid"),findVideoStreaming.get("title"), findVideoStreaming.get("desc"), "哔哩", coverunaddr+"/"+filename+".jpg", findVideoStreaming.get("video"),videounaddr,bvid);
 					    videoDataDao.save(videoDataEntity);
