@@ -66,6 +66,8 @@ public class Global {
 	
 	public static String analysiSserver="https://spirit.lifeer.xyz";
 	
+	public static String wallpaperid ="431960";
+	
 	public static enum platform{
 		bilibili,
 		douyin;

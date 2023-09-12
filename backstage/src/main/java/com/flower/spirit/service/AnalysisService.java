@@ -1,6 +1,12 @@
 package com.flower.spirit.service;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -11,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.dao.VideoDataDao;
@@ -18,9 +26,11 @@ import com.flower.spirit.entity.ProcessHistoryEntity;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.utils.Aria2Util;
 import com.flower.spirit.utils.BiliUtil;
+import com.flower.spirit.utils.CommandUtil;
 import com.flower.spirit.utils.DateUtils;
 import com.flower.spirit.utils.DouUtil;
 import com.flower.spirit.utils.FileUtil;
+import com.flower.spirit.utils.FileUtils;
 import com.flower.spirit.utils.HttpUtil;
 import com.flower.spirit.utils.StringUtil;
 import com.flower.spirit.utils.URLUtil;
@@ -84,12 +94,68 @@ public class AnalysisService {
 	}
 	
 	/**
+	 * 不支持 从本处登录帐号并验证 二次令牌 请先使用 docker exec 进行登录帐号 在配置帐号密码进行下载
 	 * 支持从steam 工坊下载
 	 * @param video
+	 * @throws IOException 
 	 */
-	private void steamwork(String video) {
-		
-		
+	private void steamwork(String video) throws IOException {
+		File file = new File("/app/db/account.txt");
+//		File file = new File("D:\\home\\spirit\\db\\account.txt");
+		if(file.exists()) {
+			String account ="";
+			String password ="";
+	        BufferedReader reader = null;
+	        try {
+	            reader = new BufferedReader(new FileReader(file));
+	            String readStr;
+	            while ((readStr = reader.readLine()) != null) {
+	            	if(readStr.contains("account")) {
+	            		 account = readStr.replaceAll("account:", "");
+	            	}
+	            	if(readStr.contains("password")) {
+	            		password = readStr.replaceAll("password:", "");
+	           	}
+	            }
+	            reader.close();
+
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } finally {
+	            if (reader != null) {
+	                try {
+	                    reader.close();
+	                } catch (IOException e1) {
+	                    e1.printStackTrace();
+	                }
+	            }
+	        }
+	        String wallpaperId = getWallpaperId(video);
+			String steamcmd = CommandUtil.steamcmd(account,password,wallpaperId);
+			if(!steamcmd.equals("")) {
+				//下载完成 cp 文件
+				logger.info("ok");
+				String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyyMM");
+				FileUtils.createDirectory(localapp);
+				CommandUtil.command("mv "+steamcmd+" "+localapp);
+//				复制完成 建档
+				String json = localapp+"/"+wallpaperId+"/project.json";
+				try {
+					String jsonContent = new String(Files.readAllBytes(Paths.get(json)));
+					JSONObject jsonObject = JSON.parseObject(jsonContent);
+					String filename = jsonObject.getString("file");
+					String previewname = jsonObject.getString("preview");
+					String title = jsonObject.getString("title");
+					String cosaddr = savefile+"/wallpaper/"+DateUtils.getDate("yyyyMM")+"/"+wallpaperId;
+					VideoDataEntity videoDataEntity = new VideoDataEntity(wallpaperId,title,title, "wallpaper", cosaddr+"/"+previewname, localapp+"/"+filename,cosaddr+"/"+filename,video);
+				    videoDataDao.save(videoDataEntity);
+				     logger.info("下载流程结束");
+				} catch (IOException e) {
+					logger.info("建档异常-");
+				}
+			}
+		}
+
 	}
 
 	/**
@@ -260,7 +326,26 @@ public class AnalysisService {
 		return URLUtil.urlAnalysis(input);
     }
 
-	
-	
-	
+	private String getWallpaperId(String url) {
+		 // 创建正则表达式模式，匹配id参数的值
+        Pattern pattern = Pattern.compile("\\?id=(\\d+)");
+        Matcher matcher = pattern.matcher(url);
+
+        if (matcher.find()) {
+            // 提取id的值
+            String idValue = matcher.group(1);
+            return idValue;
+        } else {
+            System.out.println("ID not found in the URL.");
+        }
+		return null;
+	}
+	public static void main(String[] args) throws IOException {
+		String jsonContent = new String(Files.readAllBytes(Paths.get("D:/home/spirit/resources/wallpaper/202309/3031712532/project.json")));
+		JSONObject jsonObject = JSON.parseObject(jsonContent);
+		String filename = jsonObject.getString("file");
+		String previewname = jsonObject.getString("preview");
+		String title = jsonObject.getString("title");
+		System.out.println(filename);
+	}
 }
