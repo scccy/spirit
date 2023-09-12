@@ -1,52 +1,42 @@
-######## BUILDER ########
-
-# Set the base image
 FROM steamcmd/steamcmd:ubuntu-20 as builder
 
-# Set environment variables
 ENV USER root
 ENV HOME /root/installer
 
-# Set working directory
 WORKDIR $HOME
 
-# Install prerequisites
 RUN apt-get update \
  && apt-get install -y --no-install-recommends curl tar
 
-# Donload and unpack installer
 RUN curl http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
     --output steamcmd.tar.gz --silent
 RUN tar -xvzf steamcmd.tar.gz && rm steamcmd.tar.gz
 
-######## INSTALL ########
-
+# Set the base image
 FROM alpine
+RUN apk update
+RUN apk add --no-cache bash 
+RUN apk add --no-cache openjdk11-jre 
+RUN apk add ffmpeg 
+RUN rm -rf /var/cache/apk/*
 
-ENV UID=1000
-ENV GID=1000
-ENV UMASK=022
-ENV USERNAME=spiritapp
-
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
-    apk upgrade --update-cache && \
-    apk add openjdk8 && \
-    apk add bash && \
-    apk add ffmpeg && \
-    rm -rf /tmp/* /var/cache/apk/*
-
+# Copy steamcmd files from builder
 COPY --from=builder /root/installer/steamcmd.sh /usr/lib/games/steam/
 COPY --from=builder /root/installer/linux32/steamcmd /usr/lib/games/steam/
 COPY --from=builder /usr/games/steamcmd /usr/bin/steamcmd
 
+# Copy required files from builder
 COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /lib/i386-linux-gnu /lib/
-# COPY --from=builder /root/installer/linux32/libstdc++.so.6 /lib/
+COPY --from=builder /root/installer/linux32/libstdc++.so.6 /lib/
 
+# Update SteamCMD and verify latest version
 RUN steamcmd +quit
-
+# 挂载目录
 VOLUME ["/tmp","/app"]
+##构建基础应用
 COPY db /home/app/db/
 RUN mkdir -p /app/resources
 ADD spirit-0.0.1-SNAPSHOT.jar app.jar
+## 启动进程
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar","--spring.profiles.active=docker"]
