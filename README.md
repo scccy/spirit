@@ -17,14 +17,22 @@
 也就是说将 图片和视频 放在一个文件夹下 方便手工管理
 
 
-目前已推送至dev 分支及steam分支
 
-没有wallpaperx需求不要使用steam分支 
+
+没有wallpaper需求不要使用steam分支 
 
 旧版本目录路径最后版本号为0.0.3 
 
-后续dev 测试完成后会合并到latest 分支
+dev steam分支 已合并到lastest分支
 
+```
+### 测试方式
+```
+下载视频 各一个  下载方式 Aria2和http 内建各一次
+下载收藏夹/作品(大小100个以内) 各一个  下载方式 Aria2和http 内建各一次
+
+steam 分支
+下载壁纸一次
 ```
 
 ### docker cli
@@ -42,7 +50,7 @@ docker run --name spirit -d -p 28081:28081 -v /home/spirit/log:/app/log -v /home
 
 0.0.3 版本会存在一些bug 会划分到latest 分支进行修复 
 
-0.0.3 已知遗留问题
+0.0.3 已知遗留问题 由于未做源码分支管理 故不再修复
 当Aria2下载目录与本镜像挂载目录不一致时 下载B站视频需要ffmpeg进行合并的 会造成合并失败
 当B站视频下载时候 单个视频会出现清晰度选择错误 造成无法下载
 
@@ -298,3 +306,9 @@ https://github.com/SocialSisterYi/bilibili-API-collect
 https://toscode.gitee.com/zong_zh/parsing-tiktok-video
 
 https://github.com/Johnserf-Seed/TikTokDownload
+
+
+### 感谢
+ [JetBrains](https://jb.gg/OpenSourceSupport/?from=https://github.com/lemon8866/spirit) 提供 [Licenses for Open Source Development](https://www.jetbrains.com/community/opensource/#support)
+
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)](https://www.jetbrains.com/?from=https://github.com/lemon8866/spirit)
