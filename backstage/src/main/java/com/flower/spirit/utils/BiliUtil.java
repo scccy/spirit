@@ -161,7 +161,8 @@ public class BiliUtil {
 		}
 		if(Global.downtype.equals("a2")) {
 			//a2 不需要 目录有a2托管  此处路径应该可以优化
-			String a2path= Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+map.get("cid");
+//			String a2path= Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+map.get("cid");
+			String a2path = FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(),filename, Global.down_path);
 			String videores = Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(video,a2path , filename+"-video.m4s", Global.a2_token));
 			String audiores = Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(audio,a2path , filename+"-audio.m4s", Global.a2_token));
 			//保存到FfmpegQueueEntity队列
@@ -169,7 +170,8 @@ public class BiliUtil {
 			FfmpegQueueEntity ffmpegQueueEntity = new FfmpegQueueEntity();
 			ffmpegQueueEntity.setVideoid(map.get("cid"));
 			ffmpegQueueEntity.setVideoname(map.get("title"));
-			ffmpegQueueEntity.setPendingfolder(a2path);
+//			ffmpegQueueEntity.setPendingfolder(a2path);
+			ffmpegQueueEntity.setPendingfolder(FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(),filename));
 			ffmpegQueueEntity.setAudiostatus("0");
 			ffmpegQueueEntity.setVideostatus("0");
 			ffmpegQueueEntity.setFilepath(FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename,Global.platform.bilibili.name()));
@@ -183,7 +185,7 @@ public class BiliUtil {
 			videoData.setTaskid(JSONObject.parseObject(videores).getString("result"));
 			videoData.setFiletype("v");
 			videoData.setStatus("0");
-			videoData.setFilepath(a2path+File.separator+filename+"-video.m4s");
+			videoData.setFilepath(FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(),filename)+"/"+filename+"-video.m4s");
 			videoData.setCreatetime(DateUtils.getDateTime());
 			biliUtil.ffmpegQueueDataDao.save(videoData);
 			
@@ -193,7 +195,7 @@ public class BiliUtil {
 			audioData.setTaskid(JSONObject.parseObject(audiores).getString("result"));
 			audioData.setFiletype("a");
 			audioData.setStatus("0");
-			audioData.setFilepath(a2path+File.separator+filename+"-audio.m4s");
+			audioData.setFilepath(FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(),filename)+"/"+"-audio.m4s");
 			audioData.setCreatetime(DateUtils.getDateTime());
 			biliUtil.ffmpegQueueDataDao.save(audioData);
 			//创建完成交由数据库处理
@@ -354,7 +356,7 @@ public class BiliUtil {
 		//video/BV1mz4y1q7Pb
 		///video/BV1qM4y1w716
 
-		List<Map<String, String>> findVideoStreaming = BiliUtil.findVideoStreaming("/video/BV1mz4y1q7Pb","cookie");
-		System.out.println(findVideoStreaming);
+		String a2path = FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), Global.down_path);
+		System.out.println(a2path);
 	}
 }

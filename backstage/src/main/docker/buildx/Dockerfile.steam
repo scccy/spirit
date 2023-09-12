@@ -1,37 +1,28 @@
-FROM steamcmd/steamcmd:ubuntu-20 as builder
+FROM ubuntu:18.04
 
-ENV USER root
-ENV HOME /root/installer
+# Insert Steam prompt answers
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN echo steam steam/question select "I AGREE" | debconf-set-selections \
+ && echo steam steam/license note '' | debconf-set-selections
 
-WORKDIR $HOME
+# Update the repository and install SteamCMD
+ARG DEBIAN_FRONTEND=noninteractive
+RUN dpkg --add-architecture i386 \
+ && apt-get update -y \
+ && apt-get install -y --no-install-recommends ca-certificates locales steamcmd ffmpeg openjdk-8-jre \
+ && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update \
- && apt-get install -y --no-install-recommends curl tar
+# Add unicode support
+RUN locale-gen en_US.UTF-8
+ENV LANG 'en_US.UTF-8'
+ENV LANGUAGE 'en_US:en'
 
-RUN curl http://media.steampowered.com/installer/steamcmd_linux.tar.gz \
-    --output steamcmd.tar.gz --silent
-RUN tar -xvzf steamcmd.tar.gz && rm steamcmd.tar.gz
-
-# Set the base image
-FROM alpine
-RUN apk update
-RUN apk add --no-cache bash 
-RUN apk add --no-cache openjdk11-jre 
-RUN apk add ffmpeg 
-RUN rm -rf /var/cache/apk/*
-
-# Copy steamcmd files from builder
-COPY --from=builder /root/installer/steamcmd.sh /usr/lib/games/steam/
-COPY --from=builder /root/installer/linux32/steamcmd /usr/lib/games/steam/
-COPY --from=builder /usr/games/steamcmd /usr/bin/steamcmd
-
-# Copy required files from builder
-COPY --from=builder /etc/ssl/certs /etc/ssl/certs
-COPY --from=builder /lib/i386-linux-gnu /lib/
-COPY --from=builder /root/installer/linux32/libstdc++.so.6 /lib/
+# Create symlink for executable
+RUN ln -s /usr/games/steamcmd /usr/bin/steamcmd
 
 # Update SteamCMD and verify latest version
 RUN steamcmd +quit
+
 # 挂载目录
 VOLUME ["/tmp","/app"]
 ##构建基础应用
