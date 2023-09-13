@@ -25,7 +25,7 @@
 
 dev steam分支 已合并到lastest分支
 
-steam分支下载wallpaper 有问题 建议先不要使用
+steam分支下载wallpaper 建议先不要使用 因为账号不能设置任何令牌 暂时没有解决 
 ```
 ### 测试方式
 ```
@@ -59,12 +59,11 @@ docker run --name spirit -d -p 28081:28081 -v /home/spirit/log:/app/log -v /home
 ```
    注意此分支目前加入了 steamcmd 并且构建镜像从alpine变更为ubuntu 并且不再支持arm架构
 
-   此分支不支持 steam手机令牌验证  目前仅支持没有验证后者邮箱验证
+   此分支不支持 steam手机令牌验证  目前仅支持没有验证
 
    部署之后进入容器 
    执行 steamcmd
    输入 login account password
-   如果有邮箱验证的话steamcmd 会要求输入邮箱验证
    登录完成后关闭终端
 
    之后在挂载目录 的db 文件夹下新建account.txt文件
