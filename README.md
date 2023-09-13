@@ -25,6 +25,7 @@
 
 dev steam分支 已合并到lastest分支
 
+steam分支下载wallpaper 有问题 建议先不要使用
 ```
 ### 测试方式
 ```
