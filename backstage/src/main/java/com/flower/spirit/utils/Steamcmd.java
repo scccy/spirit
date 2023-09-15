@@ -3,6 +3,7 @@ package com.flower.spirit.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -32,7 +33,7 @@ public class Steamcmd {
             command.add("steamcmd");
             command.add("-X");
             command.add("stuff");
-            command.add("workshop_download_item 431960 3034703990\r");
+            command.add("workshop_download_item 431960 "+wallpaper+"\r");
             ProcessBuilder processBuilder = new ProcessBuilder(command);
 			Process process = processBuilder.start();
             InputStream inputStream = process.getInputStream();
@@ -59,7 +60,7 @@ public class Steamcmd {
 			boolean checkfile =  false;
 			while(i <checklog) {
 				File file = new File(workshoplog);
-				if(file.exists()) {
+				if(file.exists() && file.length() >10) {
 					checkfile = true;
 					break;
 				}
@@ -80,8 +81,18 @@ public class Steamcmd {
 			            reader = new BufferedReader(new FileReader(file));
 			            String readStr;
 			            while ((readStr = reader.readLine()) != null) {
+//			            	logger.info("-----------------------------------start");
+//			            	logger.info(readStr);
+//			            	logger.info(a);
+//			            	logger.info(Boolean.toString(readStr.contains(a)));
+//			            	logger.info("-----------------------------------end");
 			            	if(readStr.contains(a)) {
 			            		success = true;
+			            		//清空log
+			            		FileWriter fileWriter =new FileWriter(file);
+			                    fileWriter.write("");  //写入空
+			                    fileWriter.flush();
+			                    fileWriter.close();
 			            		break;
 			            	}
 			            }
@@ -101,8 +112,7 @@ public class Steamcmd {
 					Thread.sleep(1000*10);
 					//文件路径为
 					String path = workdown+wallpepr;
-					//删除log
-					FileUtils.deleteFile(workshoplog);
+//					FileUtils.deleteFile(workshoplog);
 					logger.info("处理完成---前端处理");
 					return path;
 				}else {
@@ -119,6 +129,16 @@ public class Steamcmd {
 		return null;
 	}
 	
+	
+	public static void main(String[] args) {
+		File file = new File("D://home//spirit//1.txt");
+		System.out.println(file.length());
+		if (file.exists() && file.isFile() && file.length() == 0) {
+			System.out.println("The txt file is empty.");
+		} else {
+			System.out.println("The txt file is not empty.");
+		}
+	}
 	
 
 }

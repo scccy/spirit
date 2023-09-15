@@ -273,45 +273,32 @@ public class AnalysisService {
 	 */
 	public void putRecord(String awemeId,String desc,String playApi,String cover,String platform,String originaladdress,String type,String cookie) {
 		String filename = StringUtil.getFileName(desc, awemeId);
-//	    String videofile = Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
-//      String videounrealaddr = savefile+"video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
-//      String coverunaddr =  savefile+"cover/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".jpg";
 		String videofile = FileUtil.createDirFile(Global.down_path, ".mp4", filename, Global.platform.douyin.name());
 	    String videounrealaddr = FileUtil.createDirFile(FileUtil.savefile, ".mp4", filename, Global.platform.douyin.name());
         String coverunaddr = FileUtil.createDirFile(FileUtil.savefile, ".jpg", filename, Global.platform.douyin.name());
 		if(type.equals("client")) {
 			    logger.info("已使用htmlunit进行解析,下载器类型为:"+Global.downtype);
 		        if(Global.downtype.equals("a2")) {
-//		      	   Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, Global.down_path+"/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"), filename+".mp4", Global.a2_token));
 		           Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter("https:"+playApi, FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), filename, Global.down_path), filename+".mp4", Global.a2_token));
-//		      	   videofile = "/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		        }
 		        if(Global.downtype.equals("http")) {
 		        	//内置下载器
 		        	HttpUtil.downLoadFromUrl("https:"+playApi, filename+".mp4",FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), filename, FileUtil.uploadRealPath));
-		        	//HttpUtil.downLoadFromUrl("https:"+playApi, filename+".mp4","/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
-//		        	videofile = "/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 		        }
 		        videofile = FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename, Global.platform.douyin.name());
 		        //下载封面图当容器映射目录
-//		        HttpUtil.downLoadFromUrl("https:"+cover, filename+".jpg", uploadRealPath+"cover/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 		        HttpUtil.downLoadFromUrl("https:"+cover, filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), filename, uploadRealPath)+"/");
 		}
 		if(type.equals("api")) {
 			logger.info("已使用api进行解析,下载器类型为:"+Global.downtype);
 	        if(Global.downtype.equals("a2")) {
 		      	 Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(playApi, FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), filename, Global.down_path), filename+".mp4", Global.a2_token,cookie));
-		      	 //Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createDouparameter(playApi, FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), filename, Global.down_path), filename+".mp4", Global.a2_token,cookie));
-//		      	   videofile = "/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 	        }
 	        if(Global.downtype.equals("http")) {
 	        	//内置下载器
 	        	HttpUtil.downDouFromUrl(playApi, filename+".mp4",FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), filename, FileUtil.uploadRealPath),cookie);
-	        //	HttpUtil.downDouFromUrl(playApi, filename+".mp4","/app/resources/video/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"),cookie);
-//	        	videofile = "/app/resources/video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+filename+".mp4";
 	        }
 	        videofile = FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename, Global.platform.douyin.name());
-//	        HttpUtil.downLoadFromUrl(cover, filename+".jpg", uploadRealPath+"cover/douyin/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/");
 	        HttpUtil.downLoadFromUrl(cover, filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.douyin.name(), filename, uploadRealPath)+"/");
 		}
         //推送完成后建立历史资料  此处注意  a2 地址需要与spring boot 一致否则 无法打开视频
