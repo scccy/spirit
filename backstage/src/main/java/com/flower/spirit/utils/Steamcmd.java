@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +26,14 @@ public class Steamcmd {
 			ProcessBuilder wipe = new ProcessBuilder("screen", "-wipe");
 			wipe.start();
 			//向指定名称的screen 会话执行
-			ProcessBuilder processBuilder = new ProcessBuilder("screen","-x","steamcmd","-X","stuff","workshop_download_item","431960",wallpaper);
+            List<String> command = new ArrayList<>();
+            command.add("screen");
+            command.add("-x");
+            command.add("steamcmd");
+            command.add("-X");
+            command.add("stuff");
+            command.add("workshop_download_item 431960 3034703990\r");
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
 			Process process = processBuilder.start();
             InputStream inputStream = process.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
