@@ -54,6 +54,7 @@ public class Steamcmd {
 					break;
 				}
 				Thread.sleep(1000*30);
+				i++;
 			}
 			if(checkfile) {
 				//文件存在读日志 并监听 文件超过15分钟未完成 认为失败
@@ -83,6 +84,7 @@ public class Steamcmd {
 			        	break;
 			        }
 					Thread.sleep(1000*30);
+					y++;
 				}
 				if(success) {
 					//静止十秒 等待IO完成
@@ -94,7 +96,7 @@ public class Steamcmd {
 					logger.info("处理完成---前端处理");
 					return path;
 				}else {
-					logger.info("30分钟都没下完 一定出问题了");
+					logger.info("15分钟都没下完 一定出问题了");
 					return null;
 				}
 			}else {

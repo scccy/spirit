@@ -222,25 +222,17 @@ public class AnalysisService {
 	public void bilivideo(String platform,String  video) throws Exception {
 		  logger.info("bilivideo down");
 		  ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, video, platform);
-		  //String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
 		  try {
-//			 Map<String, String> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies, videofile);
 			 /*
 			  * bili 的下载 此方法内没有  只下了 封面 视频源文件下载 从findVideoStreaming方法中完成  
 			  * **/
 			 List<Map<String, String>> findVideoStreaming = BiliUtil.findVideoStreaming(video, Global.bilicookies);
 			 for(int i = 0;i<findVideoStreaming.size();i++) {
 				 Map<String, String> map = findVideoStreaming.get(i);
-				 String filename = StringUtil.getFileName(map.get("title"), map.get("cid"));
-				 
-//				 String coverunaddr =  savefile+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //映射
-//				 String videounaddr =  savefile+"video/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+map.get("videoname");//映射
-//				 
-				 
+				 String filename = StringUtil.getFileName(map.get("title"), map.get("cid"));		 
 				 String coverunaddr =  FileUtil.createDirFile(FileUtil.savefile, ".jpg", filename,Global.platform.bilibili.name());
 				 String videounaddr =  FileUtil.createDirFile(FileUtil.savefile, ".mp4", filename,Global.platform.bilibili.name());
 				 //封面down
-//				 HttpUtil.downBiliFromUrl(map.get("pic"), filename+".jpg", uploadRealPath+"cover/bilibili/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"));
 				 HttpUtil.downBiliFromUrl(map.get("pic"), filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.bilibili.name(), filename));
 				//封面down
 				 VideoDataEntity videoDataEntity = new VideoDataEntity(map.get("cid"),map.get("title"), map.get("desc"), platform, coverunaddr, map.get("video"),videounaddr,video);
