@@ -56,26 +56,8 @@ docker run --name spirit -d -p 28081:28081 -v /home/spirit/log:/app/log -v /home
 当B站视频下载时候 单个视频会出现清晰度选择错误 造成无法下载
 
 ### steamn分支介绍
-```
-   注意此分支目前加入了 steamcmd 并且构建镜像从alpine变更为ubuntu 并且不再支持arm架构
 
-   此分支不支持 steam手机令牌验证  目前仅支持没有验证
-
-   部署之后进入容器 
-   执行 steamcmd
-   输入 login account password
-   登录完成后关闭终端
-
-   之后在挂载目录 的db 文件夹下新建account.txt文件
-   内容为
-      account:xxxxx
-      password:xxxxx
-   之后重启容器即可
-
-   之后像接口推送https://steamcommunity.com/sharedfiles/filedetails/?id=1234567这样的链接即可下载
-
-
-```
+[部署方式](https://github.com/lemon8866/spirit/blob/main/doc/deployment.md "查看部署方式中 steam分支相关内容")
 
 ### 更新记录
 
