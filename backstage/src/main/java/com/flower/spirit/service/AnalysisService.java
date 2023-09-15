@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +34,7 @@ import com.flower.spirit.utils.DouUtil;
 import com.flower.spirit.utils.FileUtil;
 import com.flower.spirit.utils.FileUtils;
 import com.flower.spirit.utils.HttpUtil;
+import com.flower.spirit.utils.Steamcmd;
 import com.flower.spirit.utils.StringUtil;
 import com.flower.spirit.utils.URLUtil;
 
@@ -65,6 +68,11 @@ public class AnalysisService {
 	private ProcessHistoryService processHistoryService;
 	
 	
+	private ExecutorService steamcmd = Executors.newFixedThreadPool(1);
+	
+	private ExecutorService douyin = Executors.newFixedThreadPool(1);
+	
+	private ExecutorService bilibili = Executors.newFixedThreadPool(1);
 
 	/**解析资源
 	 * @param token
@@ -79,15 +87,34 @@ public class AnalysisService {
 			logger.info("解析开始~原地址:"+video);
 			String platform = this.getPlatform(video);
 			if(platform.equals("抖音")) {
-				this.dyvideo(platform, this.getUrl(video));
+				douyin.execute(() -> {
+					try {
+						this.dyvideo(platform, this.getUrl(video));
+					}catch (Exception e) {
+						
+					}
+				});
 				return;
 			}
 			if(platform.equals("哔哩")) {
-				this.bilivideo(platform, this.getUrl(video));
+				bilibili.execute(() -> {
+					try {
+						this.bilivideo(platform, this.getUrl(video));
+					}catch (Exception e) {
+						
+					}
+				});
 				return;
 			}
 			if(platform.equals("steam")) {
-				this.steamwork(video);
+				
+				steamcmd.execute(() -> {
+					try {
+						this.steamwork(video);
+					}catch (Exception e) {
+						
+					}
+				});
 				return;
 			}
 	       
@@ -101,7 +128,6 @@ public class AnalysisService {
 	 */
 	private void steamwork(String video) throws IOException {
 		File file = new File("/app/db/account.txt");
-//		File file = new File("D:\\home\\spirit\\db\\account.txt");
 		if(file.exists()) {
 			String account ="";
 			String password ="";
@@ -153,6 +179,35 @@ public class AnalysisService {
 				} catch (IOException e) {
 					logger.info("建档异常-");
 				}
+			}
+		}else {
+			//文件不存在 认为使用screen 模式 
+		    String wallpaperId = getWallpaperId(video);
+			try {
+				String execAndListening = Steamcmd.execAndListening(wallpaperId);
+				if(execAndListening != null) {
+					logger.info("ok");
+					String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
+					FileUtils.createDirectory(localapp);
+					CommandUtil.command("mv "+execAndListening+" "+localapp);
+//					复制完成 建档
+					String json = localapp+"/"+wallpaperId+"/project.json";
+					try {
+						String jsonContent = new String(Files.readAllBytes(Paths.get(json)));
+						JSONObject jsonObject = JSON.parseObject(jsonContent);
+						String filename = jsonObject.getString("file");
+						String previewname = jsonObject.getString("preview");
+						String title = jsonObject.getString("title");
+						String cosaddr = savefile+"/wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
+						VideoDataEntity videoDataEntity = new VideoDataEntity(wallpaperId,title,title, "wallpaper", cosaddr+"/"+previewname, localapp+"/"+filename,cosaddr+"/"+filename,video);
+					    videoDataDao.save(videoDataEntity);
+					     logger.info("下载流程结束");
+					} catch (IOException e) {
+						logger.info("建档异常-");
+					}
+				}
+			} catch (Exception e) {
+				logger.info("系统异常");
 			}
 		}
 
