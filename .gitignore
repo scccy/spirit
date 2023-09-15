@@ -29,3 +29,4 @@ buildNumber.properties
 /backstage/.settings/org.eclipse.m2e.core.prefs
 /backstage/.settings/org.eclipse.jdt.apt.core.prefs
 /app/uniapp/spirit/unpackage
+/app/desktop/spirit-app/package-lock.json
