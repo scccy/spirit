@@ -38,7 +38,7 @@
 		},
 		methods: {
 			palyVideo(e){
-				this.videoPlay =e;
+				this.videoPlay =encodeURI(e);
 				this.$refs.videoPlay.open()
 			},
 			getData(page) {
