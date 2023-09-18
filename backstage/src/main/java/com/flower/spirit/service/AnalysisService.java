@@ -157,6 +157,11 @@ public class AnalysisService {
 	            }
 	        }
 	        String wallpaperId = getWallpaperId(video);
+	        VideoDataEntity findByVideoid = findByVideoid(video,"wallpaper");
+	        if(findByVideoid != null) {
+	        	logger.info("重复ID 不下载");
+	        	return;
+	        }
 			String steamcmd = CommandUtil.steamcmd(account,password,wallpaperId);
 			if(!steamcmd.equals("")) {
 				//下载完成 cp 文件
@@ -175,7 +180,7 @@ public class AnalysisService {
 					String cosaddr = savefile+"/wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
 					VideoDataEntity videoDataEntity = new VideoDataEntity(wallpaperId,title,title, "wallpaper", cosaddr+"/"+previewname, localapp+"/"+filename,cosaddr+"/"+filename,video);
 				    videoDataDao.save(videoDataEntity);
-				     logger.info("下载流程结束");
+				    logger.info("下载流程结束");
 				} catch (IOException e) {
 					logger.info("建档异常-");
 				}
@@ -183,6 +188,11 @@ public class AnalysisService {
 		}else {
 			//文件不存在 认为使用screen 模式 
 		    String wallpaperId = getWallpaperId(video);
+	        VideoDataEntity findByVideoid = findByVideoid(video,"wallpaper");
+	        if(findByVideoid != null) {
+	        	logger.info("重复ID 不下载");
+	        	return;
+	        }
 			try {
 				String execAndListening = Steamcmd.execAndListening(wallpaperId);
 				if(execAndListening != null) {
@@ -375,8 +385,8 @@ public class AnalysisService {
 		return null;
 	}
 	
-	public VideoDataEntity findByVideoid(String id) {
-		 List<VideoDataEntity> findByVideoid = videoDataDao.findByVideoid(id);
+	public VideoDataEntity findByVideoid(String id,String platform) {
+		 List<VideoDataEntity> findByVideoid = videoDataDao.findByVideoidAndVideolatform(id,platform);
 		 if(findByVideoid.size()>1) {
 			 return findByVideoid.get(0);
 		 }

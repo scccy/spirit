@@ -16,6 +16,8 @@ public interface VideoDataDao extends PagingAndSortingRepository<VideoDataEntity
 
 	List<VideoDataEntity> findByVideoid(String videoid);
 
+	List<VideoDataEntity> findByVideoidAndVideolatform(String id, String platform);
+
 	
 
 }
