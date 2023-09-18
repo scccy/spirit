@@ -23,6 +23,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	private static Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
+	public static boolean deleteParentDirectorie(String path) {
+		File file = new File(path);
+		File parentDirectory = file.getParentFile();
+		return parentDirectory.delete();
+	}
+	
+	
 	/**
 	 * 复制单个文件，如果目标文件存在，则不覆盖
 	 * @param srcFileName 待复制的文件名

@@ -78,8 +78,10 @@ public class VideoDataService {
 		Optional<VideoDataEntity> findById = videoDataDao.findById(data.getId());
 		if(findById.isPresent()) {
 			VideoDataEntity videoDataEntity = findById.get();
-			FileUtils.deleteFile(videoDataEntity.getVideoaddr());
-			FileUtils.deleteFile(videoDataEntity.getVideocover().replace(savefile, uploadRealPath));
+			//新版 优化 此处可以修改为直接删除文件夹
+//			FileUtils.deleteFile(videoDataEntity.getVideoaddr()); 
+			FileUtils.deleteParentDirectorie(videoDataEntity.getVideoaddr());  //直接删除上级文件夹
+//			FileUtils.deleteFile(videoDataEntity.getVideocover().replace(savefile, uploadRealPath));
 			videoDataDao.deleteById(data.getId());
 		}
 		return new AjaxEntity(Global.ajax_success, "操作成功", null);
