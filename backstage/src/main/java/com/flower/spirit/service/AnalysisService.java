@@ -386,7 +386,7 @@ public class AnalysisService {
 	}
 	
 	public VideoDataEntity findByVideoid(String id,String platform) {
-		 List<VideoDataEntity> findByVideoid = videoDataDao.findByVideoidAndVideolatform(id,platform);
+		 List<VideoDataEntity> findByVideoid = videoDataDao.findByVideoidAndVideoplatform(id,platform);
 		 if(findByVideoid.size()>1) {
 			 return findByVideoid.get(0);
 		 }
