@@ -374,6 +374,16 @@ public class AnalysisService {
         }
 		return null;
 	}
+	
+	public VideoDataEntity findByVideoid(String id) {
+		 List<VideoDataEntity> findByVideoid = videoDataDao.findByVideoid(id);
+		 if(findByVideoid.size()>1) {
+			 return findByVideoid.get(0);
+		 }
+		return null;
+	}
+	
+	
 	public static void main(String[] args) throws IOException {
 		String jsonContent = new String(Files.readAllBytes(Paths.get("D:/home/spirit/resources/wallpaper/202309/3031712532/project.json")));
 		JSONObject jsonObject = JSON.parseObject(jsonContent);
