@@ -25,7 +25,7 @@
 
 dev steam分支 已合并到lastest分支
 
-steam分支下载wallpaper 建议先不要使用 因为账号不能设置任何令牌 暂时没有解决 
+steam分支下载wallpaper 请参照部署文档或者steam分支介绍
 ```
 ### 测试方式
 ```
