@@ -69,7 +69,7 @@ public class Steamcmd {
 			}
 			if(checkfile) {
 				//文件存在读日志 并监听 文件超过15分钟未完成 认为失败
-				int checkstatus = 30;
+				int checkstatus = 60;
 				int y = 0;
 				boolean success = false;
 				while(y<checkstatus) {
@@ -116,7 +116,7 @@ public class Steamcmd {
 					logger.info("处理完成---前端处理");
 					return path;
 				}else {
-					logger.info("15分钟都没下完 一定出问题了");
+					logger.info("30分钟都没下完 一定出问题了");
 					return null;
 				}
 			}else {

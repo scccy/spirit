@@ -26,7 +26,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	public static boolean deleteParentDirectorie(String path) {
 		File file = new File(path);
 		File parentDirectory = file.getParentFile();
-		return parentDirectory.delete();
+		return FileUtils.deleteDirectory(parentDirectory.getPath());
 	}
 	
 	
@@ -576,5 +576,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			return null;
 		}
 		return fileName.substring(0, fileName.lastIndexOf("."));
+	}
+	
+	public static void main(String[] args) {
+		FileUtils.deleteParentDirectorie("D:\\app\\cos\\userfiles\\1\\_thumbs\\images\\photo\\2023\\06\\2.jpg");
 	}
 }
