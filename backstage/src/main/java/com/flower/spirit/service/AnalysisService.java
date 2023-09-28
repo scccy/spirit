@@ -166,7 +166,7 @@ public class AnalysisService {
 			if(!steamcmd.equals("")) {
 				//下载完成 cp 文件
 				logger.info("ok");
-				String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
+				String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
 				FileUtils.createDirectory(localapp);
 				CommandUtil.command("mv "+steamcmd+" "+localapp);
 //				复制完成 建档
@@ -197,7 +197,7 @@ public class AnalysisService {
 				String execAndListening = Steamcmd.execAndListening(wallpaperId);
 				if(execAndListening != null) {
 					logger.info("ok");
-					String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
+					String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
 					FileUtils.createDirectory(localapp);
 					CommandUtil.command("mv "+execAndListening+" "+localapp);
 //					复制完成 建档
