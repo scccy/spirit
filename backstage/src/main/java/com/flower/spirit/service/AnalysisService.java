@@ -166,7 +166,7 @@ public class AnalysisService {
 			if(!steamcmd.equals("")) {
 				//下载完成 cp 文件
 				logger.info("ok");
-				String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
+				String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
 				FileUtils.createDirectory(localapp);
 				CommandUtil.command("mv "+steamcmd+" "+localapp);
 //				复制完成 建档
@@ -177,8 +177,8 @@ public class AnalysisService {
 					String filename = jsonObject.getString("file");
 					String previewname = jsonObject.getString("preview");
 					String title = jsonObject.getString("title");
-					String cosaddr = savefile+"/wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
-					VideoDataEntity videoDataEntity = new VideoDataEntity(wallpaperId,title,title, "wallpaper", cosaddr+"/"+previewname, localapp+"/"+filename,cosaddr+"/"+filename,video);
+					String cosaddr = savefile+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
+					VideoDataEntity videoDataEntity = new VideoDataEntity(wallpaperId,title,title, "wallpaper", cosaddr+"/"+previewname, localapp+"/"+wallpaperId+"/"+filename,cosaddr+"/"+filename,video);
 				    videoDataDao.save(videoDataEntity);
 				    logger.info("下载流程结束");
 				} catch (IOException e) {
@@ -197,7 +197,7 @@ public class AnalysisService {
 				String execAndListening = Steamcmd.execAndListening(wallpaperId);
 				if(execAndListening != null) {
 					logger.info("ok");
-					String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
+					String localapp = uploadRealPath+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
 					FileUtils.createDirectory(localapp);
 					CommandUtil.command("mv "+execAndListening+" "+localapp);
 //					复制完成 建档
@@ -208,8 +208,8 @@ public class AnalysisService {
 						String filename = jsonObject.getString("file");
 						String previewname = jsonObject.getString("preview");
 						String title = jsonObject.getString("title");
-						String cosaddr = savefile+"/wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
-						VideoDataEntity videoDataEntity = new VideoDataEntity(wallpaperId,title,title, "wallpaper", cosaddr+"/"+previewname, localapp+"/"+filename,cosaddr+"/"+filename,video);
+						String cosaddr = savefile+"wallpaper/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM")+"/"+wallpaperId;
+						VideoDataEntity videoDataEntity = new VideoDataEntity(wallpaperId,title,title, "wallpaper", cosaddr+"/"+previewname, localapp+"/"+wallpaperId+"/"+filename,cosaddr+"/"+filename,video);
 					    videoDataDao.save(videoDataEntity);
 					     logger.info("下载流程结束");
 					} catch (IOException e) {
