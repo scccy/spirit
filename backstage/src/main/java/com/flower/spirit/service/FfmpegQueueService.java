@@ -111,5 +111,10 @@ public class FfmpegQueueService {
 	}
 	
 	
+	public void clearTask() {
+		ffmpegQueueDao.deleteAll();
+		ffmpegQueueDataDao.deleteAll();
+	}
+	
 
 }

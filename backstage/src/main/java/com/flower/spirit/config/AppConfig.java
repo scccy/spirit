@@ -2,15 +2,19 @@ package com.flower.spirit.config;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.TikTokConfigEntity;
+import com.flower.spirit.service.AnalysisService;
 import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.DownloaderService;
+import com.flower.spirit.service.FfmpegQueueService;
 import com.flower.spirit.service.TikTokConfigService;
 
 /**
@@ -19,6 +23,8 @@ import com.flower.spirit.service.TikTokConfigService;
  */
 @Configuration
 public class AppConfig {
+	
+	private Logger logger = LoggerFactory.getLogger(AppConfig.class);
 	
 	@Autowired
 	private DownloaderService downloaderService;
@@ -32,6 +38,9 @@ public class AppConfig {
 	
 	@Autowired
 	private TikTokConfigService  tikTokConfigService;
+	
+	@Autowired
+	private FfmpegQueueService ffmpegQueueService;
 	
 	
 	@PostConstruct
@@ -57,6 +66,9 @@ public class AppConfig {
 		if(null != tiktok.getAnalysisserver() && !"".equals(tiktok.getAnalysisserver())) {
 			Global.analysiSserver =tiktok.getAnalysisserver();
 		}
+		//清空 ffmpeg 队列
+		ffmpegQueueService.clearTask();
+		logger.info("ffmpeg队列已清空");
 	}
 
 }
