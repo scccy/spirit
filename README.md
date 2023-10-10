@@ -47,7 +47,6 @@ latest steam dev 等分支 资源目录进行调整
 ### 更新计划
 - [ ] 修复后台端 由于文件名称存在中文等特殊符号无法显示缩略图的问题
 - [ ] 支持对网页内m3u8资源进行嗅探 并下载
-- [ ] 支持desktop 端提交功能
 
 ### 部署文档
 详情 请查看[部署方式](https://github.com/lemon8866/spirit/blob/main/doc/deployment.md "部署文档")
@@ -68,6 +67,9 @@ latest steam dev 等分支 资源目录进行调整
     小程序基于uniapp开发  直接发布一个体验版本的小程序即可  不要推正式版
     并打开小程序开发模式  跳过域名校验  即可使用
 ```
+###### 电脑配套端
+[win 桌面客户端](https://github.com/lemon8866/spirit/blob/main/app/desktop/spirit-app/build/spirit-app%200.0.1.exe "基于electron-vue")
+
 
 ###### 小程序界面或APP界面
 
