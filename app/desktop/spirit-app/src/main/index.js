@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron'
-import '../renderer/store'
+// import '../renderer/store'
 
 /**
  * Set `__static` path to static files in production
@@ -23,7 +23,7 @@ function createWindow () {
     useContentSize: true,
     width: 1000
   })
-
+  mainWindow.setMenu(null)
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
