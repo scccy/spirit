@@ -17,7 +17,7 @@ public class CommandUtil {
             if (System.getProperty("os.name").toLowerCase().contains("win")) {
                 processBuilder = new ProcessBuilder("cmd.exe", "/c", command);
             } else {
-                processBuilder = new ProcessBuilder("bash", "-c", command);
+                processBuilder = new ProcessBuilder("/bin/sh", "-c", command);
             }
 
             processBuilder.redirectErrorStream(true);

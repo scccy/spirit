@@ -68,7 +68,7 @@ public class FileUtil {
 
 	public  static String createTemporaryDirectory(String platform,String filename) {
 		String datepath = DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM");
-		String videofile = uploadRealPath+System.getProperty("file.separator")
+		String videofile = uploadRealPath
 						   +platform
 						   +System.getProperty("file.separator")
 						   +datepath
