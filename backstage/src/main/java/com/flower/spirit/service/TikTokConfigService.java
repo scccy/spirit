@@ -4,12 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.config.Global;
-import com.flower.spirit.dao.CollectdDataDetailDao;
 import com.flower.spirit.dao.TikTokConfigDao;
-import com.flower.spirit.entity.CollectDataDetailEntity;
 import com.flower.spirit.entity.TikTokConfigEntity;
 
 @Service

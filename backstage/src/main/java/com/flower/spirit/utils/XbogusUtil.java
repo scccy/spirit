@@ -206,7 +206,8 @@ public class XbogusUtil {
         return xb.toString();
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    @SuppressWarnings("static-access")
+	public static void main(String[] args) throws NoSuchAlgorithmException {
         String urlPath = "aweme_id=7221047525594139944&aid=6383&cookie_enabled=true&platform=PC&downlink=10";
         XbogusUtil xb = new XbogusUtil();
         String xbogus = xb.getXBogus(urlPath);

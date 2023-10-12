@@ -13,6 +13,7 @@ import java.util.Map.Entry;
  */
 public class URLUtil {
 	
+	@SuppressWarnings("serial")
 	public static Map<String, List<String>> domain = new HashMap<String, List<String>>(){{
 		List<String> bili = new ArrayList<String>();
 		bili.add("b23.tv");

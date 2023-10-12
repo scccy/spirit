@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
-
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -28,6 +26,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSONObject;
 
+@SuppressWarnings("deprecation")
 public class HttpUtil {
 	
 	
@@ -192,7 +191,6 @@ public class HttpUtil {
      * @param json
      * @return
      */
-    @SuppressWarnings("deprecation")
 	public static JSONObject doPost(String url,JSONObject json){
         DefaultHttpClient client = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
@@ -267,7 +265,8 @@ public class HttpUtil {
 		}
     }
     
-	  private static class InputStreamWithProgress extends FilterInputStream {
+	@SuppressWarnings("unused")
+	private static class InputStreamWithProgress extends FilterInputStream {
 	        private long totalBytes;
 	        private long bytesRead;
 

@@ -579,6 +579,6 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	public static void main(String[] args) {
-		FileUtils.deleteParentDirectorie("D:\\app\\cos\\userfiles\\1\\_thumbs\\images\\photo\\2023\\06\\2.jpg");
+		FileUtils.deleteParentDirectorie("D:\\home\\spirit\\video\\111\\111.txt");
 	}
 }

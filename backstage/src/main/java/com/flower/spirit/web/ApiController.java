@@ -1,15 +1,11 @@
 package com.flower.spirit.web;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.entity.VideoDataEntity;
@@ -28,7 +24,7 @@ public class ApiController {
 	@Autowired
 	private AnalysisService analysisService;
 	
-	private ExecutorService exec = Executors.newFixedThreadPool(1);
+//	private ExecutorService exec = Executors.newFixedThreadPool(1);
 	
 	@Autowired
 	private VideoDataService videoDataService;

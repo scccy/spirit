@@ -10,7 +10,6 @@ import com.flower.spirit.common.AjaxEntity;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.dao.BiliConfigDao;
 import com.flower.spirit.entity.BiliConfigEntity;
-import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.utils.HttpUtil;
 
 @Service

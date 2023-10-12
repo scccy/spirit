@@ -193,12 +193,12 @@ public class CollectDataService {
 	 */
 	public void createBiliData(CollectDataEntity entity,JSONArray json) throws Exception {
 		//线程开始  变更状态
-		String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
+//		String videofile = uploadRealPath+"video/"+DateUtils.getDate("yyyy")+"/"+DateUtils.getDate("MM"); //真实地址
 		entity.setTaskstatus("已开始处理");
 		collectdDataDao.save(entity);
 		for(int i = 0;i<json.size();i++) {
 			JSONObject data = json.getJSONObject(i);
-			String avid = data.getString("id");
+//			String avid = data.getString("id");
 			String bvid = data.getString("bvid");
 			List<Map<String, String>> videoDataInfo = BiliUtil.getVideoDataInfo("/video/"+bvid);
 //			Map<String, String> videoDataInfo = BiliUtil.getVideoDataInfo("/video/"+bvid);

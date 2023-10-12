@@ -1,6 +1,5 @@
 package com.flower.spirit.task;
 
-import java.time.LocalTime;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronExpression;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
-
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.service.CollectDataService;
 import com.flower.spirit.service.ConfigService;

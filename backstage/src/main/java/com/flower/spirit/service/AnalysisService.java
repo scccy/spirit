@@ -394,12 +394,4 @@ public class AnalysisService {
 	}
 	
 	
-	public static void main(String[] args) throws IOException {
-		String jsonContent = new String(Files.readAllBytes(Paths.get("D:/home/spirit/resources/wallpaper/202309/3031712532/project.json")));
-		JSONObject jsonObject = JSON.parseObject(jsonContent);
-		String filename = jsonObject.getString("file");
-		String previewname = jsonObject.getString("preview");
-		String title = jsonObject.getString("title");
-		System.out.println(filename);
-	}
 }
