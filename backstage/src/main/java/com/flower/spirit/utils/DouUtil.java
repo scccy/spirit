@@ -137,14 +137,14 @@ public class DouUtil {
 			 String coveruri = "";
 			 JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
 			 if(cover.size() >=2) {
-				 coveruri = cover.getString(2);
+				 coveruri = cover.getString(cover.size()-1);
 			 }else {
 				 coveruri = cover.getString(0);
 			 }
 			 JSONArray jsonArray = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
 			 String videoplay = "";
 			 if(jsonArray.size() >=2) {
-				 videoplay = jsonArray.getString(2);
+				 videoplay = jsonArray.getString(jsonArray.size()-1);
 			 }else {
 				 videoplay = jsonArray.getString(0);
 			 }
@@ -217,14 +217,14 @@ public class DouUtil {
 			 String coveruri = "";
 			 JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
 			 if(cover.size() >=2) {
-				 coveruri = cover.getString(2);
+				 coveruri = cover.getString(cover.size()-1);
 			 }else {
 				 coveruri = cover.getString(0);
 			 }
 			 JSONArray jsonArray = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
 			 String videoplay = "";
 			 if(jsonArray.size() >=2) {
-				 videoplay = jsonArray.getString(2);
+				 videoplay = jsonArray.getString(jsonArray.size()-1);
 			 }else {
 				 videoplay = jsonArray.getString(0);
 			 }

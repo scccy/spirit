@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 
 public class TikTokUtil {
 	
-	private static boolean dev= true;
+	private static boolean dev= false;
 	
 	public static String ua="Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
 	
@@ -60,13 +60,13 @@ public class TikTokUtil {
 		String videoplay = "";
 		JSONArray cover = aweme_detail.getJSONObject("video").getJSONObject("cover").getJSONArray("url_list");
 		 if(cover.size() >=2) {
-			 coveruri = cover.getString(2);
+			 coveruri = cover.getString(cover.size()-1);
 		 }else {
 			 coveruri = cover.getString(0);
 		 }
 		JSONArray videolist = aweme_detail.getJSONObject("video").getJSONObject("play_addr").getJSONArray("url_list");
 		 if(videolist.size() >=2) {
-			 videoplay = videolist.getString(2);
+			 videoplay = videolist.getString(videolist.size()-1);
 		 }else {
 			 videoplay = videolist.getString(0);
 		 }
