@@ -36,6 +36,7 @@ import com.flower.spirit.utils.FileUtils;
 import com.flower.spirit.utils.HttpUtil;
 import com.flower.spirit.utils.Steamcmd;
 import com.flower.spirit.utils.StringUtil;
+import com.flower.spirit.utils.TikTokUtil;
 import com.flower.spirit.utils.URLUtil;
 
 
@@ -129,8 +130,35 @@ public class AnalysisService {
 	       
 	}
 	
-	private void tiktok(String platform, String url) {
-
+	private void tiktok(String platform, String url) throws IOException {
+		 ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, url, platform);
+		 String tikTokVideoId = TikTokUtil.getTikTokVideoId("https://vt.tiktok.com/ZSN2uaA2M/");
+			if(tikTokVideoId != null) {
+				Map<String, String> videoData = TikTokUtil.getVideoData(tikTokVideoId);
+				String awemeid = videoData.get("awemeid");
+				String videoplay = videoData.get("videoplay");
+				String desc = videoData.get("desc");
+				String cover = videoData.get("cover");
+				
+				String filename = StringUtil.getFileName(desc, awemeid);
+				String videofile = FileUtil.createDirFile(Global.down_path, ".mp4", filename, Global.platform.tiktok.name());
+			    String videounrealaddr = FileUtil.createDirFile(FileUtil.savefile, ".mp4", filename, Global.platform.tiktok.name());
+		        String coverunaddr = FileUtil.createDirFile(FileUtil.savefile, ".jpg", filename, Global.platform.tiktok.name());
+				
+		        if(Global.downtype.equals("a2")) {
+			      	 Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createparameter(videoplay, FileUtil.createTemporaryDirectory(Global.platform.tiktok.name(), filename, Global.down_path), filename+".mp4", Global.a2_token));
+		        }
+		        if(Global.downtype.equals("http")) {
+		        	//内置下载器
+		        	HttpUtil.downDouFromUrl(videoplay, filename+".mp4",FileUtil.createTemporaryDirectory(Global.platform.tiktok.name(), filename, FileUtil.uploadRealPath),null);
+		        }
+		        videofile = FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename, Global.platform.tiktok.name());
+		        HttpUtil.downLoadFromUrl(cover, filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.tiktok.name(), filename, uploadRealPath)+"/");
+		        VideoDataEntity videoDataEntity = new VideoDataEntity(awemeid,desc, desc, platform, coverunaddr, videofile,videounrealaddr,url);
+		        videoDataDao.save(videoDataEntity);
+				logger.info("下载流程结束");
+			}
+		 processHistoryService.saveProcess(saveProcess.getId(), url, platform);
 	
 	}
 /**
