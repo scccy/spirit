@@ -20,6 +20,9 @@ public class URLUtil {
 		bili.add("bilibili.com");
 		List<String> dy = new ArrayList<String>();
 		dy.add("douyin.com");
+		List<String> tiktok = new ArrayList<String>();
+		tiktok.add("tiktok.com");
+		put("tiktok", tiktok);
 		put("哔哩", bili);
 		put("抖音", dy);
 	}};;

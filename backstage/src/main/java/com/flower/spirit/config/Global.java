@@ -70,6 +70,7 @@ public class Global {
 	
 	public static enum platform{
 		bilibili,
-		douyin;
+		douyin,
+		tiktok;
 	}
 }

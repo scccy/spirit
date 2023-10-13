@@ -117,10 +117,23 @@ public class AnalysisService {
 				});
 				return;
 			}
+			if(platform.equals("tiktok")) {
+				douyin.execute(() -> {
+					try {
+						this.tiktok(platform, this.getUrl(video));
+					}catch (Exception e) {
+						logger.info("tiktok解析异常");
+					}
+				});
+			}
 	       
 	}
 	
-	/**
+	private void tiktok(String platform, String url) {
+
+	
+	}
+/**
 	 * 不支持 从本处登录帐号并验证 二次令牌 请先使用 docker exec 进行登录帐号 在配置帐号密码进行下载
 	 * 支持从steam 工坊下载
 	 * @param video

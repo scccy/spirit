@@ -301,7 +301,9 @@ public class HttpUtil {
              HttpURLConnection conn = (HttpURLConnection)url.openConnection();  
              conn.setConnectTimeout(5*1000);
              conn.setRequestProperty("User-Agent", DouUtil.ua);
-             conn.setRequestProperty("cookie", cookie);
+             if(cookie != null) {
+            	 conn.setRequestProperty("cookie", cookie);
+             }
              InputStream input = conn.getInputStream();  
              byte[] getData = readInputStream(input);    
              File saveDir = new File(savePath);
