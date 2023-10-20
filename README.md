@@ -133,6 +133,8 @@ https://toscode.gitee.com/zong_zh/parsing-tiktok-video
 
 https://github.com/Johnserf-Seed/TikTokDownload
 
+https://github.com/yt-dlp/yt-dlp
+
 ### 致谢
 
  [JetBrains](https://jb.gg/OpenSourceSupport/?from=https://github.com/lemon8866/spirit) 提供 [Licenses for Open Source Development](https://www.jetbrains.com/community/opensource/#support)
