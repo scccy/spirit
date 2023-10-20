@@ -2,6 +2,18 @@
 
 
 ```
+2023/10/20
+Dev 分支新增 推特  YouTube ins 解析  
+Dockerfile 中引入Python3
+Dockerfile 中引入yt-dlp
+需要特殊网络才可以解析下载
+本容器可以做到解析成功 但是 不监控Aria2下载是否成功  在开发阶段 ins 视频有概率失败  但是重启Aria2容器 任务会重新开始 并下载成功 暂时不知道是为什么
+后期考虑 在发送请求是给Aria2 发送yt-dlp返回的请求头尝试一下
+本功能暂时为合并到 steam 分支及latest 分支 
+```
+
+
+```
 2023/10/18
 修复 bilibili下载中 分辨率写错判断 导致视频被降级而无法下载的bug
 修复 bilibili中 需要ffmpeg合并时  当视频重复下载时 会造成 ffmpeg覆盖问题导致终端卡住的问题
