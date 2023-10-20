@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.flower.spirit.config.Global;
 import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
+import com.flower.spirit.entity.CookiesConfigEntity;
 import com.flower.spirit.entity.TikTokConfigEntity;
 import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
+import com.flower.spirit.service.CookiesConfigService;
 import com.flower.spirit.service.TikTokConfigService;
 
 
@@ -34,6 +36,9 @@ public class PageController {
 	
 	@Autowired
 	private TikTokConfigService  tikTokConfigService;
+	
+	@Autowired
+	private CookiesConfigService cookiesConfigService;
 	
 	/**
 	 * 管理员控制台
@@ -123,9 +128,11 @@ public class PageController {
 		ConfigEntity config = configService.getData();
 		BiliConfigEntity bili = biliConfigService.getData();
 		TikTokConfigEntity tiktok = tikTokConfigService.getData();
+		CookiesConfigEntity cookies = cookiesConfigService.getData();
 		model.addAttribute("bili", bili);
 		model.addAttribute("config", config);
 		model.addAttribute("tiktok", tiktok);
+		model.addAttribute("cookies", cookies);
 		return "admin/config";
 	}
 	/**

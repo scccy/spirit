@@ -150,10 +150,36 @@
   </div>
   </form>
   
-  
+ <form class="layui-form" action="">
   <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-  		<legend>其他功能UI占位</legend>
+  		<legend>平台cookie配置</legend>
   </fieldset>
+  
+  <div class="layui-form-item">
+    <div class="layui-inline" style=" float: left; ">
+      <input type="hidden" class="cookiesid" th:value="${cookies.id}" /> 
+      <label class="layui-form-label">YouTuBe</label>
+      <div class="layui-input-inline">
+        <input type="type" name="youtubecookies"  autocomplete="off" class="layui-input youtubecookies" th:value="${cookies.youtubecookies}" placeholder="cookie">
+      </div>
+      <br/>
+      <div style="margin-top: 1rem;display: inline-block;margin-left: 5.9%;">YouTuBe cookie 你填了就用 不知道有啥作用 不填就不用</div>
+    </div>   
+     <div class="layui-inline" style=" float: left; ">
+      <label class="layui-form-label">Twitter</label>
+      <div class="layui-input-inline">
+        <input type="type" name="twittercookies"  autocomplete="off" class="layui-input twittercookies" th:value="${cookies.twittercookies}" placeholder="cookie">
+      </div>
+      <br/>
+      <div style="margin-top: 1rem;display: inline-block;margin-left: 5.9%;">没做呢 也许后边不做了  现在不支持Twitter</div>
+    </div> 
+  </div>
+   <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button type="button" class="layui-btn saveCookieConfig" lay-submit="" >保存</button>
+    </div>
+  </div>
+  </form>
   
   <div class="QRSCANBOX" style="display: none">
   		<div id="qrcode"></div><br />
@@ -167,10 +193,38 @@
 	 scanQR();
 	 scanQRend();
 	 saveTikTokConfig();
+	 saveCookieConfig();
  })
  var layer;
  var form;
  var qrcode_key;
+ function saveCookieConfig(){
+	 	 $('.saveCookieConfig').click(function(){
+		 var appid = $('.cookiesid').val();
+		 var youtubecookies = $('.youtubecookies').val();
+		 var twittercookies = $('.twittercookies').val();
+		 var option = {};
+		 option['id'] = appid;
+		 if(youtubecookies != ""){
+			 option['youtubecookies'] = youtubecookies;
+		 }
+		 if(twittercookies != ""){
+			option['twittercookies'] = twittercookies;
+		 }
+		 $.post("/admin/api/updateCookie",option,function(data,status){
+			if(data.resCode =="000001"){
+				layer.closeAll();
+				layer.alert(data.message,function(){
+					 window.location.reload();
+				})
+			}else{
+				layer.alert(data.message,function(){
+					layer.closeAll();
+				});
+			}
+		 })
+	 })
+ }
  function saveTikTokConfig(){
 	 $('.saveTikTokConfig').click(function(){
 		 var appid = $('.tiktok').val();

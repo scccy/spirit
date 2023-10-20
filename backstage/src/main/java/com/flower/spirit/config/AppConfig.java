@@ -6,11 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+
+import com.flower.spirit.dao.CookiesConfigDao;
 import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.TikTokConfigEntity;
+import com.flower.spirit.entity.CookiesConfigEntity;
 import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
+import com.flower.spirit.service.CookiesConfigService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.FfmpegQueueService;
 import com.flower.spirit.service.TikTokConfigService;
@@ -40,6 +44,9 @@ public class AppConfig {
 	@Autowired
 	private FfmpegQueueService ffmpegQueueService;
 	
+	@Autowired
+	private CookiesConfigService cookiesConfigService;
+	
 	
 	@PostConstruct
 	public void init() {
@@ -63,6 +70,14 @@ public class AppConfig {
 		}
 		if(null != tiktok.getAnalysisserver() && !"".equals(tiktok.getAnalysisserver())) {
 			Global.analysiSserver =tiktok.getAnalysisserver();
+		}
+		//新增cookies 配置信息
+		CookiesConfigEntity cookies = cookiesConfigService.getData();
+		if(cookies.getTwittercookies() != null && !cookies.getTwittercookies().equals("")) {
+			Global.youtubecookies  = cookies.getYoutubecookies();
+		}
+		if(cookies.getYoutubecookies() != null && !cookies.getYoutubecookies().equals("")) {
+			Global.twittercookies  = cookies.getTwittercookies();
 		}
 		//清空 ffmpeg 队列
 		ffmpegQueueService.clearTask();

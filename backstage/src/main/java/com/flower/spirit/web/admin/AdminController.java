@@ -14,6 +14,7 @@ import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.CollectDataDetailEntity;
 import com.flower.spirit.entity.CollectDataEntity;
 import com.flower.spirit.entity.ConfigEntity;
+import com.flower.spirit.entity.CookiesConfigEntity;
 import com.flower.spirit.entity.DownloaderEntity;
 import com.flower.spirit.entity.ProcessHistoryEntity;
 import com.flower.spirit.entity.TikTokConfigEntity;
@@ -23,6 +24,7 @@ import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.CollectDataDetailService;
 import com.flower.spirit.service.CollectDataService;
 import com.flower.spirit.service.ConfigService;
+import com.flower.spirit.service.CookiesConfigService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.ProcessHistoryService;
 import com.flower.spirit.service.SystemService;
@@ -75,6 +77,9 @@ public class AdminController {
 	
 	@Autowired
 	private CollectDataDetailService collectDataDetailService;
+	
+	@Autowired
+	private CookiesConfigService cookiesConfigService;
 	
 	/**  
 	
@@ -325,4 +330,15 @@ public class AdminController {
 	public AjaxEntity findCollectDataDetail(CollectDataDetailEntity entity) {
 		return collectDataDetailService.findPage(entity);
 	}
+	
+	/**
+	 * 更新Cookie 配置
+	 * @param entity
+	 * @return
+	 */
+	@PostMapping(value = "/updateCookie")
+	public AjaxEntity updateCookie(CookiesConfigEntity entity) {
+		return cookiesConfigService.updateCookie(entity);
+	}
+	
 } 

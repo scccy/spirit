@@ -68,9 +68,14 @@ public class Global {
 	
 	public static String wallpaperid ="431960";
 	
+	public static String youtubecookies="";
+
+	public static String twittercookies="";
+	
 	public static enum platform{
 		bilibili,
 		douyin,
-		tiktok;
+		tiktok,
+		youtube;
 	}
 }
