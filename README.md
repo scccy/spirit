@@ -28,7 +28,9 @@
 | TIKTOK    | 支持      |
 | B站        | 支持          |
 | wallpaper | 支持(steam分支) |
-| Youtube   | 计划中         |
+| Youtube   | 支持(dev分支)    |
+| 推特   | 支持(dev分支)    |
+| ins   | 支持(dev分支)    |
 | 识别M3U8    | 计划中         |
 | 其他        | 计划中         |
 
