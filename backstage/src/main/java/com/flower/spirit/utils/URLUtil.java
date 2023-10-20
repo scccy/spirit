@@ -22,9 +22,24 @@ public class URLUtil {
 		dy.add("douyin.com");
 		List<String> tiktok = new ArrayList<String>();
 		tiktok.add("tiktok.com");
+		
+		List<String> youtube = new ArrayList<String>();
+		youtube.add("youtu.be");
+		youtube.add("youtube.com");
+		
+		List<String> instagram = new ArrayList<String>();
+		instagram.add("instagram.com");
+		
+		List<String> twitter = new ArrayList<String>();
+		twitter.add("twitter.com");
+		twitter.add("https://x.com/");
+		
 		put("tiktok", tiktok);
 		put("哔哩", bili);
 		put("抖音", dy);
+		put("YouTube", youtube);
+		put("instagram", instagram);
+		put("twitter", twitter);
 	}};;
 
 	/**

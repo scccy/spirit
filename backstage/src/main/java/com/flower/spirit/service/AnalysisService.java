@@ -21,9 +21,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.flower.spirit.config.Global;
+import com.flower.spirit.dao.FfmpegQueueDao;
+import com.flower.spirit.dao.FfmpegQueueDataDao;
 import com.flower.spirit.dao.VideoDataDao;
+import com.flower.spirit.entity.FfmpegQueueDataEntity;
+import com.flower.spirit.entity.FfmpegQueueEntity;
 import com.flower.spirit.entity.ProcessHistoryEntity;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.utils.Aria2Util;
@@ -38,6 +43,8 @@ import com.flower.spirit.utils.Steamcmd;
 import com.flower.spirit.utils.StringUtil;
 import com.flower.spirit.utils.TikTokUtil;
 import com.flower.spirit.utils.URLUtil;
+import com.flower.spirit.utils.YouTuBeUtil;
+import com.flower.spirit.utils.YtDlpUtil;
 
 
 /**
@@ -74,6 +81,17 @@ public class AnalysisService {
 	private ExecutorService douyin = Executors.newFixedThreadPool(1);
 	
 	private ExecutorService bilibili = Executors.newFixedThreadPool(1);
+	
+	private ExecutorService ytdlp = Executors.newFixedThreadPool(1);
+	
+	@Autowired
+	private  FfmpegQueueDao ffmpegQueueDao;
+	
+	@Autowired
+	private  FfmpegQueueDataDao ffmpegQueueDataDao;
+	
+	
+	
 
 	/**解析资源
 	 * @param token
@@ -127,9 +145,211 @@ public class AnalysisService {
 					}
 				});
 			}
+			if(platform.equals("YouTube")) {
+				ytdlp.execute(() -> {
+					try {
+						this.YouTube(platform, this.getUrl(video));
+					}catch (Exception e) {
+						logger.debug(e.getMessage());
+						logger.info("YouTube解析异常");
+					}
+				});
+			}
+			if(platform.equals("instagram")) {
+				ytdlp.execute(() -> {
+					try {
+						this.instagram(platform, this.getUrl(video));
+					}catch (Exception e) {
+						logger.debug(e.getMessage());
+						logger.info("instagram解析异常");
+					}
+				});
+			}
+			if(platform.equals("twitter")) {
+				ytdlp.execute(() -> {
+					try {
+						this.twitter(platform, this.getUrl(video));
+					}catch (Exception e) {
+						logger.debug(e.getMessage());
+						logger.info("twitter解析异常");
+					}
+				});
+			}
 	       
 	}
 	
+	private void twitter(String platform, String url) {
+		ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, url, platform);
+		try {
+			String exec = YtDlpUtil.exec(url);
+			int lastIndexOf = exec.lastIndexOf("}}");
+			exec = exec.substring(0, lastIndexOf+2);
+			JSONObject parseObject = JSONObject.parseObject(exec);
+			String thumbnail = parseObject.getString("thumbnail");
+			String videourl = parseObject.getString("url");
+			String id = parseObject.getString("id");
+			String description = parseObject.getString("description");
+			String title = parseObject.getString("title");
+			String filename =  StringUtil.getFileName(title, id);
+		    String videounrealaddr = FileUtil.createDirFile(FileUtil.savefile, ".mp4", filename, Global.platform.twitter.name());
+	        String coverunaddr = FileUtil.createDirFile(FileUtil.savefile, ".jpg", filename, Global.platform.twitter.name());
+			String filepath =FileUtil.createDirFile("/app/resources", ".mp4", filename,Global.platform.twitter.name());
+			if(Global.downtype.equals("http")) {
+				//http  需要创建临时目录
+				String newpath =FileUtil.createTemporaryDirectory(Global.platform.twitter.name(), filename,"/app/resources");
+				FileUtils.createDirectory(newpath);
+				HttpUtil.downLoadFromUrl(videourl, filename+".mp4", newpath);
+			}
+			if(Global.downtype.equals("a2")) {
+				//a2 不需要 目录有a2托管  此处路径应该可以优化
+				String a2path = FileUtil.createTemporaryDirectory(Global.platform.twitter.name(),filename, Global.down_path);
+				String videores = Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(videourl,a2path , filename+".mp4", Global.a2_token));
+			}
+			HttpUtil.downLoadFromUrl(thumbnail, filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.twitter.name(), filename, uploadRealPath)+"/");
+			//建档
+	        VideoDataEntity videoDataEntity = new VideoDataEntity(id,title, description, platform, coverunaddr, filepath,videounrealaddr,url);
+	        videoDataDao.save(videoDataEntity);
+			processHistoryService.saveProcess(saveProcess.getId(), url, platform);
+			
+		} catch (Exception e) {
+		
+		}
+		processHistoryService.saveProcess(saveProcess.getId(), url, platform);
+		
+	}
+
+	private void instagram(String platform, String url) {
+		ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, url, platform);
+		try {
+			String exec = YtDlpUtil.exec(url);
+			JSONObject parseObject = JSONObject.parseObject(exec);
+			String thumbnail = parseObject.getString("thumbnail");
+			String videourl = parseObject.getString("url");
+			String id = parseObject.getString("id");
+			String description = parseObject.getString("description");
+			String title = parseObject.getString("title");
+			String filename =  StringUtil.getFileName(title, id);
+		    String videounrealaddr = FileUtil.createDirFile(FileUtil.savefile, ".mp4", filename, Global.platform.instagram.name());
+	        String coverunaddr = FileUtil.createDirFile(FileUtil.savefile, ".jpg", filename, Global.platform.instagram.name());
+			String filepath =FileUtil.createDirFile("/app/resources", ".mp4", filename,Global.platform.instagram.name());
+			if(Global.downtype.equals("http")) {
+				//http  需要创建临时目录
+				String newpath =FileUtil.createTemporaryDirectory(Global.platform.instagram.name(), filename,"/app/resources");
+				FileUtils.createDirectory(newpath);
+				HttpUtil.downLoadFromUrl(videourl, filename+".mp4", newpath);
+			}
+			if(Global.downtype.equals("a2")) {
+				//a2 不需要 目录有a2托管  此处路径应该可以优化
+				String a2path = FileUtil.createTemporaryDirectory(Global.platform.instagram.name(),filename, Global.down_path);
+				String videores = Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(videourl,a2path , filename+".mp4", Global.a2_token));
+			}
+			HttpUtil.downLoadFromUrl(thumbnail, filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.instagram.name(), filename, uploadRealPath)+"/");
+			//建档
+	        VideoDataEntity videoDataEntity = new VideoDataEntity(id,title, description, platform, coverunaddr, filepath,videounrealaddr,url);
+	        videoDataDao.save(videoDataEntity);
+			processHistoryService.saveProcess(saveProcess.getId(), url, platform);
+			
+		} catch (Exception e) {
+		
+		}
+		processHistoryService.saveProcess(saveProcess.getId(), url, platform);
+	}
+
+	private void YouTube(String platform, String youtube) throws Exception {
+		ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, youtube, platform);
+		try {
+			String exec = YouTuBeUtil.exec("https://www.youtube.com/watch?v=f7EDFdA10pg");
+			JSONObject parseObject = JSONObject.parseObject(exec);
+			String a_link ="";
+			String v_linl ="";
+			String title= parseObject.getString("title");
+			String description= parseObject.getString("description");
+			String display_id= parseObject.getString("display_id");
+			String thumbnail= parseObject.getString("thumbnail");
+			if(parseObject.containsKey("requested_formats")) {
+				JSONArray jsonArray = parseObject.getJSONArray("requested_formats");
+				for(int i = 0;i<jsonArray.size();i++) {
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					String ext = jsonObject.getString("video_ext");
+					String url = jsonObject.getString("url");
+					if(ext.equals("none")) {
+						a_link = url;
+					}
+					if(ext.equals("webm")) {
+						v_linl = url;
+					}
+				}
+			}
+			if(a_link.equals("") || v_linl.equals("")) {
+				logger.error(youtube+"解析异常");
+				return;
+			}
+			String filename =  StringUtil.getFileName(title, display_id);
+		    String videounrealaddr = FileUtil.createDirFile(FileUtil.savefile, ".mp4", filename, Global.platform.youtube.name());
+	        String coverunaddr = FileUtil.createDirFile(FileUtil.savefile, ".jpg", filename, Global.platform.youtube.name());
+			String filepath =FileUtil.createDirFile("/app/resources", ".mp4", filename,Global.platform.youtube.name());
+			if(Global.downtype.equals("http")) {
+				//http  需要创建临时目录
+
+				String newpath =FileUtil.createTemporaryDirectory(Global.platform.youtube.name(), filename,"/app/resources");
+				FileUtils.createDirectory(newpath);
+				HttpUtil.downLoadFromUrl(v_linl, filename+"-video.webm", newpath);
+				HttpUtil.downLoadFromUrl(a_link, filename+"-audio.weba", newpath);
+				//此处可以直接合并 由于http 不是异步
+				CommandUtil.command("ffmpeg -i "+newpath+File.separator+filename+"-video.webm -i "+newpath+File.separator+filename+"-audio.weba -c:v copy -c:a copy -f mp4 "+filepath);
+				//删除
+				FileUtils.deleteFile(newpath+File.separator+filename+"-video.m4s");
+				FileUtils.deleteFile(newpath+File.separator+filename+"-audio.m4s");
+			}
+			if(Global.downtype.equals("a2")) {
+				//a2 不需要 目录有a2托管  此处路径应该可以优化
+				String a2path = FileUtil.createTemporaryDirectory(Global.platform.youtube.name(),filename, Global.down_path);
+				String videores = Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(v_linl,a2path , filename+"-video.webm", Global.a2_token));
+				String audiores = Aria2Util.sendMessage(Global.a2_link,  Aria2Util.createBiliparameter(a_link,a2path , filename+"-audio.weba", Global.a2_token));
+				//保存到FfmpegQueueEntity队列
+				logger.info("youtube仅支持dash 提交到ffmpeg队列等待下载完成合并-前置任务结束");
+				FfmpegQueueEntity ffmpegQueueEntity = new FfmpegQueueEntity();
+				ffmpegQueueEntity.setVideoid(display_id);
+				ffmpegQueueEntity.setVideoname(title);
+				ffmpegQueueEntity.setPendingfolder(FileUtil.createTemporaryDirectory(Global.platform.youtube.name(),filename));
+				ffmpegQueueEntity.setAudiostatus("0");
+				ffmpegQueueEntity.setVideostatus("0");
+				ffmpegQueueEntity.setFilepath(FileUtil.createDirFile(FileUtil.uploadRealPath, ".mp4", filename,Global.platform.youtube.name()));
+				ffmpegQueueEntity.setStatus("0");
+				ffmpegQueueEntity.setCreatetime(DateUtils.getDateTime());
+				ffmpegQueueDao.save(ffmpegQueueEntity);
+				//数据
+				FfmpegQueueDataEntity videoData = new FfmpegQueueDataEntity();
+				videoData.setQueueid(ffmpegQueueEntity.getId());
+				videoData.setTaskid(JSONObject.parseObject(videores).getString("result"));
+				videoData.setFiletype("v");
+				videoData.setStatus("0");
+				videoData.setFilepath(FileUtil.createTemporaryDirectory(Global.platform.youtube.name(),filename)+"/"+filename+"-video.webm");
+				videoData.setCreatetime(DateUtils.getDateTime());
+				ffmpegQueueDataDao.save(videoData);
+				FfmpegQueueDataEntity audioData = new FfmpegQueueDataEntity();
+				audioData.setQueueid(ffmpegQueueEntity.getId());
+				audioData.setTaskid(JSONObject.parseObject(audiores).getString("result"));
+				audioData.setFiletype("a");
+				audioData.setStatus("0");
+				audioData.setFilepath(FileUtil.createTemporaryDirectory(Global.platform.youtube.name(),filename)+"/"+filename+"-audio.weba");
+				audioData.setCreatetime(DateUtils.getDateTime());
+				ffmpegQueueDataDao.save(audioData);
+			}
+			  HttpUtil.downLoadFromUrl(thumbnail, filename+".jpg", FileUtil.createTemporaryDirectory(Global.platform.youtube.name(), filename, uploadRealPath)+"/");
+			//建档
+	        VideoDataEntity videoDataEntity = new VideoDataEntity(display_id,title, description, platform, coverunaddr, filepath,videounrealaddr,youtube);
+	        videoDataDao.save(videoDataEntity);
+			processHistoryService.saveProcess(saveProcess.getId(), youtube, platform);
+			
+			
+		} catch (Exception e) {
+			throw e;
+			//logger.error(youtube+"解析异常");
+		}
+		
+	}
+
 	private void tiktok(String platform, String url) throws IOException {
 		 ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, url, platform);
 		 String tikTokVideoId = TikTokUtil.getTikTokVideoId("https://vt.tiktok.com/ZSN2uaA2M/");
@@ -433,6 +653,10 @@ public class AnalysisService {
 		 }
 		return null;
 	}
-	
+	public static void main(String[] args) {
+		String x = "1234}}aaa11";
+		int lastIndexOf = x.lastIndexOf("}}");
+		System.out.println(x.substring(0,lastIndexOf+2));
+	}
 	
 }

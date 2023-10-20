@@ -76,6 +76,8 @@ public class Global {
 		bilibili,
 		douyin,
 		tiktok,
-		youtube;
+		youtube,
+		instagram,
+		twitter;
 	}
 }
