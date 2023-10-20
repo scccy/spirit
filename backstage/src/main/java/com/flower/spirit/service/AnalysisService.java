@@ -352,7 +352,7 @@ public class AnalysisService {
 
 	private void tiktok(String platform, String url) throws IOException {
 		 ProcessHistoryEntity saveProcess = processHistoryService.saveProcess(null, url, platform);
-		 String tikTokVideoId = TikTokUtil.getTikTokVideoId("https://vt.tiktok.com/ZSN2uaA2M/");
+		 String tikTokVideoId = TikTokUtil.getTikTokVideoId(url);
 			if(tikTokVideoId != null) {
 				Map<String, String> videoData = TikTokUtil.getVideoData(tikTokVideoId);
 				String awemeid = videoData.get("awemeid");
