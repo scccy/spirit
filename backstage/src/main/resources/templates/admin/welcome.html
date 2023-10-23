@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>工具说明</title>
+  <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../static/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="../static/css/style.min.css" rel="stylesheet">
   <style>
   @font-face {
   font-family: octicons-link;
@@ -1247,54 +1250,38 @@ pre[class*="language-"] {
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9tdXlhL2xpYi9hc3NldHMvc3R5bGVzL2V4cG9ydFN0eWxlLmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLHFCQUFxQjtBQUN2Qjs7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixXQUFXO0FBQ2I7O0FBRUE7RUFDRSxrQkFBa0I7QUFDcEI7O0FBRUE7RUFDRSxrQkFBa0I7RUFDbEIsb0JBQW9CO0VBQ3BCLFNBQVM7RUFDVCxVQUFVO0VBQ1YscUJBQXFCO0FBQ3ZCOztBQUVBOztFQUVFLHlCQUF5QjtBQUMzQjs7QUFFQTtFQUNFLFdBQVc7QUFDYjs7QUFFQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsZ0JBQWdCO0FBQ2xCOztBQUVBOzs7RUFHRSwyQkFBMkI7QUFDN0I7O0FBRUE7RUFDRSxlQUFlO0FBQ2pCOztBQUVBO0VBQ0UsY0FBYztBQUNoQjs7QUFFQTtFQUNFLGNBQWM7RUFDZCxxQkFBcUI7QUFDdkI7QUFDQTtFQUNFLGNBQWM7RUFDZCxxQkFBcUI7QUFDdkI7O0FBRUE7RUFDRSxPQUFPO0VBQ1AsY0FBYztFQUNkLGNBQWM7RUFDZCwrQkFBK0I7QUFDakMiLCJzb3VyY2VSb290IjoiIn0= */</style>
   <style>.markdown-body{}pre.front-matter{display:none!important;}</style>
 </head>
+
 <body>
-  <article class="markdown-body"><h1 class="atx" id="使用指南">使用指南</h1>
-<pre><code class="fenced-code-block">请勿滥用，本项目仅用于学习和测试！请勿滥用.</code></pre>
-<p>这是一个只能保证基本流程的应用。具体后续更新测试仅通过了基本我自己的测试。并不能保证没有bug  基本上每一个使用的人都是一个测试的用户  🤪   所以有问题请提交</p>
-<p><a href="https://github.com/Confession1995/spirit">GitHub - Confession1995/spirit: spirit</a><a href="https://github.com/Confession1995/spirit">GitHub - Confession1995/spirit: spirit</a></p>
-<p>issues   如果能定位到问题会尽力解决</p>
-<h1 class="atx" id="ios端快捷指令">ios端快捷指令</h1>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;由B站大佬 从今天起做个混子  分享</p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.icloud.com/shortcuts/b4fad825911247659656a89a6c95146f">快捷指令</a></p>
-<h1 class="atx" id="更新说明">更新说明</h1>
-<pre><code class="fenced-code-block">最新加入了收藏夹监控  但是我就测试了一个B站  并且就测了一次  不知道会不会有问题
-优化了B站收藏夹 合集收藏下载的问题
-优化了B站 多集下载的问题
-其不知道了优化了 下载视频名称使用视频ID不容易管理的问题  现在改成使用视频标题了
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <div th:include="admin/include/common :: headermenu"> </div>
 
-但是抖音暂时不支持图集下载
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      	<article class="markdown-body"><h1 class="atx" id="注意事项">注意事项</h1>
+			<pre><code class="fenced-code-block">请勿滥用，本项目仅用于学习和测试！请勿滥用.</code></pre>
+			<p>这是一个只能保证基本流程的应用。具体后续更新测试仅通过了基本我自己的测试。并不能保证没有bug 基本上每一个使用的人都是一个测试的用户 🤪 所以有问题请提交</p>
+			<p><a href="https://github.com/Confession1995/spirit">GitHub - Confession1995/spirit: spirit</a><a href="https://github.com/Confession1995/spirit">GitHub - Confession1995/spirit: spirit</a></p>
+			<p>issues 如果能定位到问题会尽力解决</p>
+			<h4 class="atx" id="ios端快捷指令">ios端快捷指令</h4>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;由B站大佬 从今天起做个混子 分享</p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://www.icloud.com/shortcuts/b4fad825911247659656a89a6c95146f">快捷指令</a></p>
+			<h4 class="atx" id="安卓客户端">安卓客户端</h4>
+			<p><a href="https://github.com/lemon8866/spirit/releases/download/0.0.6/0.0.2.apk">https://github.com/lemon8866/spirit/releases/download/0.0.6/0.0.2.apk</a></p>
+			<h4 class="atx" id="win-桌面客户端">win 桌面客户端</h4>
+			<p><a href="https://github.com/lemon8866/spirit/releases/download/0.0.5/spirit-app.0.0.1.exe">https://github.com/lemon8866/spirit/releases/download/0.0.5/spirit-app.0.0.1.exe</a></p>
+		</article>
 
-B站cookie 不知道有效期多久
-抖音cookie 据说有效期不长  
-使用TikTokDownload库 处理的抖音 据说支持tiktok 链接 但是没测试</code></pre>
-<h1 class="atx" id="说明">说明</h1>
-<pre><code class="fenced-code-block">B站Cookies 不是必须填的 有心理负担可以不填 默认不填的情况下只能 获取720p
+    </main>
+    <!--End 页面主要内容-->
 
-填了会使用你的cookies 去请求1080的资源 当然 如果视频没有1080分辨率 也是无效
+  </div>
+</div>
 
-必须要添加下载器 aria2或者 http都可以 aria2最优
-
-之前的版本哔哩的视频不支持aria2 下载 现在也支持通过aria2下载了
-
-现在版本 已经移除哔哩解析对htmlunit库的依赖 减少了内存占用
-
-但是抖音目前还是需要使用htmlunit库 并且只有解析抖音资源的时候才会增加内存
-
-但是htmlunit是备选 优先使用api
-
-如果担忧内存问题建议设置定时任务定时重启容器
-
-登录后 删除admin 并新建新的账户
-
-并且修改app token 内网使用无所谓改不改
-
-手机端 是uni app 用hbuilderx 发布一个小程序即可
-
-小程序使用体验版 并且开启调试模式 ok
-
-或者使用我打包的apk 都可以
-
-意见反馈 请通过github 提交</code></pre>
-</article>
+<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="../static/js/main.min.js"></script>
 </body>
 </html>

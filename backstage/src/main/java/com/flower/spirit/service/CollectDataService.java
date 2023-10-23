@@ -80,6 +80,8 @@ public class CollectDataService {
     	}
     	for(CollectDataEntity data:list) {
     		//开始执行
+    		//删除以前的 记录
+    		collectDataDetailService.deleteDataid(data.getId());
     		this.submitCollectData(data);
     	}
 		

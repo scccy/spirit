@@ -17,6 +17,8 @@ public interface CollectdDataDetailDao extends PagingAndSortingRepository<Collec
 	
 	public List<CollectDataDetailEntity> findAll();
 
+	public void deleteByDataid(Integer dataid);
+
 	
 
 }

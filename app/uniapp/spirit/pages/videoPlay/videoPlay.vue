@@ -68,8 +68,8 @@
 							})
 							var content = res.data.record.content;
 							for(var  i = 0;i<content.length;i++){
-								content[i].videounrealaddr=""+serveraddr+":"+serverport+content[i].videounrealaddr
-								content[i].videocover=""+serveraddr+":"+serverport+content[i].videocover
+								content[i].videounrealaddr=""+serveraddr+":"+serverport+content[i].videounrealaddr+"?apptoken="+servertoken
+								content[i].videocover=""+serveraddr+":"+serverport+content[i].videocover+"?apptoken="+servertoken
 							}
 							that.list =temp.concat(content);
 							that.fetchPageNum=that.fetchPageNum+1;

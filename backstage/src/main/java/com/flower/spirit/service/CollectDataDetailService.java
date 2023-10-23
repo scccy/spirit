@@ -51,5 +51,8 @@ public class CollectDataDetailService {
 			Page<CollectDataDetailEntity> findAll = collectdDataDetailDao.findAll(specification,of);
 			return new AjaxEntity(Global.ajax_success, "数据获取成功", findAll);
 	}
+	public void deleteDataid(Integer dataid) {
+		collectdDataDetailDao.deleteByDataid(dataid);
+	}
 
 }

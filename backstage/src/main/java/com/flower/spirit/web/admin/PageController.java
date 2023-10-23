@@ -83,6 +83,10 @@ public class PageController {
 	public String welcome() {
 		return "admin/welcome";
 	}
+	@RequestMapping(value = "/update")
+	public String update() {
+		return "admin/update";
+	}
 	/**
 	 * 退出登录
 	 * @param request
