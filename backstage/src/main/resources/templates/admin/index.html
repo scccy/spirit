@@ -47,8 +47,23 @@
 <script type="text/javascript" src="../static/js/main.min.js"></script>
 <script src="../static/js/layer/layer.js" type="text/javascript"></script>
 <script>
+	var page = 1;
     $(function(){
-        findList(1);
+        findList(page);
+        
+		window.onscroll = ()=>{
+		  // 窗口高度
+		  var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+			// 页面高度
+			var documentHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+			// 滚动条位置
+			var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+			if ((windowHeight + scrollTop + 2) >= documentHeight) {
+				page++;
+		 		findList(page);
+			}
+		}
+
     });
     function transferName(str){
         var obj=str.lastIndexOf("/");
