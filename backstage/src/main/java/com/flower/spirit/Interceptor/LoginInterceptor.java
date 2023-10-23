@@ -34,11 +34,19 @@ public class LoginInterceptor implements HandlerInterceptor  {
                               HttpServletResponse response, Object handler) throws Exception {
 
          UserEntity user = (UserEntity)request.getSession().getAttribute(Global.user_session_key);
-         logger.info(request.getRequestURI().toString());
-         if (user == null || user.equals(""))  {
-             response.sendRedirect("/admin/login");
-             return false;
+         if(request.getRequestURI().toString().startsWith("/resources") || request.getRequestURI().toString().startsWith("/cos")){
+             String apptoken = request.getParameter("apptoken");
+             if (user == null && null ==apptoken && !Global.apptoken.equals(apptoken))  {
+                 response.sendRedirect("/admin/login");
+                 return false;
+             }
+         }else{
+             if (user == null)  {
+                 response.sendRedirect("/admin/login");
+                 return false;
+             }
          }
+
          return true;
      }
 
