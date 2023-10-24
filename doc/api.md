@@ -23,3 +23,6 @@
      videoplatform   选填
 请求类型 http post
 ```
+
+### 资源请求问题 
+如果通过接口获得视频播放链接或者视频缩略图  在访问是 请追加?apptoken=xxxx 参数 否则无法访问
