@@ -405,6 +405,7 @@ public class CollectDataService {
 		json.put("str", newsign);
 		json.put("ua", "");
 		String apiaddt = api.replaceAll("#max_cursor#", max_cursor);
+		// 409~411 行 需要更换为本地生成xbogus 此处先标记   暂时不处理 后期有测试机会 在更换 标记 #1
 		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token-update", json);
 		logger.info("使用的:"+Global.analysiSserver+"服务器");
 		String xbogus = token.getJSONObject("data").getString("xbogus");
