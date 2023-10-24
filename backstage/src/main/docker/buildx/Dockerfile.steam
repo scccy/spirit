@@ -1,4 +1,7 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
+
+ENV TZ=Asia/Shanghai
+RUN sed -i 's/http:\/\/archive.ubuntu.com/http:\/\/mirrors.tuna.tsinghua.edu.cn\/ubuntu/g' /etc/apt/sources.list
 
 # Insert Steam prompt answers
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
@@ -9,8 +12,7 @@ RUN echo steam steam/question select "I AGREE" | debconf-set-selections \
 ARG DEBIAN_FRONTEND=noninteractive
 RUN dpkg --add-architecture i386 \
  && apt-get update -y \
- && apt-get install -y --no-install-recommends ca-certificates locales steamcmd screen ffmpeg openjdk-8-jre python3 wget \
- && rm -rf /var/lib/apt/lists/*
+ && apt-get install -y --no-install-recommends ca-certificates locales steamcmd screen ffmpeg openjdk-8-jre wget software-properties-common
 
 # Add unicode support
 RUN locale-gen en_US.UTF-8
@@ -20,6 +22,13 @@ ENV LANGUAGE 'en_US:en'
 ARG YT_DLP_VERSION="2023.10.13"
 RUN wget -O /usr/local/bin/yt-dlp https://github.com/yt-dlp/yt-dlp/releases/download/${YT_DLP_VERSION}/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp
 ENV YT_DLP_PATH /usr/local/bin/yt-dlp
+
+RUN add-apt-repository ppa:deadsnakes/ppa
+
+# Update the repository again and install Python 3.12
+RUN apt-get update -y \
+ && apt-get install -y python3.12 \
+ && rm -rf /var/lib/apt/lists/*
 
 # Create symlink for executable
 RUN ln -s /usr/games/steamcmd /usr/bin/steamcmd
