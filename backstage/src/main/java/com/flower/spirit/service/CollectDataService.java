@@ -37,6 +37,7 @@ import com.flower.spirit.utils.DouUtil;
 import com.flower.spirit.utils.FileUtil;
 import com.flower.spirit.utils.HttpUtil;
 import com.flower.spirit.utils.StringUtil;
+import com.flower.spirit.utils.XbogusUtil;
 
 @Service
 public class CollectDataService {
@@ -380,7 +381,7 @@ public class CollectDataService {
 	}
 	
 
-	public JSONArray getAllDYData(CollectDataEntity entity) throws IOException, InterruptedException {
+	public JSONArray getAllDYData(CollectDataEntity entity) throws Exception {
 		String api ="";
 		String sign = "aid=6383&sec_user_id=#uid#&count=35&max_cursor=#max_cursor#&cookie_enabled=true&platform=PC&downlink=10";
 		if(entity.getOriginaladdress().contains("post")) {
@@ -397,18 +398,18 @@ public class CollectDataService {
 		
 	}
 	
-	public JSONArray  getDYNextData(String api,JSONArray data,String max_cursor,String sign) throws IOException, InterruptedException {
+	public JSONArray  getDYNextData(String api,JSONArray data,String max_cursor,String sign) throws Exception {
 //		System.out.println(sign);
-		JSONObject json =  new JSONObject();
+//		JSONObject json =  new JSONObject();
 		String newsign = sign.replaceAll("#max_cursor#", max_cursor);
 //		System.out.println(newsign);
-		json.put("str", newsign);
-		json.put("ua", "");
+//		json.put("str", newsign);
+//		json.put("ua", "");
 		String apiaddt = api.replaceAll("#max_cursor#", max_cursor);
 		// 409~411 行 需要更换为本地生成xbogus 此处先标记   暂时不处理 后期有测试机会 在更换 标记 #1
-		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token-update", json);
-		logger.info("使用的:"+Global.analysiSserver+"服务器");
-		String xbogus = token.getJSONObject("data").getString("xbogus");
+//		JSONObject token = HttpUtil.doPostNew(Global.analysiSserver+"/spirit-token-update", json);
+//		logger.info("使用的:"+Global.analysiSserver+"服务器");
+		String xbogus = XbogusUtil.getXBogus(newsign);
 		apiaddt = apiaddt+"&X-Bogus="+xbogus;
 //		System.out.println(apiaddt);
 		String httpget = DouUtil.httpget(apiaddt, Global.tiktokCookie);
