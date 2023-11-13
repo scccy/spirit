@@ -11,6 +11,7 @@ import java.net.URLDecoder;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,7 +42,7 @@ public class DouUtil {
 	public static String ua="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36";
 	public static String  odin_tt ="324fb4ea4a89c0c05827e18a1ed9cf9bf8a17f7705fcc793fec935b637867e2a5a9b8168c885554d029919117a18ba69";
 	public static String  passport_csrf_token ="2f142a9bb5db1f81f249d6fc997fe4a1";
-
+	public static String referer =  "https://www.douyin.com/";
 	public static  Map<String, String>  downVideo(String url) {
 		Document document = null;
 		Map<String, String>  data = new HashMap<String, String>();
@@ -404,6 +405,43 @@ public class DouUtil {
 
         return cookieMap;
     }
+	
+	
+	 public static String getFp() {
+	        String e = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	        int t = e.length();
+	        long milliseconds = System.currentTimeMillis();
+	        StringBuilder base36 = new StringBuilder();
+
+	        while (milliseconds > 0) {
+	            long remainder = milliseconds % 36;
+	            if (remainder < 10) {
+	                base36.insert(0, remainder);
+	            } else {
+	                base36.insert(0, (char) ('a' + remainder - 10));
+	            }
+	            milliseconds /= 36;
+	        }
+
+	        String r = base36.toString();
+	        char[] o = new char[36];
+	        o[8] = o[13] = o[18] = o[23] = '_';
+	        o[14] = '4';
+
+	        Random random = new Random();
+	        for (int i = 0; i < 36; i++) {
+	            if (o[i] == 0) {
+	                int n = random.nextInt(t);
+	                if (i == 19) {
+	                    n = 3 & n | 8;
+	                }
+	                o[i] = e.charAt(n);
+	            }
+	        }
+
+	        String ret = "verify_" + r + "_" + new String(o);
+	        return ret;
+	    }
 
 	public static void main(String[] args) {
 		Map<String, String> generatetoken = DouUtil.generatetoken("7221047525594139944");

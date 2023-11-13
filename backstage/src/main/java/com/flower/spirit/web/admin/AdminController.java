@@ -1,5 +1,7 @@
 package com.flower.spirit.web.admin;
 
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import com.flower.spirit.service.CollectDataDetailService;
 import com.flower.spirit.service.CollectDataService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.CookiesConfigService;
+import com.flower.spirit.service.DouYinService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.ProcessHistoryService;
 import com.flower.spirit.service.SystemService;
@@ -80,6 +83,9 @@ public class AdminController {
 	
 	@Autowired
 	private CookiesConfigService cookiesConfigService;
+	
+	@Autowired
+	private DouYinService douYinService;
 	
 	/**  
 	
@@ -341,4 +347,14 @@ public class AdminController {
 		return cookiesConfigService.updateCookie(entity);
 	}
 	
+	
+	@GetMapping(value = "/getDouYinCodeLogin")
+	public AjaxEntity getDouYinCodeLogin() throws Exception {
+		return douYinService.getDouYinCodeLogin();
+	}
+	
+	@GetMapping(value = "/checkDouYinLogin")
+	public AjaxEntity checkDouYinLogin(String token) throws Exception {
+		return douYinService.checkLoginStatus(token);
+	}
 } 
