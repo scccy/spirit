@@ -36,7 +36,8 @@ public class DouYinService {
 		if(cookie_ttwid.equals("")) {
 			cookie_ttwid =domain+"ttwid="+DouUtil.getTtwid();
 		}
-		String xBogus = XbogusUtil.getXBogus(domain+"service=https%3A%2F%2Fwww.douyin.com&need_logo=false&need_short_url=true&device_platform=web_app&aid=6383&account_sdk_source=sso&sdk_version=2.2.5&language=zh&verifyFp="+fp+"&fp="+fp);
+		String xBogusString ="service=https%3A%2F%2Fwww.douyin.com&need_logo=false&need_short_url=true&device_platform=web_app&aid=6383&account_sdk_source=sso&sdk_version=2.2.5&language=zh&verifyFp="+fp+"&fp="+fp;
+		String xBogus = xBogusString+"&X-Bogus="+XbogusUtil.getXBogus(xBogusString);
         HttpURLConnection connection = (HttpURLConnection) new URL(loginQRdomain+xBogus).openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("User-Agent", DouUtil.ua);
@@ -67,16 +68,18 @@ public class DouYinService {
 		if(cookie_ttwid.equals("")) {
 			cookie_ttwid =domain+"ttwid="+DouUtil.getTtwid();
 		}
-		String xBogus = XbogusUtil.getXBogus(domain+"token="+token+"&service=https%3A%2F%2Fwww.douyin.com&need_logo=false&need_short_url=true&device_platform=web_app&aid=6383&account_sdk_source=sso&sdk_version=2.2.5&language=zh&verifyFp="+fp+"&fp="+fp);
+		String xBogusString ="token="+token+"&service=https%3A%2F%2Fwww.douyin.com&need_logo=false&need_short_url=true&device_platform=web_app&aid=6383&account_sdk_source=sso&sdk_version=2.2.5&language=zh&verifyFp="+fp+"&fp="+fp;
+		String xBogus = xBogusString+"&X-Bogus="+XbogusUtil.getXBogus(xBogusString);
         HttpURLConnection connection = (HttpURLConnection) new URL(loginCheckDomain+xBogus).openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("User-Agent", DouUtil.ua);
         connection.setRequestProperty("Referer", DouUtil.referer);
         connection.setRequestProperty("Cookie",cookie_ttwid);
         int responseCode = connection.getResponseCode();
-        System.out.println(responseCode);
         StringBuilder responseStringBuilder = new StringBuilder();
         if (responseCode == HttpURLConnection.HTTP_OK) {
+        	fp ="";
+        	cookie_ttwid="";
             try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {

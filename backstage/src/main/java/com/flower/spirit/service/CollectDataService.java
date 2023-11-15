@@ -139,6 +139,7 @@ public class CollectDataService {
 				collectDataEntity.setTaskstatus("已提交待处理");
 				collectDataEntity.setCreatetime(DateUtils.formatDateTime(new Date()));
 				collectDataEntity.setCount(String.valueOf(jsonArray.size()));
+				collectDataEntity.setCarriedout("0"); //归零
 				CollectDataEntity save = collectdDataDao.save(collectDataEntity);
 				//提交线程
 				exec.execute(() -> {
@@ -164,6 +165,7 @@ public class CollectDataService {
 					collectDataEntity.setTaskstatus("已提交待处理");
 					collectDataEntity.setCreatetime(DateUtils.formatDateTime(new Date()));
 					collectDataEntity.setCount("0");
+					collectDataEntity.setCarriedout("0");  //归零
 					CollectDataEntity save = collectdDataDao.save(collectDataEntity);
 					//提交线程
 					exec.execute(() -> {
