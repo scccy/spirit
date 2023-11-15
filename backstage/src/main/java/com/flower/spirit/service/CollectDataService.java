@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -74,6 +75,14 @@ public class CollectDataService {
     
     
     public void findMonitor(){
+    	// 暂时不需要,感觉无问题
+    	//ThreadPoolExecutor executor =  (ThreadPoolExecutor) exec;
+    	//int activeCount = executor.getActiveCount();
+    	//int queueSize = executor.getQueue().size();
+    	//if(activeCount >0 || queueSize>0){
+    	//	logger.info("已存在线程正在处理监控,本地任务将不会执行");
+    	//	return;
+    	//}
     	List<CollectDataEntity> list = collectdDataDao.findByMonitoring("Y");
     	if(list.size() == 0) {
     		logger.info("未设置监控收藏夹");
