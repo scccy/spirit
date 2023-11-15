@@ -30,6 +30,8 @@ public class CollectDataEntity   extends DataEntity<CollectDataEntity> implement
 	
 	private String platform;
 	
+	private String taskname;
+	
 	private String taskstatus;
 	
 	private String createtime;
@@ -67,6 +69,14 @@ public class CollectDataEntity   extends DataEntity<CollectDataEntity> implement
 
 	public void setPlatform(String platform) {
 		this.platform = platform;
+	}
+
+	public String getTaskname() {
+		return taskname;
+	}
+
+	public void setTaskname(String taskname) {
+		this.taskname = taskname;
 	}
 
 	public String getTaskstatus() {
