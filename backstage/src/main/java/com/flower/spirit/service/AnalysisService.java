@@ -106,6 +106,7 @@ public class AnalysisService {
 			logger.info("解析开始~原地址:"+video);
 			String platform = this.getPlatform(video);
 			if(platform.equals("抖音")) {
+//				this.dyvideo(platform, this.getUrl(video));
 				douyin.execute(() -> {
 					try {
 						this.dyvideo(platform, this.getUrl(video));

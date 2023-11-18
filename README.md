@@ -60,8 +60,6 @@ latest steam dev 等分支 资源目录进行调整
 新增容器内新增steamcmd 用于下载steam wallpaper 壁纸 没需要请使用latest分支
 支持两种方式 请查看 [部署方式](https://github.com/lemon8866/spirit/blob/main/doc/deployment.md "查看部署方式中 steam分支相关内容") 相关区别
 
-由于0.0.3 存在很多bug 但是代码没有分支 故不再修复  全都移到latest进行修复
-例如 哔哩哔哩 某些情况下分辨率降级异常造成下载失败或者收藏夹下载中断等问题
 
 ### 更新记录
 
@@ -129,7 +127,7 @@ spring boot 2.7.10、spring boot、jpa、sqlite、htmlunit等
 
 [GitHub - lemon8866/spirit: spirit](https://github.com/lemon8866/spirit/)
 
-### 参考资料
+### 参考及引用
 
 https://github.com/SocialSisterYi/bilibili-API-collect
 
@@ -138,6 +136,8 @@ https://toscode.gitee.com/zong_zh/parsing-tiktok-video
 https://github.com/Johnserf-Seed/TikTokDownload
 
 https://github.com/yt-dlp/yt-dlp
+
+https://gitee.com/yinqi/Light-Year-Admin-Template
 
 ### 致谢
 

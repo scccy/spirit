@@ -49,29 +49,46 @@ public class DouUtil {
 		try {
 			 document = Jsoup.connect(url).userAgent(ua).get();
 			 String baseUri = document.baseUri();
-			 String pattern="(?<=/video/).*?(?=/)";
-		     Pattern compile = Pattern.compile(pattern);
-		     Matcher matcher = compile.matcher(baseUri);
-		     if(matcher.find()) {
-		    	  String vedioId = matcher.group(0);
-		    	  logger.info("DouYin vedioId="+vedioId);
-		    	  // getBogus 方法名有问题  歧义  其实 这个方法就是生成xBogus并返回视频信息
-		    	  data  = DouUtil.getBogus(vedioId,"local");
+			 String pattern_v1="(?<=/video/).*?(?=/)";
+			 String pattern_v2 = "/video/(\\d+)";
+		     Pattern compile_v1 = Pattern.compile(pattern_v1);
+		     Pattern compile_v2 = Pattern.compile(pattern_v2);
+		     Matcher matcher_v1 = compile_v1.matcher(baseUri);
+		     Matcher matcher_v2 = compile_v2.matcher(baseUri);
+		     if(matcher_v1.find()) {
+		    	 String vedioId = matcher_v1.group(0);
+		    	 logger.info("DouYin vedioId="+vedioId);
+		    	 data  = DouUtil.getBogus(vedioId,"local");
 		    	  if(data != null) {
 		    		  logger.info("接口解析数据"+data);
 		    		  return data;
 		    	  }else {
 		    		  //失败 使用htmlclient
-		    		  return DouUtil.htmlclient(url);
+		    		  return null;
+//		    		  return DouUtil.htmlclient(url);
 		    	  }
-		     }else {
-		    	 //失败 使用htmlclient
-		    	 return DouUtil.htmlclient(url);
+		     }
+		     if(matcher_v2.find()) {
+		    	 String vedioId = matcher_v2.group(0).replaceAll("video", "").replaceAll("/", "");
+		    	 logger.info("DouYin vedioId="+vedioId);
+		    	 data  = DouUtil.getBogus(vedioId,"local");
+		    	  if(data != null) {
+		    		  logger.info("接口解析数据"+data);
+		    		  return data;
+		    	  }else {
+		    		  //失败 使用htmlclient
+		    		  return null;
+		    	  }
+		     }
+		     if(!matcher_v2.find() && !matcher_v1.find()) {
+		    	 return null;
 		     }
 			
 		} catch (IOException e1) {
-			return DouUtil.htmlclient(url);
+			return null;
+			//return DouUtil.htmlclient(url);
 		}
+		return null;
 	}
 	public static  Map<String, String> htmlclient(String url) {
 		 logger.info("WebClient客户端开始启动");
@@ -86,6 +103,7 @@ public class DouUtil {
 		        Element render_data = parse.getElementById("RENDER_DATA");
 		        String encode = URLDecoder.decode(render_data.html().substring("//<![CDATA[".length(), render_data.html().length() - "//]]>".length()).trim(), "UTF-8");
 		        JSONObject jsonObject = JSON.parseObject(encode);
+//		        System.out.println(jsonObject);
 		        jsonObject.forEach((key, value) -> {
 		        	if(DouUtil.isJSONString(value.toString())) {
 		        		  JSONObject aweme = JSONObject.parseObject(value.toString()).getJSONObject("aweme");
