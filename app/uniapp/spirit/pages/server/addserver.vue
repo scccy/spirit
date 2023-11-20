@@ -85,7 +85,7 @@
 	height: 3.5rem;
 	line-height: 3.5rem;
 	border-bottom: 1px solid #d3d0d0;
-	margin: 1% 1%;
+	margin: 1% 3%;
 }
 .line .title{
 	width: 15%;
