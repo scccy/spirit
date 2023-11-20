@@ -49,9 +49,11 @@
 					this.statusBarHeight = res.statusBarHeight
 					// 通过操作系统 确定自定义导航栏高度  
 					if (res.system.substring(0, 3) == "iOS") {
-						this.navBarHeight = 42
+						// this.navBarHeight = 42
+						this.navBarHeight = 125
 					} else {
-						this.navBarHeight = 40
+						// this.navBarHeight = 40
+						this.navBarHeight = 125
 					}
 				}
 			})
@@ -88,7 +90,7 @@
 								var playurl = serveraddr+":"+serverport+item.videounrealaddr+"?apptoken="+servertoken
 								var cover= serveraddr+":"+serverport+item.videocover+"?apptoken="+servertoken
 								obj.src = playurl;
-								obj.title = item.title;
+								obj.title = item.videoname;
 								obj.cover = cover;
 								this.originList.push(obj)
 							})

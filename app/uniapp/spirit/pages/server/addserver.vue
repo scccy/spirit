@@ -88,11 +88,11 @@
 	margin: 1% 3%;
 }
 .line .title{
-	width: 15%;
+	width: 20%;
 	float: left;
 }
 .line .input,input{
-	width: 85%;
+	width: 80%;
 	float: left;
 	height: 3.5rem;
 	line-height: 3.5rem;
