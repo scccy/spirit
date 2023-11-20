@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!--swiper实现整屏划动播放视频-->
-		<swiper circular vertical duration="200" @transition="transition" @change="changed"
+		<swiper circular vertical duration="200"  @change="changed"
 			:style="{height: screenHeight-navBarHeight +'px'}">
 			<block v-for="(item,index) in displaySwiperList" :key="index">
 				<swiper-item>
