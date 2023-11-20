@@ -85,6 +85,7 @@ public class DouUtil {
 		     }
 			
 		} catch (IOException e1) {
+			logger.info("解析异常"+e1.getMessage());
 			return null;
 			//return DouUtil.htmlclient(url);
 		}
