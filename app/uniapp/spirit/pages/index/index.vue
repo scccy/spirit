@@ -1,14 +1,13 @@
 <template>
 	<view class="content">
-			<view class="content">
-				<textarea class="url" placeholder="输入或粘贴分享" v-model="originaladdress"></textarea>
-				<input class="uni-input" v-model="serveraddr" placeholder="服务器地址"/>
-				<input class="uni-input" v-model="serverport" placeholder="服务器端口"/>
-				<input class="uni-input" v-model="servertoken" placeholder="服务器token"/>
-				
-				<button @click="pushMessage">推送</button>
-				<button @click="saveServer">保存服务器</button>
-			</view>
+		<textarea class="url" placeholder="输入或粘贴分享" v-model="originaladdress"></textarea>
+		<view class="option">
+			<button class="submit">提交</button>
+		</view>
+		<view class="service"  @click="serverList()">
+			<view class="servername">服务器：{{servername}}</view>
+			<uni-icons type="gear-filled" size="20"></uni-icons>
+		</view>
 	</view>
 </template>
 
@@ -17,22 +16,50 @@
 		data() {
 			return {
 				originaladdress:"",
+				servername:"",
 				serveraddr:"",
 				serverport:"",
 				servertoken:""
 			}
 		},
 		onLoad() {
-			this.initServer();
+			// this.initServer();
 		},
 		onShow() {
+			this.loadServer();
 			uni.getClipboardData({
 				success: (res) => {
 					this.originaladdress = res.data
 				}
-			})
+			});
 		},
 		methods: {
+			loadServer:function(){
+					var that = this;
+					var serverlist = uni.getStorageSync('serverlist');
+					for(var i =0;i<serverlist.length;i++){
+						if(serverlist[i].default == 'y'){
+							that.servername = serverlist[i].servername
+							that.serveraddr = serverlist[i].server
+							that.serverport = serverlist[i].port
+							that.servertoken = serverlist[i].token
+						}
+					}
+					if(that.servername=="" && serverlist.length !=0){
+						that.servername = serverlist[0].servername
+						that.serveraddr = serverlist[0].server
+						that.serverport = serverlist[0].port
+						that.servertoken = serverlist[0].token
+					}
+					uni.setStorageSync('serveraddr',that.serveraddr)
+					uni.setStorageSync('serverport',that.serverport)
+					uni.setStorageSync('servertoken',that.servertoken)
+			},
+			serverList:function(){
+				uni.navigateTo({
+					url:"/pages/server/serverlist"
+				})
+			},
 			pushMessage:function(){
 				if(this.originaladdress != "" && this.serveraddr != "" && this.serverport != "" && this.servertoken != ""){
 					var api =this.serveraddr+":"+this.serverport+"/api/processingVideos";
@@ -80,20 +107,6 @@
 					duration: 2000
 				});
 			},
-			initServer:function(){
-				var serveraddr = uni.getStorageSync('serveraddr')
-				var serverport = uni.getStorageSync('serverport')
-				var servertoken = uni.getStorageSync('servertoken')
-				if(serveraddr != null){
-					this.serveraddr =serveraddr;
-				}
-				if(serverport != null){
-					this.serverport =serverport;
-				}
-				if(servertoken != null){
-					this.servertoken =servertoken;
-				}
-			}
 		}
 	}
 </script>
@@ -104,23 +117,22 @@
 		text-align: center;
 	}
 	.url{
-		margin-top: 5%;
-		border: 1px solid #c0b9b9;
-		border-radius: 10px;
-		margin-left: 12%
+		display: inline-block;
+		border: 1px solid #bfbcbc;
+		border-radius: 5px;
+		margin-top: 4%;
 	}
-	.uni-input{
-		margin-top: 5%;
-		border: 1px solid #c0b9b9;
-		width: 80%;
-		margin-left: 12%;
-		border-radius: 10px;
+	.option{
+		margin: 12% 26%;
+		margin-bottom: 6%;
 	}
-	button{
-		margin-top: 5%;
-		border: 1px solid #c0b9b9;
-		width: 80%;
-		margin-left: 12%;
-		border-radius: 10px;
+	.option .submit{
+		background-color: #0284da;
+		color: #fff;
+		border-radius: 12rem;
+	}
+	.servername{
+		height: 1.5rem;
+		line-height: 1.5rem;
 	}
 </style>

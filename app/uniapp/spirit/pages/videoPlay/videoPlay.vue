@@ -40,6 +40,8 @@
 			palyVideo(e){
 				this.videoPlay =encodeURI(e);
 				this.$refs.videoPlay.open()
+				this.videoContext = uni.createVideoContext('myVideo');
+				this.videoContext.requestFullScreen();
 			},
 			getData(page) {
 				var that= this;
