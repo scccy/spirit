@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -34,7 +36,7 @@ public class DouYinService {
 			fp = DouUtil.getFp();
 		}
 		if(cookie_ttwid.equals("")) {
-			cookie_ttwid =domain+"ttwid="+DouUtil.getTtwid();
+			cookie_ttwid ="ttwid="+DouUtil.getTtwid();
 		}
 		String xBogusString ="service=https%3A%2F%2Fwww.douyin.com&need_logo=false&need_short_url=true&device_platform=web_app&aid=6383&account_sdk_source=sso&sdk_version=2.2.5&language=zh&verifyFp="+fp+"&fp="+fp;
 		String xBogus = xBogusString+"&X-Bogus="+XbogusUtil.getXBogus(xBogusString);
@@ -66,7 +68,7 @@ public class DouYinService {
 			fp = DouUtil.getFp();
 		}
 		if(cookie_ttwid.equals("")) {
-			cookie_ttwid =domain+"ttwid="+DouUtil.getTtwid();
+			cookie_ttwid ="ttwid="+DouUtil.getTtwid();
 		}
 		String xBogusString ="token="+token+"&service=https%3A%2F%2Fwww.douyin.com&need_logo=false&need_short_url=true&device_platform=web_app&aid=6383&account_sdk_source=sso&sdk_version=2.2.5&language=zh&verifyFp="+fp+"&fp="+fp;
 		String xBogus = xBogusString+"&X-Bogus="+XbogusUtil.getXBogus(xBogusString);
@@ -78,8 +80,7 @@ public class DouYinService {
         int responseCode = connection.getResponseCode();
         StringBuilder responseStringBuilder = new StringBuilder();
         if (responseCode == HttpURLConnection.HTTP_OK) {
-        	fp ="";
-        	cookie_ttwid="";
+
             try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
@@ -88,8 +89,41 @@ public class DouYinService {
             }
 
             String responseData = responseStringBuilder.toString(); 
-    		return new AjaxEntity(Global.ajax_success,"ok", JSONObject.parseObject(responseData));
+            JSONObject jsonObject = JSONObject.parseObject(responseData).getJSONObject("data");
+            String status = jsonObject.getString("status");
+            String redirect_url = jsonObject.getString("redirect_url");
+            if(status.equals("3")) {
+            	//
+//            	Map<String, List<String>> headerFields = connection.getHeaderFields();
+            	String setCookieHeader = connection.getHeaderField("Set-Cookie");
+//                List<String> cookies = headerFields.get("set-cookie");
+//                String cookieString = String.join("; ", cookies);
+                HttpURLConnection redirect = (HttpURLConnection) new URL(redirect_url).openConnection();
+                redirect.setRequestMethod("GET");
+                redirect.setRequestProperty("User-Agent", DouUtil.ua);
+                redirect.setRequestProperty("Referer", DouUtil.referer);
+                redirect.setRequestProperty("Cookie",setCookieHeader);
+                System.out.println(redirect.getResponseCode());
+                
+                Map<String, List<String>> redirect_headerFields = redirect.getHeaderFields();
+                List<String> redirect_cookies = redirect_headerFields.get("Set-Cookie");
+                System.out.println(String.join("; ", redirect_cookies));
+//                if(redirect.getResponseCode() == 302) {
+//                	Map<String, List<String>> redirect_headerFields = redirect.getHeaderFields();
+//                    List<String> redirect_cookies = redirect_headerFields.get("Set-Cookie");
+//                    System.out.println(String.join("; ", redirect_cookies));
+//                }
+            	fp ="";
+            	cookie_ttwid="";
+            	return null;
+            }
+            
+        	fp ="";
+        	cookie_ttwid="";
+            return new AjaxEntity(Global.ajax_uri_error,"error","二维码登录异常");
         } else {
+        	fp ="";
+        	cookie_ttwid="";
         	return new AjaxEntity(Global.ajax_uri_error,"error","二维码异常");
         }
 	}

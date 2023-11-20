@@ -149,7 +149,8 @@ public class DouUtil {
 	public static  Map<String, String> getBogus(String aweme_id,String type) throws HttpException, IOException {
 		 Map<String, String> res = new HashMap<String, String>();
 		 if(null !=Global.tiktokCookie && !"".equals(Global.tiktokCookie) ) {
-			 String cookie = simplifycookie(Global.tiktokCookie);
+//			 String cookie = simplifycookie(Global.tiktokCookie);
+			 String cookie = Global.tiktokCookie;
 			 Map<String, String> generatetoken = generatetoken(aweme_id);
 			 String httpget = DouUtil.httpget(generatetoken.get("url").trim(),cookie);
 			 JSONObject data = JSONObject.parseObject(httpget);
@@ -427,21 +428,20 @@ public class DouUtil {
 	
 	
 	 public static String getFp() {
-	        String e = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+		 String e = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	        int t = e.length();
 	        long milliseconds = System.currentTimeMillis();
 	        StringBuilder base36 = new StringBuilder();
 
 	        while (milliseconds > 0) {
-	            long remainder = milliseconds % 36;
+	            int remainder = (int) (milliseconds % 36);
 	            if (remainder < 10) {
 	                base36.insert(0, remainder);
 	            } else {
-	                base36.insert(0, (char) ('a' + remainder - 10));
+	                base36.insert(0, (char) (Character.valueOf('a') + remainder - 10));
 	            }
-	            milliseconds /= 36;
+	            milliseconds = milliseconds / 36;
 	        }
-
 	        String r = base36.toString();
 	        char[] o = new char[36];
 	        o[8] = o[13] = o[18] = o[23] = '_';
@@ -457,9 +457,9 @@ public class DouUtil {
 	                o[i] = e.charAt(n);
 	            }
 	        }
-
-	        String ret = "verify_" + r + "_" + new String(o);
-	        return ret;
+	        StringBuilder ret = new StringBuilder("verify_" + r + "_");
+	        ret.append(o);
+	        return ret.toString();
 	    }
 
 	public static void main(String[] args) {
