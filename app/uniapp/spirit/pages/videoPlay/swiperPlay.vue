@@ -89,9 +89,9 @@
 								let obj = {}
 								var playurl = serveraddr+":"+serverport+item.videounrealaddr+"?apptoken="+servertoken
 								var cover= serveraddr+":"+serverport+item.videocover+"?apptoken="+servertoken
-								obj.src = playurl;
+								obj.src = encodeURI(playurl);
 								obj.title = item.videoname;
-								obj.cover = cover;
+								obj.cover = encodeURI(cover);
 								this.originList.push(obj)
 							})
 						}
