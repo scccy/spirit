@@ -1,6 +1,6 @@
 package com.flower.spirit.utils;
 
-
+import javax.servlet.http.HttpServletRequest;
 
 /**  
 
@@ -53,6 +53,21 @@ public class StringUtil {
 			return aid;
 		}
 	 }
+	 
+		public static String getRemoteAddr(HttpServletRequest request){
+			String remoteAddr = request.getHeader("X-Real-IP");
+	        if (isString(remoteAddr)) {
+	        	remoteAddr = request.getHeader("X-Forwarded-For");
+	        }else if (isString(remoteAddr)) {
+	        	remoteAddr = request.getHeader("Proxy-Client-IP");
+	        }else if (isString(remoteAddr)) {
+	        	remoteAddr = request.getHeader("WL-Proxy-Client-IP");
+	        }
+	        return remoteAddr != null ? remoteAddr : request.getRemoteAddr();
+		}
+	 
+	 
+	 
 	 public static void main(String[] args) {
 		 System.out.println(StringUtil.getFileName("反恐精英1.6 #动画制作 #游戏 #反恐精英 #童年回忆", "123"));
 	}

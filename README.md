@@ -119,7 +119,7 @@ docker run --name spirit -d -p 28081:28081 -v /home/spirit/log:/app/log -v /home
 ### 技术框架
 
 ```
-spring boot 2.7.10、spring boot、jpa、sqlite、htmlunit等
+spring boot 2.7.17、spring boot、jpa、sqlite等
 ```
 
 ## docker hub

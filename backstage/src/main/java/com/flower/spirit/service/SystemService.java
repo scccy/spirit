@@ -57,21 +57,21 @@ public class SystemService {
 		if(!StringUtil.isString(userEntity.getPassword()) || !StringUtil.isString(userEntity.getUsername())) {
 			return new AjaxEntity(Global.ajax_uri_error,Global.ajax_uri_error_message,null);
 		}
-		logger.info("用户"+userEntity.getUsername()+"尝试登录");
+		logger.info("用户"+userEntity.getUsername()+"在"+StringUtil.getRemoteAddr(request)+"尝试登录");
 		UserEntity findByUsername = userDao.findByUsername(userEntity.getUsername());
 		if(findByUsername == null) {
-			logger.info("用户"+userEntity.getUsername()+"登录失败");
+			logger.info("用户"+userEntity.getUsername()+"在"+StringUtil.getRemoteAddr(request)+"登录失败");
 			return new AjaxEntity(Global.ajax_login_err,Global.ajax_login_err_message,null);
 		}
 		if(MD5Util.MD5(userEntity.getPassword()).equals(findByUsername.getPassword())) {
 			Date date = new Date();
 			findByUsername.setLasttime(Long.toString( date.getTime()));
 			userDao.save(findByUsername);
-			logger.info("用户"+userEntity.getUsername()+"登录成功");
+			logger.info("用户"+userEntity.getUsername()+"在"+StringUtil.getRemoteAddr(request)+"登录成功");
 			request.getSession().setAttribute(Global.user_session_key, findByUsername);
 			return new AjaxEntity(Global.ajax_success, Global.ajax_login_success_message, null);
 		}
-		logger.info("用户"+userEntity.getUsername()+"登录失败");
+		logger.info("用户"+userEntity.getUsername()+"在"+StringUtil.getRemoteAddr(request)+"登录失败");
 		return new AjaxEntity(Global.ajax_login_err,Global.ajax_login_err_message,null);
 	}
 	
