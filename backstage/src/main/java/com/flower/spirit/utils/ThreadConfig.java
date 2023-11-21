@@ -7,8 +7,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import org.htmlunit.BrowserVersion;
-import org.htmlunit.WebClient;
+
 
 public class ThreadConfig {
     public static ThreadPoolExecutor threadPoolExecutor() {
@@ -21,25 +20,25 @@ public class ThreadConfig {
      * 获取web客户端
      * @return
      */
-    public static WebClient getWebClient() {
-        WebClient webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        webClient.getOptions().setActiveXNative(false);
-        webClient.getOptions().setCssEnabled(false);
-        webClient.getOptions().setJavaScriptEnabled(true);
-        webClient.getOptions().setDownloadImages(false);
-        return webClient;
-    }
-    
-    public static WebClient getWebClientNotJavaScript() {
-        WebClient webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        webClient.getOptions().setActiveXNative(false);
-        webClient.getOptions().setCssEnabled(false);
-        webClient.getOptions().setJavaScriptEnabled(false);
-        webClient.getOptions().setDownloadImages(false);
-        return webClient;
-    }
+//    public static WebClient getWebClient() {
+//        WebClient webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
+//        webClient.getOptions().setThrowExceptionOnScriptError(false);
+//        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+//        webClient.getOptions().setActiveXNative(false);
+//        webClient.getOptions().setCssEnabled(false);
+//        webClient.getOptions().setJavaScriptEnabled(true);
+//        webClient.getOptions().setDownloadImages(false);
+//        return webClient;
+//    }
+//    
+//    public static WebClient getWebClientNotJavaScript() {
+//        WebClient webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
+//        webClient.getOptions().setThrowExceptionOnScriptError(false);
+//        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+//        webClient.getOptions().setActiveXNative(false);
+//        webClient.getOptions().setCssEnabled(false);
+//        webClient.getOptions().setJavaScriptEnabled(false);
+//        webClient.getOptions().setDownloadImages(false);
+//        return webClient;
+//    }
 }

@@ -16,8 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpException;
-import org.htmlunit.WebClient;
-import org.htmlunit.html.HtmlPage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -91,52 +89,52 @@ public class DouUtil {
 		}
 		return null;
 	}
-	public static  Map<String, String> htmlclient(String url) {
-		 logger.info("WebClient客户端开始启动");
-		 Map<String, String> res = new HashMap<String, String>();
-		 WebClient webClient = ThreadConfig.getWebClient();
-	        HtmlPage page = null;
-	        try {
-	            page = webClient.getPage(url);
-		        webClient.waitForBackgroundJavaScript(300);
-		        String pageXml = page.asXml();
-		        Document parse = Jsoup.parse(pageXml);
-		        Element render_data = parse.getElementById("RENDER_DATA");
-		        String encode = URLDecoder.decode(render_data.html().substring("//<![CDATA[".length(), render_data.html().length() - "//]]>".length()).trim(), "UTF-8");
-		        JSONObject jsonObject = JSON.parseObject(encode);
-//		        System.out.println(jsonObject);
-		        jsonObject.forEach((key, value) -> {
-		        	if(DouUtil.isJSONString(value.toString())) {
-		        		  JSONObject aweme = JSONObject.parseObject(value.toString()).getJSONObject("aweme");
-		        		  if(aweme != null) {
-		        			  JSONObject detail = aweme.getJSONObject("detail");
-		        			  String awemeId = detail.getString("awemeId");
-		        			  String desc = detail.getString("desc");
-		        			  JSONObject videoobj = detail.getJSONObject("video");
-		        	          String playApi = videoobj.getString("playApi");
-		        	          String cover = videoobj.getString("cover");
-		        	          res.put("cover", cover);
-		        	     	  res.put("awemeid", awemeId);
-		        			  res.put("videoplay", playApi);
-		        			  res.put("desc", desc);
-		        			  res.put("type", "client");
-		        		  }
-		        	}
-					
-				});
-	        } catch (Exception e) {
-	        	logger.info("获取不到");
-	        }finally {
-				//如果后续观察内存占用问题比较大 考虑取消此处注释
-				webClient.getCurrentWindow().getJobManager().removeAllJobs();
-				webClient.getCurrentWindow().getJobManager().shutdown();
-				webClient.close();
-				System.gc();
-	        }
-	        logger.info("下载流程结束");
-	        return res;
-	
-	}
+//	public static  Map<String, String> htmlclient(String url) {
+//		 logger.info("WebClient客户端开始启动");
+//		 Map<String, String> res = new HashMap<String, String>();
+//		 WebClient webClient = ThreadConfig.getWebClient();
+//	        HtmlPage page = null;
+//	        try {
+//	            page = webClient.getPage(url);
+//		        webClient.waitForBackgroundJavaScript(300);
+//		        String pageXml = page.asXml();
+//		        Document parse = Jsoup.parse(pageXml);
+//		        Element render_data = parse.getElementById("RENDER_DATA");
+//		        String encode = URLDecoder.decode(render_data.html().substring("//<![CDATA[".length(), render_data.html().length() - "//]]>".length()).trim(), "UTF-8");
+//		        JSONObject jsonObject = JSON.parseObject(encode);
+////		        System.out.println(jsonObject);
+//		        jsonObject.forEach((key, value) -> {
+//		        	if(DouUtil.isJSONString(value.toString())) {
+//		        		  JSONObject aweme = JSONObject.parseObject(value.toString()).getJSONObject("aweme");
+//		        		  if(aweme != null) {
+//		        			  JSONObject detail = aweme.getJSONObject("detail");
+//		        			  String awemeId = detail.getString("awemeId");
+//		        			  String desc = detail.getString("desc");
+//		        			  JSONObject videoobj = detail.getJSONObject("video");
+//		        	          String playApi = videoobj.getString("playApi");
+//		        	          String cover = videoobj.getString("cover");
+//		        	          res.put("cover", cover);
+//		        	     	  res.put("awemeid", awemeId);
+//		        			  res.put("videoplay", playApi);
+//		        			  res.put("desc", desc);
+//		        			  res.put("type", "client");
+//		        		  }
+//		        	}
+//					
+//				});
+//	        } catch (Exception e) {
+//	        	logger.info("获取不到");
+//	        }finally {
+//				//如果后续观察内存占用问题比较大 考虑取消此处注释
+//				webClient.getCurrentWindow().getJobManager().removeAllJobs();
+//				webClient.getCurrentWindow().getJobManager().shutdown();
+//				webClient.close();
+//				System.gc();
+//	        }
+//	        logger.info("下载流程结束");
+//	        return res;
+//	
+//	}
 	
 	/**
 	 * 获取xBogus 并获取视频数据
