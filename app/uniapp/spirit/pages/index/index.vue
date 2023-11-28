@@ -2,7 +2,7 @@
 	<view class="content">
 		<textarea class="url" placeholder="输入或粘贴分享" v-model="originaladdress"></textarea>
 		<view class="option">
-			<button class="submit">提交</button>
+			<button class="submit" @click="pushMessage()">提交</button>
 		</view>
 		<view class="service"  @click="serverList()">
 			<view class="servername">服务器：{{servername}}</view>
