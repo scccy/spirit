@@ -357,4 +357,8 @@ public class AdminController {
 	public AjaxEntity checkDouYinLogin(String token) throws Exception {
 		return douYinService.checkLoginStatus(token);
 	}
+	@GetMapping(value = "/checkVersion")
+	public AjaxEntity checkVersion() {
+		return systemService.checkVersion();
+	}
 } 
