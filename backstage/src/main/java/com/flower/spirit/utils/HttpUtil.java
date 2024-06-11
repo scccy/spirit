@@ -293,8 +293,8 @@ public class HttpUtil {
 	            }
 	        }
 	    }
-	
-	
+
+
 	public static void  downDouFromUrl(String urlStr,String fileName,String savePath,String cookie) {
         try {
         	 URL url = new URL(urlStr); 

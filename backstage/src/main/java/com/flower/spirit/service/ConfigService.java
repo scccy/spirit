@@ -19,6 +19,7 @@ public class ConfigService {
 	public ConfigEntity getData() {
 		List<ConfigEntity> list =  configDao.findAll();
 		return list.get(0);
+//		return null;
 	}
 
 	public AjaxEntity saveConfig(ConfigEntity configEntity) {
