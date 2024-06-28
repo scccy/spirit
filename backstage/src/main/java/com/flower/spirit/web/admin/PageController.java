@@ -11,11 +11,11 @@ import com.flower.spirit.config.Global;
 import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.CookiesConfigEntity;
-import com.flower.spirit.entity.TikTokConfigEntity;
+import com.flower.spirit.entity.ConfigTiktokEntity;
 import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.CookiesConfigService;
-import com.flower.spirit.service.TikTokConfigService;
+import com.flower.spirit.service.ConfigTiktokService;
 
 
 /**
@@ -35,7 +35,7 @@ public class PageController {
 	private BiliConfigService biliConfigService;
 	
 	@Autowired
-	private TikTokConfigService  tikTokConfigService;
+	private ConfigTiktokService  ConfigTiktokService;
 	
 	@Autowired
 	private CookiesConfigService cookiesConfigService;
@@ -131,7 +131,7 @@ public class PageController {
 	public String config(Model model) {
 		ConfigEntity config = configService.getData();
 		BiliConfigEntity bili = biliConfigService.getData();
-		TikTokConfigEntity tiktok = tikTokConfigService.getData();
+		ConfigTiktokEntity tiktok = ConfigTiktokService.getData();
 		CookiesConfigEntity cookies = cookiesConfigService.getData();
 		model.addAttribute("bili", bili);
 		model.addAttribute("config", config);

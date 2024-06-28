@@ -119,7 +119,7 @@
                                         <input type="type" name="tiktokcookies"  autocomplete="off" class="form-control tiktokcookies" th:value="${tiktok.cookies}">
                                     </div>
                                     <div class="form-group">
-                                        <button class="btn btn-primary saveTikTokConfig" type="button">保存</button>
+                                        <button class="btn btn-primary saveConfigTiktok" type="button">保存</button>
                                     </div>
                                 </form>
 
@@ -170,7 +170,7 @@
         saveBiliConfig();
         scanQR();
         scanQRend();
-        saveTikTokConfig();
+        saveConfigTiktok();
         saveCookieConfig();
     })
 
@@ -202,8 +202,8 @@
             })
         })
     }
-    function saveTikTokConfig(){
-        $('.saveTikTokConfig').click(function(){
+    function saveConfigTiktok(){
+        $('.saveConfigTiktok').click(function(){
             var appid = $('.tiktok').val();
             var cookies = $('.tiktokcookies').val();
             var analysisserver = $('.analysisserver').val();
@@ -211,7 +211,7 @@
             option['id'] = appid;
             option['cookies'] = cookies;
             option['analysisserver'] = analysisserver;
-            $.post("/admin/api/updateTikTokConfig",option,function(data,status){
+            $.post("/admin/api/updateConfigTiktok",option,function(data,status){
                 if(data.resCode =="000001"){
                     layer.closeAll();
                     layer.alert(data.message,function(){

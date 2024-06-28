@@ -19,7 +19,7 @@ import com.flower.spirit.entity.ConfigEntity;
 import com.flower.spirit.entity.CookiesConfigEntity;
 import com.flower.spirit.entity.DownloaderEntity;
 import com.flower.spirit.entity.ProcessHistoryEntity;
-import com.flower.spirit.entity.TikTokConfigEntity;
+import com.flower.spirit.entity.ConfigTiktokEntity;
 import com.flower.spirit.entity.UserEntity;
 import com.flower.spirit.entity.VideoDataEntity;
 import com.flower.spirit.service.BiliConfigService;
@@ -31,7 +31,7 @@ import com.flower.spirit.service.DouYinService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.ProcessHistoryService;
 import com.flower.spirit.service.SystemService;
-import com.flower.spirit.service.TikTokConfigService;
+import com.flower.spirit.service.ConfigTiktokService;
 import com.flower.spirit.service.UserService;
 import com.flower.spirit.service.VideoDataService;
 
@@ -75,7 +75,7 @@ public class AdminController {
 	
 	
 	@Autowired
-	private TikTokConfigService  tikTokConfigService;
+	private ConfigTiktokService  ConfigTiktokService;
 	
 	
 	@Autowired
@@ -314,16 +314,16 @@ public class AdminController {
 	public AjaxEntity submitCollectData(CollectDataEntity collectDataEntity,HttpServletRequest request) {
 		return collectDataService.submitCollectData(collectDataEntity);
 	}
-	//updateTikTokConfig
+	//updateConfigTiktok
 	/**
 	 * 更新抖音相关下载配置
-	 * @param tikTokConfigEntity
+	 * @param ConfigTiktokEntity
 	 * @param request
 	 * @return
 	 */
-	@PostMapping(value = "/updateTikTokConfig")
-	public AjaxEntity updateTikTokConfig(TikTokConfigEntity tikTokConfigEntity,HttpServletRequest request) {
-		return tikTokConfigService.updateTikTokConfig(tikTokConfigEntity);
+	@PostMapping(value = "/updateConfigTiktok")
+	public AjaxEntity updateConfigTiktok(ConfigTiktokEntity ConfigTiktokEntity,HttpServletRequest request) {
+		return ConfigTiktokService.updateConfigTiktok(ConfigTiktokEntity);
 	}
 	
 	

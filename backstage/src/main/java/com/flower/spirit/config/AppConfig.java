@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Configuration;
 import com.flower.spirit.dao.CookiesConfigDao;
 import com.flower.spirit.entity.BiliConfigEntity;
 import com.flower.spirit.entity.ConfigEntity;
-import com.flower.spirit.entity.TikTokConfigEntity;
+import com.flower.spirit.entity.ConfigTiktokEntity;
 import com.flower.spirit.entity.CookiesConfigEntity;
 import com.flower.spirit.service.BiliConfigService;
 import com.flower.spirit.service.ConfigService;
 import com.flower.spirit.service.CookiesConfigService;
 import com.flower.spirit.service.DownloaderService;
 import com.flower.spirit.service.FfmpegQueueService;
-import com.flower.spirit.service.TikTokConfigService;
+import com.flower.spirit.service.ConfigTiktokService;
 
 /**
  * @author flower
@@ -39,7 +39,7 @@ public class AppConfig {
 	private BiliConfigService biliConfigService;
 	
 	@Autowired
-	private TikTokConfigService  tikTokConfigService;
+	private ConfigTiktokService  ConfigTiktokService;
 	
 	@Autowired
 	private FfmpegQueueService ffmpegQueueService;
@@ -64,7 +64,7 @@ public class AppConfig {
 		if(null != bili.getBitstream() && !"".equals(bili.getBitstream())) {
 			Global.bilibitstream= bili.getBitstream();
 		}
-		TikTokConfigEntity tiktok = tikTokConfigService.getData();
+		ConfigTiktokEntity tiktok = ConfigTiktokService.getData();
 		if(null !=tiktok.getCookies() && !"".equals(tiktok.getCookies())) {
 			Global.tiktokCookie =tiktok.getCookies();
 		}
